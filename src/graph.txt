@@ -1,0 +1,13 @@
+node a 1 1
+node b 2 2
+node c 3 3
+node d 4 4
+e 4 3
+f 4 2
+
+a b
+b c
+c d
+d e
+e f
+f d

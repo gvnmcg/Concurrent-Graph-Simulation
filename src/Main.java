@@ -10,7 +10,7 @@ public class Main extends Application {
 
         BorderPane bp = new BorderPane();
 
-        Graph g = new Graph();
+        Graph g = new Graph("");
 
         primaryStage.setScene(new Scene(bp, 300, 400));
     }

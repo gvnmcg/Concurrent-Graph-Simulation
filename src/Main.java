@@ -8,11 +8,12 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        BorderPane bp = new BorderPane();
 
-        Graph g = new Graph("");
+        Graph graph = new Graph("src/graph");
+        GraphDisplay graphDisplay = new GraphDisplay(graph);
 
-        primaryStage.setScene(new Scene(bp, 300, 400));
+        primaryStage.setScene(new Scene(graphDisplay.getRoot(), 700, 500));
+        primaryStage.show();
     }
 
     public static void main(String[] args) {

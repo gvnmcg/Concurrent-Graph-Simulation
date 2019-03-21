@@ -47,6 +47,9 @@ public class GraphNode implements Runnable {
 
     }
 
+    public Coordinate getCoordinate() {
+        return cords;
+    }
 
     @Override
     public void run() {

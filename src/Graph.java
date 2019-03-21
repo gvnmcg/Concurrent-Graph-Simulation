@@ -8,7 +8,7 @@ public class Graph {
 
     // TODO Need to update this to something like a map, where it maps the coordinates to the node
     // This will better allow adding edges and traversals
-    LinkedList<GraphNode> nodes = new LinkedList<>();
+    private LinkedList<GraphNode> nodes = new LinkedList<>();
 
     /**
      * Graph constructor that creates a graph from the given text file
@@ -20,6 +20,9 @@ public class Graph {
 
         BufferedReader in = null;
         String line;
+
+        int x, y;
+        int scale = 30;
         try {
             in = new BufferedReader(new FileReader(filename + ".txt"));
 
@@ -29,6 +32,9 @@ public class Graph {
                 switch (strArray[0]) {
                     case "node":
 
+                        x = scale * Integer.parseInt(strArray[1]);
+                        y = scale * Integer.parseInt(strArray[2]);
+                        nodes.add(new GraphNode(x,y));
 
                         break;
                     case "edge":
@@ -50,6 +56,10 @@ public class Graph {
 
 
         testGraph();
+    }
+
+    public LinkedList<GraphNode> getNodes() {
+        return nodes;
     }
 
     private void testGraph() {

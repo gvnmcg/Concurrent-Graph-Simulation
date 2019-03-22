@@ -1,3 +1,6 @@
+/**
+ * Coordinate class used to map nodes to locations
+ */
 public class Coordinate {
 
     private int x;
@@ -24,7 +27,6 @@ public class Coordinate {
     @Override
     public boolean equals(Object obj) {
         Coordinate coord = (Coordinate) obj;
-
         if (coord != null && x == coord.getX() && y == coord.getY()) {
             return true;
         } else {
@@ -32,8 +34,4 @@ public class Coordinate {
         }
     }
 
-    public boolean equals(Coordinate coord) {
-        if (x == coord.getX() && y == coord.getY()) return true;
-        else return false;
-    }
 }

@@ -35,16 +35,11 @@ public class GraphNode implements Runnable {
     }
 
     public synchronized NodeStatus getStatus() {
-        synchronized (status) {
             return status;
-        }
     }
 
     public synchronized void setStatus(NodeStatus status) {
-        synchronized (status) {
             this.status = status;
-        }
-
     }
 
     public Coordinate getCoordinate() {
@@ -56,9 +51,9 @@ public class GraphNode implements Runnable {
 
         System.out.println("Node: " + toString() + "; Status: " + status + " 1");
         while (status == NodeStatus.GREEN) {
-//            System.out.print(toString() + " ");
             // Check status of other nodes
             for (GraphNode node : adjacentNodes) {
+
                 if (node.getStatus() == NodeStatus.RED) {
                     System.out.println(toString() + " found out that it's neighbor " + node.toString() + " is on fire!");
                     status = NodeStatus.YELLOW;
@@ -70,14 +65,13 @@ public class GraphNode implements Runnable {
 
         if (status == NodeStatus.YELLOW) {
             System.out.println("Node: " + toString() + "; Status: " + status + " 2");
-//            try {
-//
-//                Thread.yield();
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e) {
-//                System.out.println("Tried sleeping!");
-//                e.printStackTrace();
-//            }
+            try {
+                Thread.yield();
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                System.out.println("Tried sleeping!");
+                e.printStackTrace();
+            }
         }
 
 

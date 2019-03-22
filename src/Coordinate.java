@@ -21,6 +21,17 @@ public class Coordinate {
         return "("+x+","+y+")";
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        Coordinate coord = (Coordinate) obj;
+
+        if (coord != null && x == coord.getX() && y == coord.getY()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public boolean equals(Coordinate coord) {
         if (x == coord.getX() && y == coord.getY()) return true;
         else return false;

@@ -21,16 +21,17 @@ public class GraphDisplay {
 
     private void initDisplay(Graph graph) {
 
+        int scale = 30;
         Group g;
         Circle c;
-        for (GraphNode n : graph.getNodes()){
+        for (GraphNode n : graph.getNodes().values()){
 
             g = new Group();
 
             c = new Circle(10);
             c.setFill(Color.BLUE);
-            c.setCenterX(n.getCoordinate().getX());
-            c.setCenterY(n.getCoordinate().getY());
+            c.setCenterX(n.getCoordinate().getX()*scale);
+            c.setCenterY(n.getCoordinate().getY()*scale);
 
             g.getChildren().add(c);
 

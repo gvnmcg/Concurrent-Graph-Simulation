@@ -2,13 +2,17 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class Graph {
 
     // TODO Need to update this to something like a map, where it maps the coordinates to the node
     // This will better allow adding edges and traversals
-    private LinkedList<GraphNode> nodes = new LinkedList<>();
+//    private LinkedList<GraphNode> nodes = new LinkedList<>();
+    private Map<String, GraphNode> nodes = new HashMap<>();
+    private LinkedList<Thread> nodeThreads = new LinkedList<>();
 
     /**
      * Graph constructor that creates a graph from the given text file
@@ -31,20 +35,32 @@ public class Graph {
                 String[] strArray = line.split(" ");
                 switch (strArray[0]) {
                     case "node":
+                        x = Integer.parseInt(strArray[1]);
+                        y = Integer.parseInt(strArray[2]);
 
-                        x = scale * Integer.parseInt(strArray[1]);
-                        y = scale * Integer.parseInt(strArray[2]);
-                        nodes.add(new GraphNode(x,y));
+                        GraphNode node = new GraphNode(x,y);
+                        nodes.put("" + x + " " + y, node);
+                        nodeThreads.add(new Thread(node));
 
                         break;
                     case "edge":
+                        String c1 = strArray[1] + " " + strArray[2];
+                        String c2 = strArray[3] + " " + strArray[4];
+
+                        if (nodes.get(c1) != null && nodes.get(c2) != null)
+                            nodes.get(c1).addEdge(nodes.get(c2));
 
                         break;
                     case "station":
 
+
                         break;
                     case "fire":
+                        String c = strArray[1] + " " + strArray[2];
 
+                        if (nodes.get(c) != null) {
+                            nodes.get(c).setStatus(NodeStatus.RED);
+                        }
                         break;
                 }
             }
@@ -54,11 +70,12 @@ public class Graph {
             e.printStackTrace();
         }
 
+        for (Thread thr : nodeThreads) thr.start();
 
-        testGraph();
+//        testGraph();
     }
 
-    public LinkedList<GraphNode> getNodes() {
+    public Map<String, GraphNode> getNodes() {
         return nodes;
     }
 

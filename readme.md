@@ -55,4 +55,4 @@ This was made using Java SDK 10.0.2
 ## Authors
 
 * **Connor Frost** - *Developing work* - [CS351 Project 4](https://csgit.cs.unm.edu/frostc/)
-* **Gavin McGuire** - *Developing work* - [CS351 Project 4](https://csgit.cs.unm.edu/gmcguire/)
+* **Gavin McGuire** - *Developing work* - [CS351 Project 4](https://csgit.cs.unm.edu/mcguireg/)

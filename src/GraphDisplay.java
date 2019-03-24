@@ -64,11 +64,19 @@ public class GraphDisplay {
 
             edgeCheckList.put(n, new LinkedList<>());
 
+
             for (GraphNode e : n.getAdjacentNodes()){
 
+                //if the the edge has not been displayed
                 if (!edgeCheckList.get(n).contains(e)) {
 
+                    //adding this edge took more steps than I thought
                     edgeCheckList.get(n).add(e);
+                    if (!edgeCheckList.containsKey(e)){
+                        edgeCheckList.put(e, new LinkedList<>());
+                        edgeCheckList.get(e).add(n);
+
+                    }
 
                     l = new Line();
                     l.setStartX(n.getCoordinate().getX());
@@ -76,6 +84,8 @@ public class GraphDisplay {
 
                     l.setEndX(e.getCoordinate().getX());
                     l.setEndY(e.getCoordinate().getY());
+
+                    centerGroup.getChildren().add(l);
 
                 }
             }

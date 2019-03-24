@@ -1,3 +1,5 @@
+import javafx.scene.shape.Circle;
+
 import java.util.LinkedList;
 
 
@@ -6,6 +8,8 @@ public class GraphNode implements Runnable {
     private LinkedList<GraphNode> adjacentNodes = new LinkedList<>();
     private Coordinate cords;
     private NodeStatus status;
+
+    private Circle display;
 
 
     GraphNode(int x, int y) {
@@ -44,6 +48,10 @@ public class GraphNode implements Runnable {
 
     public Coordinate getCoordinate() {
         return cords;
+    }
+
+    public void setDisplay(Circle display) {
+        this.display = display;
     }
 
     @Override

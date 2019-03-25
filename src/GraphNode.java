@@ -50,6 +50,18 @@ public class GraphNode implements Runnable {
     }
 
     public synchronized void setStatus(NodeStatus status) {
+
+        switch (status){
+            case GREEN:
+                display.setFill(Color.BLUE);
+                break;
+            case YELLOW:
+                display.setFill(Color.YELLOW);
+                break;
+            case RED:
+                display.setFill(Color.RED);
+                break;
+        }
             this.status = status;
     }
 

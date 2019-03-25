@@ -17,6 +17,11 @@ public class GraphNode implements Runnable {
         status = NodeStatus.GREEN;
     }
 
+    GraphNode(Coordinate coordinate) {
+        cords = coordinate;
+        status = NodeStatus.GREEN;
+    }
+
     public void addEdge(GraphNode node) {
         adjacentNodes.add(node);
         node.getAdjacentNodes().add(this);

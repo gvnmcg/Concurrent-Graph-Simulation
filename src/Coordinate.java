@@ -11,6 +11,16 @@ public class Coordinate {
         this.y = y;
     }
 
+    Coordinate(String str) {
+
+        String[] strArr = str.split(" ");
+
+        this.x = Integer.parseInt(strArr[0]);
+        this.y = Integer.parseInt(strArr[1]);
+    }
+
+
+
     public int getX() {
         return x;
     }

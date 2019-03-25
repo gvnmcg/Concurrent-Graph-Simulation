@@ -8,8 +8,15 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
 
-        Graph graph = new Graph("resources/graph1");
+        Graph graph = new Graph("resources/BottleNeck");
         GraphDisplay graphDisplay = new GraphDisplay(graph);
+
+
+        //does not work
+        primaryStage.setOnCloseRequest(e -> {
+            e.consume();
+            primaryStage.close();
+        });
 
         primaryStage.setScene(new Scene(graphDisplay.getRoot(), 700, 500));
         primaryStage.show();

@@ -1,3 +1,5 @@
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.util.LinkedList;
@@ -56,7 +58,23 @@ public class GraphNode implements Runnable {
     }
 
     public void setDisplay(Circle display) {
+
         this.display = display;
+
+    }
+
+    public Circle getDisplay() {
+//        return display;
+
+        Circle c ;
+        c = new Circle(10);
+        c.setFill(Color.BLUE);
+        c.setCenterX(getCoordinate().getX()*GraphDisplay.scale);
+        c.setCenterY(getCoordinate().getY()*GraphDisplay.scale);
+
+        return c;
+
+
     }
 
     @Override

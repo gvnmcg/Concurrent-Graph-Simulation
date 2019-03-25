@@ -1,5 +1,7 @@
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Pair;
+
 
 public class GraphEdge {
 
@@ -25,9 +27,21 @@ public class GraphEdge {
     }
 
     public Line getLine() {
-        return new Line(nodePair.getKey().getCoordinate().getX(),
-                nodePair.getKey().getCoordinate().getY(),
-                nodePair.getValue().getCoordinate().getX(),
-                nodePair.getValue().getCoordinate().getY());
+        Line l = new Line();
+
+        System.out.println("make line to " + nodePair.getKey() + " to " + nodePair.getValue());
+
+        l.setStartX(nodePair.getKey().getCoordinate().getX() * GraphDisplay.scale);
+        l.setStartY(nodePair.getKey().getCoordinate().getY() * GraphDisplay.scale);
+        l.setEndX(nodePair.getValue().getCoordinate().getX() * GraphDisplay.scale);
+        l.setEndY(nodePair.getValue().getCoordinate().getY() * GraphDisplay.scale);
+        l.setFill(Color.BLACK);
+        l.setStroke(Color.BLACK);
+        return l;
+    }
+
+    @Override
+    public String toString() {
+        return nodePair.getKey().toString() + " " + nodePair.getValue();
     }
 }

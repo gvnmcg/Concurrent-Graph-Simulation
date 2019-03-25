@@ -12,7 +12,7 @@ public class Graph {
     // This will better allow adding edges and traversals
 //    private LinkedList<GraphNode> nodes = new LinkedList<>();
 //    private Map<String, GraphNode> nodes = new HashMap<>();
-    private Map<Coordinate, GraphNode> nodes = new HashMap<>();
+    private HashMap<Coordinate, GraphNode> nodes = new HashMap<>();
     private LinkedList<Thread> nodeThreads = new LinkedList<>();
     private LinkedList<GraphEdge> edges = new LinkedList<>();
 
@@ -28,7 +28,6 @@ public class Graph {
         String line;
 
         int x, y;
-        int scale = 30;
         try {
             in = new BufferedReader(new FileReader(filename + ".txt"));
 
@@ -49,25 +48,38 @@ public class Graph {
 
                         //save in data struct
                         nodes.put(coord, node);
-//                        nodes.put(new Coordinate("" + x + " " + y), node);
-
 
                         nodeThreads.add(new Thread(node));
 
                         break;
                     case "edge":
+                        //TODO you can revert if you need too,
+                        //TODO really just because those edges aint working
 
                         //break input into coordinates
 //                        String c1 = strArray[1] + " " + strArray[2];
-                        Coordinate c1 = new Coordinate(strArray[1] + " " + strArray[2]);
+//                        Coordinate c1 = new Coordinate(strArray[1] + " " + strArray[2]);
+                        x = Integer.parseInt(strArray[1]);
+                        y = Integer.parseInt(strArray[2]);
+                        Coordinate c1 = new Coordinate(x,y);
+
 //                        String c2 = strArray[3] + " " + strArray[4];
-                        Coordinate c2 = new Coordinate(strArray[3] + " " + strArray[4]);
+//                        Coordinate c2 = new Coordinate(strArray[3] + " " + strArray[4]);
+                        x = Integer.parseInt(strArray[3]);
+                        y = Integer.parseInt(strArray[4]);
+                        Coordinate c2 = new Coordinate(x,y);
 
 
-                        if (nodes.get(c1) != null && nodes.get(c2) != null){
+                        //TODO never true???
+                        if (nodes.containsKey(c1) && nodes.containsKey(c2)){
+
                             edges.add(new GraphEdge(nodes.get(c1), nodes.get(c2)));
                         }
-//                            nodes.get(c1).addEdge(nodes.get(c2));
+
+
+                        if (nodes.get(c1) != null && nodes.get(c2) != null) {
+                            nodes.get(c1).addEdge(nodes.get(c2));
+                        }
 
                         break;
                     case "station":
@@ -76,7 +88,6 @@ public class Graph {
                         break;
                     case "fire":
 //                        String c = strArray[1] + " " + strArray[2];
-
                         Coordinate c = new Coordinate(strArray[1] + " " + strArray[2]);
 
                         if (nodes.get(c) != null) {
@@ -92,13 +103,20 @@ public class Graph {
             e.printStackTrace();
         }
 
-        for (Thread thr : nodeThreads) thr.start();
+//        System.out.println(nodes);
+//        System.out.println(edges);
+
+//        for (Thread thr : nodeThreads) thr.start();
 
 //        testGraph();
     }
 
     public Map<Coordinate, GraphNode> getNodes() {
         return nodes;
+    }
+
+    public LinkedList<GraphEdge> getEdges() {
+        return edges;
     }
 
     private void testGraph() {

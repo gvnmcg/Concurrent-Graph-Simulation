@@ -37,6 +37,7 @@ public class GraphEdge {
         l.setEndY(nodePair.getValue().getCoordinate().getY() * GraphDisplay.scale);
         l.setFill(Color.BLACK);
         l.setStroke(Color.BLACK);
+        l.setStrokeWidth(5);
         return l;
     }
 

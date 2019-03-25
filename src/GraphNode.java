@@ -1,4 +1,3 @@
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -15,13 +14,15 @@ public class GraphNode implements Runnable {
 
 
     GraphNode(int x, int y) {
+        display = new Circle(10);
         cords = new Coordinate(x,y);
-        status = NodeStatus.GREEN;
+        setStatus(NodeStatus.GREEN);
     }
 
     GraphNode(Coordinate coordinate) {
+        display = new Circle(10);
         cords = coordinate;
-        status = NodeStatus.GREEN;
+        setStatus(NodeStatus.GREEN);
     }
 
     public void addEdge(GraphNode node) {
@@ -34,10 +35,12 @@ public class GraphNode implements Runnable {
     }
 
     public void printNeighbors() {
-        for (GraphNode node : adjacentNodes) {
-            System.out.print(node.toString() + " ");
+        synchronized (adjacentNodes) {
+            for (GraphNode node : adjacentNodes) {
+                System.out.print(node.toString() + " ");
+            }
+            System.out.println();
         }
-        System.out.println();
     }
 
     @Override
@@ -46,45 +49,50 @@ public class GraphNode implements Runnable {
     }
 
     public synchronized NodeStatus getStatus() {
+        synchronized (status) {
             return status;
+        }
     }
 
     public synchronized void setStatus(NodeStatus status) {
+        synchronized (status) {
 
-        switch (status){
-            case GREEN:
-                display.setFill(Color.BLUE);
-                break;
-            case YELLOW:
-                display.setFill(Color.YELLOW);
-                break;
-            case RED:
-                display.setFill(Color.RED);
-                break;
-        }
+            switch (status){
+                case GREEN:
+                    display.setFill(Color.BLUE);
+                    break;
+                case YELLOW:
+                    display.setFill(Color.YELLOW);
+                    break;
+                case RED:
+                    display.setFill(Color.RED);
+                    break;
+            }
             this.status = status;
+
+        }
     }
 
     public Coordinate getCoordinate() {
         return cords;
     }
 
-    public void setDisplay(Circle display) {
+//    public void setDisplay(Circle display) {
+//
+//        this.display = display;
+//
+//    }
 
-        this.display = display;
+    public synchronized Circle getDisplay() {
+        synchronized(status) {
+            display.setCenterX(getCoordinate().getX() * GraphDisplay.scale);
+            display.setCenterY(getCoordinate().getY() * GraphDisplay.scale);
+            return display;
+        }
+//        Circle c ;
 
-    }
 
-    public Circle getDisplay() {
-//        return display;
-
-        Circle c ;
-        c = new Circle(10);
-        c.setFill(Color.BLUE);
-        c.setCenterX(getCoordinate().getX()*GraphDisplay.scale);
-        c.setCenterY(getCoordinate().getY()*GraphDisplay.scale);
-
-        return c;
+//        return c;
 
 
     }
@@ -93,20 +101,22 @@ public class GraphNode implements Runnable {
     public void run() {
 
         System.out.println("Node: " + toString() + "; Status: " + status + " 1");
-        while (status == NodeStatus.GREEN) {
+        while (getStatus() == NodeStatus.GREEN) {
             // Check status of other nodes
-            for (GraphNode node : adjacentNodes) {
+            synchronized (adjacentNodes) {
+                for (GraphNode node : adjacentNodes) {
 
-                if (node.getStatus() == NodeStatus.RED) {
-                    System.out.println(toString() + " found out that it's neighbor " + node.toString() + " is on fire!");
-                    status = NodeStatus.YELLOW;
-                    break;
+                    if (node.getStatus() == NodeStatus.RED) {
+                        System.out.println(toString() + " found out that it's neighbor " + node.toString() + " is on fire!");
+                        setStatus(NodeStatus.YELLOW);
+                        break;
+                    }
                 }
             }
             Thread.yield();
         }
 
-        if (status == NodeStatus.YELLOW) {
+        if (getStatus() == NodeStatus.YELLOW) {
             System.out.println("Node: " + toString() + "; Status: " + status + " 2");
             try {
                 Thread.yield();
@@ -118,8 +128,13 @@ public class GraphNode implements Runnable {
         }
 
 
-        status = NodeStatus.RED;
+        setStatus(NodeStatus.RED);
         System.out.println("Node: " + toString() + "; Status: " + status + " 3");
         // Is red, need to notify others o
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
     }
 }

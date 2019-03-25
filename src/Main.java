@@ -8,7 +8,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
 
-        Graph graph = new Graph("resources/BottleNeck");
+        Graph graph = new Graph("resources/graph");
         GraphDisplay graphDisplay = new GraphDisplay(graph);
 
 
@@ -17,6 +17,9 @@ public class Main extends Application {
             e.consume();
             primaryStage.close();
         });
+
+//        MobileAgent test = new MobileAgent(getBaseStation(), true);
+
 
         primaryStage.setScene(new Scene(graphDisplay.getRoot(), 700, 500));
         primaryStage.show();

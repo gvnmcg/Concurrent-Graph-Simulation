@@ -15,6 +15,7 @@ public class Graph {
     private HashMap<Coordinate, GraphNode> nodes = new HashMap<>();
     private LinkedList<Thread> nodeThreads = new LinkedList<>();
     private LinkedList<GraphEdge> edges = new LinkedList<>();
+    private GraphNode baseStation;
 
     /**
      * Graph constructor that creates a graph from the given text file
@@ -53,26 +54,19 @@ public class Graph {
 
                         break;
                     case "edge":
-                        //TODO you can revert if you need too,
-                        //TODO really just because those edges aint working
 
                         //break input into coordinates
-//                        String c1 = strArray[1] + " " + strArray[2];
-//                        Coordinate c1 = new Coordinate(strArray[1] + " " + strArray[2]);
                         x = Integer.parseInt(strArray[1]);
                         y = Integer.parseInt(strArray[2]);
                         Coordinate c1 = new Coordinate(x,y);
 
-//                        String c2 = strArray[3] + " " + strArray[4];
-//                        Coordinate c2 = new Coordinate(strArray[3] + " " + strArray[4]);
                         x = Integer.parseInt(strArray[3]);
                         y = Integer.parseInt(strArray[4]);
                         Coordinate c2 = new Coordinate(x,y);
 
 
-                        //TODO never true???
+                        //FIXED Had to overwrite the hashcode function within the coordinate class to make sure equality is checked based on how you want it for more proprietary classes
                         if (nodes.containsKey(c1) && nodes.containsKey(c2)){
-
                             edges.add(new GraphEdge(nodes.get(c1), nodes.get(c2)));
                         }
 
@@ -84,13 +78,18 @@ public class Graph {
                         break;
                     case "station":
 
+                        x = Integer.parseInt(strArray[1]);
+                        y = Integer.parseInt(strArray[2]);
+                        Coordinate c3 = new Coordinate(x,y);
 
+                        baseStation = new GraphNode(c3);
                         break;
                     case "fire":
 //                        String c = strArray[1] + " " + strArray[2];
                         Coordinate c = new Coordinate(strArray[1] + " " + strArray[2]);
 
-                        if (nodes.get(c) != null) {
+                        if (nodes != null && nodes.get(c) != null) {
+                            System.out.println(nodes.get(c));
                             nodes.get(c).setStatus(NodeStatus.RED);
                             System.out.println(nodes.get(c).toString() + "Status: RED");
                         }
@@ -106,10 +105,21 @@ public class Graph {
 //        System.out.println(nodes);
 //        System.out.println(edges);
 
-//        for (Thread thr : nodeThreads) thr.start();
+        for (GraphNode node : nodes.values()) {
+            System.out.println(node);
+            System.out.println(node.getAdjacentNodes().size());
+            node.printNeighbors();
+
+        }
+
+
+        MobileAgent test = new MobileAgent(getBaseStation(), true);
+        for (Thread thr : nodeThreads) thr.start();
 
 //        testGraph();
     }
+
+
 
     public Map<Coordinate, GraphNode> getNodes() {
         return nodes;
@@ -117,6 +127,10 @@ public class Graph {
 
     public LinkedList<GraphEdge> getEdges() {
         return edges;
+    }
+
+    public GraphNode getBaseStation() {
+        return baseStation;
     }
 
     private void testGraph() {
@@ -143,4 +157,6 @@ public class Graph {
         Thread t3 = new Thread(gn3);
         t3.start();
     }
+
+
 }

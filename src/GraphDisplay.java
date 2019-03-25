@@ -1,8 +1,8 @@
 import javafx.scene.Group;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class GraphDisplay {
 
@@ -28,12 +28,6 @@ public class GraphDisplay {
      */
     private void initDisplay(Graph graph) {
 
-
-        //display each node
-        for (GraphNode n : graph.getNodes().values()){
-
-            centerGroup.getChildren().add(n.getDisplay());
-        }
         //TODO cannot display any edge
         //display each edge
         for (GraphEdge e : graph.getEdges()){
@@ -41,10 +35,16 @@ public class GraphDisplay {
             centerGroup.getChildren().add(e.getLine());
         }
 
+        //display each node
+        for (GraphNode n : graph.getNodes().values()){
+
+            centerGroup.getChildren().add(n.getDisplay());
+        }
+
     }
 
 
-    public BorderPane getRoot() {
+    public Pane getRoot() {
         return root;
     }
 }

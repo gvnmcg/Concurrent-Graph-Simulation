@@ -44,4 +44,8 @@ public class Coordinate {
         }
     }
 
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
 }

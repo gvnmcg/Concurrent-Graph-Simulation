@@ -82,7 +82,7 @@ public class Graph {
                         y = Integer.parseInt(strArray[2]);
                         Coordinate c3 = new Coordinate(x,y);
 
-                        baseStation = new GraphNode(c3);
+                        baseStation = nodes.get(c3);
                         break;
                     case "fire":
 //                        String c = strArray[1] + " " + strArray[2];
@@ -105,15 +105,15 @@ public class Graph {
 //        System.out.println(nodes);
 //        System.out.println(edges);
 
-        for (GraphNode node : nodes.values()) {
-            System.out.println(node);
-            System.out.println(node.getAdjacentNodes().size());
-            node.printNeighbors();
+//        for (GraphNode node : nodes.values()) {
+//            System.out.println(node);
+//            System.out.println(node.getAdjacentNodes().size());
+//            node.printNeighbors();
+//        }
 
-        }
 
+//        MobileAgent test = new MobileAgent(getBaseStation(), true);
 
-        MobileAgent test = new MobileAgent(getBaseStation(), true);
         for (Thread thr : nodeThreads) thr.start();
 
 //        testGraph();

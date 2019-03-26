@@ -1,16 +1,15 @@
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-
-import java.util.LinkedList;
-
+import java.util.ArrayList;
 
 public class GraphNode implements Runnable {
 
-    private LinkedList<GraphNode> adjacentNodes = new LinkedList<>();
+    private ArrayList<GraphNode> adjacentNodes = new ArrayList<>();
     private Coordinate cords;
     private NodeStatus status;
 
     private Circle display;
+    private MobileAgent mobileAgent;
 
 
     GraphNode(int x, int y) {
@@ -30,7 +29,7 @@ public class GraphNode implements Runnable {
         node.getAdjacentNodes().add(this);
     }
 
-    public LinkedList<GraphNode> getAdjacentNodes() {
+    public ArrayList<GraphNode> getAdjacentNodes() {
         return adjacentNodes;
     }
 
@@ -99,6 +98,7 @@ public class GraphNode implements Runnable {
 
     @Override
     public void run() {
+        // TODO Change to a notify wait program.
 
         System.out.println("Node: " + toString() + "; Status: " + status + " 1");
         while (getStatus() == NodeStatus.GREEN) {
@@ -109,6 +109,13 @@ public class GraphNode implements Runnable {
                     if (node.getStatus() == NodeStatus.RED) {
                         System.out.println(toString() + " found out that it's neighbor " + node.toString() + " is on fire!");
                         setStatus(NodeStatus.YELLOW);
+                        if (mobileAgent != null) {
+                            synchronized (mobileAgent) {
+                                System.out.println("Notifying MA");
+                                mobileAgent.notify(getStatus());
+                                mobileAgent.notify();
+                            }
+                        }
                         break;
                     }
                 }
@@ -129,6 +136,12 @@ public class GraphNode implements Runnable {
 
 
         setStatus(NodeStatus.RED);
+        if (mobileAgent != null) {
+            synchronized (mobileAgent) {
+                mobileAgent.notify(getStatus());
+                mobileAgent.notify();
+            }
+        }
         System.out.println("Node: " + toString() + "; Status: " + status + " 3");
         // Is red, need to notify others o
     }
@@ -136,5 +149,10 @@ public class GraphNode implements Runnable {
     @Override
     public int hashCode() {
         return toString().hashCode();
+    }
+
+    public void setMobileAgent(MobileAgent mobileAgent) {
+        this.mobileAgent = mobileAgent;
+
     }
 }

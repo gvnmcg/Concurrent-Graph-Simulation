@@ -9,6 +9,7 @@ public class Main extends Application {
 
 
         Graph graph = new Graph("resources/graph");
+        MobileAgent test = new MobileAgent(graph.getBaseStation(), true);
         GraphDisplay graphDisplay = new GraphDisplay(graph);
 
 
@@ -17,8 +18,6 @@ public class Main extends Application {
             e.consume();
             primaryStage.close();
         });
-
-//        MobileAgent test = new MobileAgent(getBaseStation(), true);
 
 
         primaryStage.setScene(new Scene(graphDisplay.getRoot(), 700, 500));

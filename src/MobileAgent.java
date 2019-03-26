@@ -1,3 +1,6 @@
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
 import java.util.Iterator;
 
 public class MobileAgent implements Runnable {
@@ -5,6 +8,8 @@ public class MobileAgent implements Runnable {
     private GraphNode node;
     private NodeStatus status;
     private Thread thread;
+
+    private Circle display;
 
     MobileAgent(GraphNode node, boolean init) {
         System.out.println(node.getAdjacentNodes().size());
@@ -99,5 +104,13 @@ public class MobileAgent implements Runnable {
 
 
 
+    public Circle initDisplay() {
 
+        Circle c = new Circle(5);
+        c.setCenterX(node.getCoordinate().getX());
+        c.setCenterY(node.getCoordinate().getY());
+        c.setFill(Color.GREEN);
+
+        return c;
+    }
 }

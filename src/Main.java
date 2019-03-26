@@ -8,7 +8,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
 
-        Graph graph = new Graph("resources/graph");
+        Graph graph = new Graph("resources/sample");
         MobileAgent test = new MobileAgent(graph.getBaseStation(), true);
         GraphDisplay graphDisplay = new GraphDisplay(graph);
 

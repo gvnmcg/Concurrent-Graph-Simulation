@@ -102,13 +102,18 @@ public class GraphNode implements Runnable {
 
         System.out.println("Node: " + toString() + "; Status: " + status + " 1");
         while (getStatus() == NodeStatus.GREEN) {
+
             // Check status of other nodes
             synchronized (adjacentNodes) {
+
+                //check adjecent nodes for fires
                 for (GraphNode node : adjacentNodes) {
 
                     if (node.getStatus() == NodeStatus.RED) {
                         System.out.println(toString() + " found out that it's neighbor " + node.toString() + " is on fire!");
                         setStatus(NodeStatus.YELLOW);
+
+                        //if there is a agent, notify the agent
                         if (mobileAgent != null) {
                             synchronized (mobileAgent) {
                                 System.out.println("Notifying MA");
@@ -123,8 +128,11 @@ public class GraphNode implements Runnable {
             Thread.yield();
         }
 
+        //if node is notified of a fire
         if (getStatus() == NodeStatus.YELLOW) {
             System.out.println("Node: " + toString() + "; Status: " + status + " 2");
+
+            //wait to catch on fire
             try {
                 Thread.yield();
                 Thread.sleep(1000);
@@ -135,6 +143,7 @@ public class GraphNode implements Runnable {
         }
 
 
+        //on fire
         setStatus(NodeStatus.RED);
         if (mobileAgent != null) {
             synchronized (mobileAgent) {

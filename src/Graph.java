@@ -64,6 +64,16 @@ public class Graph {
                         y = Integer.parseInt(strArray[4]);
                         Coordinate c2 = new Coordinate(x,y);
 
+//                        GraphNode node;
+                        if (!nodes.containsKey(c2)){
+                            node = new GraphNode(c2);
+                            nodes.put(c2, node);
+                        }
+                        if (!nodes.containsKey(c1)){
+                            node = new GraphNode(c1);
+                            nodes.put(c1, node);
+                        }
+
 
                         //FIXED Had to overwrite the hashcode function within the coordinate class to make sure equality is checked based on how you want it for more proprietary classes
                         if (nodes.containsKey(c1) && nodes.containsKey(c2)){

@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class GraphDisplay {
 
-    public static int scale = 30;
+    public static int scale = 50;
     private BorderPane root = new BorderPane();
     private HashMap<GraphNode, Group> nodeGroupMap = new HashMap<>();
 

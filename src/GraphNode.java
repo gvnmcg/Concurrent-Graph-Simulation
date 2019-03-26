@@ -112,7 +112,7 @@ public class GraphNode implements Runnable {
                         if (mobileAgent != null) {
                             synchronized (mobileAgent) {
                                 System.out.println("Notifying MA");
-                                mobileAgent.notify(getStatus());
+//                                mobileAgent.notify(getStatus());
                                 mobileAgent.notify();
                             }
                         }

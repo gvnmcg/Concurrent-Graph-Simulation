@@ -33,6 +33,7 @@ public class MobileAgent implements Runnable {
     }
 
     private void propagate() {
+        System.out.println("Propagating nodes @ " + node);
         for (GraphNode node : this.node.getAdjacentNodes())
             if (node.getStatus() == NodeStatus.GREEN) new MobileAgent(node, false);
     }
@@ -46,8 +47,9 @@ public class MobileAgent implements Runnable {
         System.out.println("MA: " + node + " | Status: " + node.getStatus());
         while (node.getStatus() == NodeStatus.GREEN) {
             try {
-                wait();
+                synchronized (this) {  wait(); }
             } catch (InterruptedException e) {
+                System.out.println("It broke");
                 e.printStackTrace();
             }
         }
@@ -56,7 +58,7 @@ public class MobileAgent implements Runnable {
         propagate();
         while (node.getStatus() == NodeStatus.YELLOW) {
             try {
-                wait();
+                synchronized (this) {  wait(); }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

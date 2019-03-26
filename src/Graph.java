@@ -93,6 +93,10 @@ public class Graph {
                         Coordinate c3 = new Coordinate(x,y);
 
                         baseStation = nodes.get(c3);
+
+                        nodes.get(c3);
+                        nodes.put(c3, new BaseStation(c3));
+
                         break;
                     case "fire":
 //                        String c = strArray[1] + " " + strArray[2];

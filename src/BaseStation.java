@@ -1,7 +1,7 @@
 public class BaseStation extends GraphNode {
 
 
-    BaseStation(){
-        super();
+    BaseStation(Coordinate coordinate){
+        super(coordinate);
     }
 }

@@ -23,7 +23,7 @@ public class Main extends Application {
 
         //display graph
         GraphDisplay graphDisplay = new GraphDisplay(graph);
-        System.out.println("huh");
+        MobileAgent.setGraphDisplay(graphDisplay);
 
         //start simulation
         graph.startThreads(graphDisplay);

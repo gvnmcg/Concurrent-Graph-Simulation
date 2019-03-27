@@ -16,7 +16,10 @@ public class GraphDisplay {
 
     private Group centerGroup = new Group();
 
+    private Graph graph;
+
     GraphDisplay(Graph g){
+        this.graph = g;
 
         root.setCenter(centerGroup);
         initDisplay(g);
@@ -43,7 +46,11 @@ public class GraphDisplay {
             centerGroup.getChildren().add(n.getDisplay());
         }
 
+//        updateDispl
+
     }
+
+
 
     public void addToCenter(Node thing){
         centerGroup.getChildren().add(thing);

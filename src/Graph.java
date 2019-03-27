@@ -137,7 +137,6 @@ public class Graph {
 
         for (Thread thr : nodeThreads) thr.start();
         MobileAgent mobileAgent  = station.initAgent(baseStation);
-        mobileAgent.initDisplay();
         graphDisplay.addToCenter(mobileAgent.getDisplay());
 
         Thread maThread = new Thread(mobileAgent);

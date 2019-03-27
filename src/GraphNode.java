@@ -1,5 +1,6 @@
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+
 import java.util.ArrayList;
 
 /**
@@ -83,37 +84,25 @@ public class GraphNode implements Runnable {
     }
 
 
+
     @Override
     public void run() {
         // TODO Change to a notify wait program.
 
         System.out.println("Node: " + toString() + "; Status: " + status + " 1");
         while (getStatus() == NodeStatus.GREEN) {
-
-            // Check status of other nodes
-            synchronized (adjacentNodes) {
-
-                //check adjecent nodes for fires
-                for (GraphNode node : adjacentNodes) {
-
-                    //if it detects a fire then set to YELLOW
-                    if (node.getStatus() == NodeStatus.RED) {
-                        System.out.println(toString() + " found out that it's neighbor " + node.toString() + " is on fire!");
-                        setStatus(NodeStatus.YELLOW);
-
-                        //if there is a agent, notify the agent
-                        if (mobileAgent != null) {
-                            synchronized (mobileAgent) {
-                                System.out.println("Notifying MA");
-//                                mobileAgent.notify(getStatus());
-                                mobileAgent.notify();
-                            }
-                        }
-                        break;
-                    }
-                }
+            try {
+                synchronized (this) {wait();}
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             Thread.yield();
+        }
+        setStatus(NodeStatus.YELLOW);
+        if (mobileAgent != null) {
+            synchronized (mobileAgent) {
+                mobileAgent.notify();
+            }
         }
 
         //if node is notified of a fire
@@ -123,7 +112,7 @@ public class GraphNode implements Runnable {
             //wait to catch on fire
             try {
                 Thread.yield();
-                Thread.sleep(4000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 System.out.println("Tried sleeping!");
                 e.printStackTrace();
@@ -133,9 +122,17 @@ public class GraphNode implements Runnable {
 
         //on fire
         setStatus(NodeStatus.RED);
+        for (GraphNode node : adjacentNodes) {
+            synchronized (node) {
+                if (node.getStatus() != NodeStatus.RED) {
+                    node.setStatus(NodeStatus.YELLOW);
+                    node.notify();
+                }
+            }
+        }
+        setStatus(NodeStatus.RED);
         if (mobileAgent != null) {
             synchronized (mobileAgent) {
-                mobileAgent.notify(getStatus());
                 mobileAgent.notify();
             }
         }
@@ -152,4 +149,31 @@ public class GraphNode implements Runnable {
         this.mobileAgent = mobileAgent;
 
     }
+
+    public MobileAgent getMobileAgent() {
+        return mobileAgent;
+    }
 }
+//            // Check status of other nodes
+//            synchronized (adjacentNodes) {
+//
+//                //check adjecent nodes for fires
+//                for (GraphNode node : adjacentNodes) {
+//
+//                    //if it detects a fire then set to YELLOW
+//                    if (node.getStatus() == NodeStatus.RED) {
+//                        System.out.println(toString() + " found out that it's neighbor " + node.toString() + " is on fire!");
+//                        setStatus(NodeStatus.YELLOW);
+//
+//                        //if there is a agent, notify the agent
+//                        if (mobileAgent != null) {
+//                            synchronized (mobileAgent) {
+//                                System.out.println("Notifying MA");
+////                                mobileAgent.notify(getStatus());
+//                                mobileAgent.notify();
+//                            }
+//                        }
+//                        break;
+//                    }
+//                }
+//            }

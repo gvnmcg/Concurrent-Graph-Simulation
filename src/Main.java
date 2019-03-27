@@ -19,12 +19,13 @@ public class Main extends Application {
 
         //initial gragh data structure
         Graph graph = new Graph("resources/sample");
-//        MobileAgent test = new MobileAgent(graph.getBaseStation(), true);
 
         //display graph
         GraphDisplay graphDisplay = new GraphDisplay(graph);
         System.out.println("huh");
 
+
+        MobileAgent test = new MobileAgent(graph.getStation(), graphDisplay,  true);
         //start simulation
         graph.startThreads(graphDisplay);
 

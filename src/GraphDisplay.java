@@ -1,3 +1,4 @@
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
@@ -21,6 +22,13 @@ public class GraphDisplay {
         root.setCenter(centerGroup);
         initDisplay(g);
 
+//        AnimationTimer aTimer = new AnimationTimer() {
+//            @Override
+//            public void handle(long now) {
+//                refreshGraphView();
+//            }
+//        }
+
     }
 
     /**
@@ -41,12 +49,19 @@ public class GraphDisplay {
         for (GraphNode n : graph.getNodes().values()){
 
             centerGroup.getChildren().add(n.getDisplay());
+
         }
 
     }
 
     public void addToCenter(Node thing){
-        centerGroup.getChildren().add(thing);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                centerGroup.getChildren().add(thing);
+            }
+
+        });
     }
 
 

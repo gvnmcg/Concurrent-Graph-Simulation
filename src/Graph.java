@@ -99,7 +99,7 @@ public class Graph {
 //                        baseStation = nodes.get(c3);
 
                         //BaseStation has ref to the node
-                        station = new BaseStation(nodes.get(b));
+//                        station = new BaseStation(nodes.get(b));
                         baseStation = nodes.get(b);
 
                         break;
@@ -131,17 +131,26 @@ public class Graph {
 //        }
 
 //        testGraph();
+
+        for (GraphNode node : nodes.values()) {
+            if (node.getStatus() == NodeStatus.RED) {
+                for (GraphNode yellowNodes : node.getAdjacentNodes()) {
+                    yellowNodes.setStatus(NodeStatus.YELLOW);
+                }
+            }
+        }
     }
 
     public void startThreads(GraphDisplay graphDisplay){
 
         for (Thread thr : nodeThreads) thr.start();
-        MobileAgent mobileAgent  = station.initAgent(baseStation);
-        mobileAgent.initDisplay();
-        graphDisplay.addToCenter(mobileAgent.getDisplay());
 
-        Thread maThread = new Thread(mobileAgent);
-        maThread.start();
+//        MobileAgent mobileAgent  = station.initAgent(baseStation);
+//        mobileAgent.initDisplay();
+//        graphDisplay.addToCenter(mobileAgent.getDisplay());
+
+//        Thread maThread = new Thread(mobileAgent);
+//        maThread.start();
     }
 
 
@@ -154,8 +163,8 @@ public class Graph {
         return edges;
     }
 
-    public BaseStation getStation() {
-        return station;
+    public GraphNode getStation() {
+        return baseStation;
     }
 
     private void testGraph() {

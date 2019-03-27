@@ -1,30 +1,39 @@
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import java.util.Iterator;
-
 public class MobileAgent implements Runnable {
 
+    private static GraphDisplay gd = null;
     private GraphNode node;
-    private NodeStatus status;
     private Thread thread;
-
     private Circle display;
 
+
+    MobileAgent(GraphNode node, GraphDisplay gd, boolean init) {
+        this(node, init);
+        singletonGD(gd);
+        initDisplay();
+    }
+
+    private void singletonGD(GraphDisplay gd) {
+        if (this.gd == null) this.gd = gd;
+    }
+
+
     MobileAgent(GraphNode node, boolean init) {
-        System.out.println(node.getAdjacentNodes().size());
+        initDisplay();
 
         this.node = node;
-//        if (init) {
-//            walkToFire(node);
-//        } else {
-//            // Propogated
-//            this.node = node;
-//        }
+        if (init) {
+            walkToFire(node);
+        } else {
+            // Propogated
+            this.node = node;
+        }
 
-//        this.node.setMobileAgent(this);
-//        thread = new Thread(this);
-//        thread.start();
+        this.node.setMobileAgent(this);
+        thread = new Thread(this);
+        thread.start();
     }
 
     /**
@@ -80,7 +89,7 @@ public class MobileAgent implements Runnable {
     private void propagate() {
         System.out.println("Propagating nodes @ " + node);
         for (GraphNode node : this.node.getAdjacentNodes())
-            if (node.getStatus() == NodeStatus.GREEN) new MobileAgent(node, false);
+            if (node.getStatus() == NodeStatus.GREEN) new MobileAgent(node,false);
     }
 
     public void notify(NodeStatus status) {
@@ -91,25 +100,25 @@ public class MobileAgent implements Runnable {
     public void run() {
 
 
-        //random walk until node catches fire
-        while(node.getStatus() == NodeStatus.GREEN){
-            while(node.getStatus() == NodeStatus.GREEN){
-
-                node = node.getAdjacentNodes().get(
-                        (int)(Math.random()*node.getAdjacentNodes().size()));
-
-                updateDisplay(node.getCoordinate());
-
-                try {
-                    Thread.sleep( 2000);
-                } catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-
-            }
-
-            updateDisplay(node.getCoordinate());
-        }
+//        //random walk until node catches fire
+//        while(node.getStatus() == NodeStatus.GREEN){
+//            while(node.getStatus() == NodeStatus.GREEN){
+//
+//                node = node.getAdjacentNodes().get(
+//                        (int)(Math.random()*node.getAdjacentNodes().size()));
+//
+//                updateDisplay(node.getCoordinate());
+//
+//                try {
+//                    Thread.sleep( 2000);
+//                } catch (InterruptedException e){
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//
+//            updateDisplay(node.getCoordinate());
+//        }
 
         /*TODO
         alright sorry If I moved to many  things around
@@ -120,6 +129,7 @@ public class MobileAgent implements Runnable {
         until I go to sleep
          */
 
+        updateDisplay(node.getCoordinate());
         System.out.println("MA: " + node + " | Status: " + node.getStatus());
         while (node.getStatus() == NodeStatus.GREEN) {
             try {
@@ -130,6 +140,7 @@ public class MobileAgent implements Runnable {
             }
         }
 
+        updateDisplay(node.getCoordinate());
         //while there is an adjacent fire
         System.out.println("MA: " + node + " | Status: " + node.getStatus());
         propagate();
@@ -141,6 +152,7 @@ public class MobileAgent implements Runnable {
             }
         }
 
+        updateDisplay(node.getCoordinate());
         System.out.println("MA: " + node + " | Status: " + node.getStatus());
     }
 
@@ -150,12 +162,19 @@ public class MobileAgent implements Runnable {
     }
 
     public void initDisplay() {
+        if (gd !=null) {
+            Circle c = new Circle(5);
+            if (node != null) {
+                c.setCenterX(node.getCoordinate().getX());
+                c.setCenterY(node.getCoordinate().getY());
+            }
+            c.setFill(Color.GREEN);
 
-        Circle c = new Circle(5);
-        c.setCenterX(node.getCoordinate().getX());
-        c.setCenterY(node.getCoordinate().getY());
-        c.setFill(Color.GREEN);
+            this.display = c;
+            gd.addToCenter(display);
 
-        this.display = c;
+            System.out.println("Added to display");
+        }
+
     }
 }

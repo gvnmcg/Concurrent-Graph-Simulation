@@ -23,16 +23,17 @@ public class Main extends Application {
 
         //display graph
         GraphDisplay graphDisplay = new GraphDisplay(graph);
+        System.out.println("huh");
 
         //start simulation
         graph.startThreads(graphDisplay);
 
 
         //does not work???
-        primaryStage.setOnCloseRequest(e -> {
-            e.consume();
-            primaryStage.close();
-        });
+//        primaryStage.setOnCloseRequest(e -> {
+//            e.consume();
+//            primaryStage.close();
+//        });
 
 
         primaryStage.setScene(new Scene(graphDisplay.getRoot(), 700, 500));

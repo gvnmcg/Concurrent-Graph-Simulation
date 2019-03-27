@@ -12,7 +12,7 @@ public class BaseStation  {
         this.node = node;
     }
 
-    public MobileAgent initAgent(){
+    public MobileAgent initAgent(GraphNode baseStation){
         return new MobileAgent(node, false);
     }
 }

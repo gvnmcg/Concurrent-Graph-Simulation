@@ -13,16 +13,18 @@ public class MobileAgent implements Runnable {
 
     MobileAgent(GraphNode node, boolean init) {
         System.out.println(node.getAdjacentNodes().size());
-        if (init) {
-            walkToFire(node);
-        } else {
-            // Propogated
-            this.node = node;
-        }
 
-        this.node.setMobileAgent(this);
-        thread = new Thread(this);
-        thread.start();
+        this.node = node;
+//        if (init) {
+//            walkToFire(node);
+//        } else {
+//            // Propogated
+//            this.node = node;
+//        }
+
+//        this.node.setMobileAgent(this);
+//        thread = new Thread(this);
+//        thread.start();
     }
 
     /**
@@ -56,6 +58,8 @@ public class MobileAgent implements Runnable {
 
             updateDisplay(node.getCoordinate());
 
+//            Thread.sleep( 2000);
+
         }
 
         updateDisplay(node.getCoordinate());
@@ -87,10 +91,34 @@ public class MobileAgent implements Runnable {
     public void run() {
 
 
-        //while the agents node is fine
-//        while(node.getStatus() == NodeStatus.GREEN){
-//            randomWalk();
-//        }
+        //random walk until node catches fire
+        while(node.getStatus() == NodeStatus.GREEN){
+            while(node.getStatus() == NodeStatus.GREEN){
+
+                node = node.getAdjacentNodes().get(
+                        (int)(Math.random()*node.getAdjacentNodes().size()));
+
+                updateDisplay(node.getCoordinate());
+
+                try {
+                    Thread.sleep( 2000);
+                } catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            updateDisplay(node.getCoordinate());
+        }
+
+        /*TODO
+        alright sorry If I moved to many  things around
+        trying to understand how this works
+
+        i got the dot to move around
+        it does not stop  the fire but ill continue to work on it
+        until I go to sleep
+         */
 
         System.out.println("MA: " + node + " | Status: " + node.getStatus());
         while (node.getStatus() == NodeStatus.GREEN) {
@@ -117,14 +145,17 @@ public class MobileAgent implements Runnable {
     }
 
 
+    public Circle getDisplay() {
+        return display;
+    }
 
-    public Circle initDisplay() {
+    public void initDisplay() {
 
         Circle c = new Circle(5);
         c.setCenterX(node.getCoordinate().getX());
         c.setCenterY(node.getCoordinate().getY());
         c.setFill(Color.GREEN);
 
-        return c;
+        this.display = c;
     }
 }

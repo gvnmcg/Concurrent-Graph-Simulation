@@ -123,7 +123,7 @@ public class GraphNode implements Runnable {
             //wait to catch on fire
             try {
                 Thread.yield();
-                Thread.sleep(1000);
+                Thread.sleep(4000);
             } catch (InterruptedException e) {
                 System.out.println("Tried sleeping!");
                 e.printStackTrace();

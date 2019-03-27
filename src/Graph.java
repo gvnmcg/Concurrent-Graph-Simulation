@@ -100,6 +100,7 @@ public class Graph {
 
                         //BaseStation has ref to the node
                         station = new BaseStation(nodes.get(b));
+                        baseStation = nodes.get(b);
 
                         break;
                     case "fire":
@@ -135,9 +136,12 @@ public class Graph {
     public void startThreads(GraphDisplay graphDisplay){
 
         for (Thread thr : nodeThreads) thr.start();
-        MobileAgent mobileAgent  = station.initAgent();
+        MobileAgent mobileAgent  = station.initAgent(baseStation);
+        mobileAgent.initDisplay();
+        graphDisplay.addToCenter(mobileAgent.getDisplay());
 
-        graphDisplay.addToCenter(mobileAgent.initDisplay());
+        Thread maThread = new Thread(mobileAgent);
+        maThread.start();
     }
 
 

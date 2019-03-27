@@ -1,9 +1,13 @@
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 import java.util.HashMap;
 
+/**
+ * Displays Graph data structure and it components
+ */
 public class GraphDisplay {
 
     public static int scale = 50;
@@ -22,8 +26,6 @@ public class GraphDisplay {
     /**
      * make graphical components
      * give each node display reference
-     *
-     *
      * @param graph
      */
     private void initDisplay(Graph graph) {
@@ -41,6 +43,10 @@ public class GraphDisplay {
             centerGroup.getChildren().add(n.getDisplay());
         }
 
+    }
+
+    public void addToCenter(Node thing){
+        centerGroup.getChildren().add(thing);
     }
 
 

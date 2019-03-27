@@ -1,7 +1,18 @@
-public class BaseStation extends GraphNode {
+public class BaseStation  {
 
+
+    private GraphNode node = null;
 
     BaseStation(Coordinate coordinate){
-        super(coordinate);
+        //if extended
+        //super(coordinate);
+    }
+
+    BaseStation(GraphNode node){
+        this.node = node;
+    }
+
+    public MobileAgent initAgent(){
+        return new MobileAgent(node, false);
     }
 }

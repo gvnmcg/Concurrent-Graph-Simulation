@@ -54,7 +54,19 @@ public class MobileAgent implements Runnable {
             node = node.getAdjacentNodes().get(
                     (int)(Math.random()*node.getAdjacentNodes().size()));
 
+            updateDisplay(node.getCoordinate());
+
         }
+
+        updateDisplay(node.getCoordinate());
+
+    }
+
+    private void updateDisplay(Coordinate coordinate) {
+
+        display.setCenterX(coordinate.getX() * GraphDisplay.scale);
+        display.setCenterY(coordinate.getY() * GraphDisplay.scale);
+
     }
 
     /**

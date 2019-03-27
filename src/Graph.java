@@ -6,24 +6,27 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+/**
+ * Graph Data structure for Mobile Agents
+ */
 public class Graph {
 
     // TODO Need to update this to something like a map, where it maps the coordinates to the node
-    // This will better allow adding edges and traversals
-//    private LinkedList<GraphNode> nodes = new LinkedList<>();
-//    private Map<String, GraphNode> nodes = new HashMap<>();
     private HashMap<Coordinate, GraphNode> nodes = new HashMap<>();
     private LinkedList<Thread> nodeThreads = new LinkedList<>();
     private LinkedList<GraphEdge> edges = new LinkedList<>();
+
+    //??
     private GraphNode baseStation;
+
+    private BaseStation station;
+
 
     /**
      * Graph constructor that creates a graph from the given text file
      * @param filename
      */
     Graph(String filename){
-
-//        Scanner sc = new Scanner(new File(filename + ".txt"));
 
         BufferedReader in = null;
         String line;
@@ -32,7 +35,7 @@ public class Graph {
         try {
             in = new BufferedReader(new FileReader(filename + ".txt"));
 
-//          Not finished but plan to finish this up
+            //read in the graph nodes, edges, base station, fire
             while ((line = in.readLine()) != null) {
                 String[] strArray = line.split(" ");
 
@@ -64,7 +67,7 @@ public class Graph {
                         y = Integer.parseInt(strArray[4]);
                         Coordinate c2 = new Coordinate(x,y);
 
-//                        GraphNode node;
+                        //if the node hasnt been read in for whatever reason
                         if (!nodes.containsKey(c2)){
                             node = new GraphNode(c2);
                             nodes.put(c2, node);
@@ -74,8 +77,7 @@ public class Graph {
                             nodes.put(c1, node);
                         }
 
-
-                        //FIXED Had to overwrite the hashcode function within the coordinate class to make sure equality is checked based on how you want it for more proprietary classes
+                        //if the nodes has been read in
                         if (nodes.containsKey(c1) && nodes.containsKey(c2)){
                             edges.add(new GraphEdge(nodes.get(c1), nodes.get(c2)));
                         }
@@ -83,6 +85,8 @@ public class Graph {
 
                         if (nodes.get(c1) != null && nodes.get(c2) != null) {
                             nodes.get(c1).addEdge(nodes.get(c2));
+                            nodes.get(c2).addEdge(nodes.get(c1));
+
                         }
 
                         break;
@@ -90,12 +94,12 @@ public class Graph {
 
                         x = Integer.parseInt(strArray[1]);
                         y = Integer.parseInt(strArray[2]);
-                        Coordinate c3 = new Coordinate(x,y);
+                        Coordinate b = new Coordinate(x,y);
 
-                        baseStation = nodes.get(c3);
+//                        baseStation = nodes.get(c3);
 
-                        nodes.get(c3);
-                        nodes.put(c3, new BaseStation(c3));
+                        //BaseStation has ref to the node
+                        station = new BaseStation(nodes.get(b));
 
                         break;
                     case "fire":
@@ -125,12 +129,15 @@ public class Graph {
 //            node.printNeighbors();
 //        }
 
+//        testGraph();
+    }
 
-//        MobileAgent test = new MobileAgent(getBaseStation(), true);
+    public void startThreads(GraphDisplay graphDisplay){
 
         for (Thread thr : nodeThreads) thr.start();
+        MobileAgent mobileAgent  = station.initAgent();
 
-//        testGraph();
+        graphDisplay.addToCenter(mobileAgent.initDisplay());
     }
 
 
@@ -143,15 +150,15 @@ public class Graph {
         return edges;
     }
 
-    public GraphNode getBaseStation() {
-        return baseStation;
+    public BaseStation getStation() {
+        return station;
     }
 
     private void testGraph() {
         //        Some tests for GraphNodes
-        GraphNode gn1 = new GraphNode(0,0);
-        GraphNode gn2 = new GraphNode(2,0);
-        GraphNode gn3 = new GraphNode(0,2);
+        GraphNode gn1 = new GraphNode(new Coordinate(0,0));
+        GraphNode gn2 = new GraphNode(new Coordinate(2,0));
+        GraphNode gn3 = new GraphNode(new Coordinate(0,2));
 
         gn1.addEdge(gn2);
         gn3.addEdge(gn1);

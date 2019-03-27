@@ -2,6 +2,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import java.util.ArrayList;
 
+/**
+ * Graph Node for Graph data structure
+ */
 public class GraphNode implements Runnable {
 
     private ArrayList<GraphNode> adjacentNodes = new ArrayList<>();
@@ -11,12 +14,6 @@ public class GraphNode implements Runnable {
     private Circle display;
     private MobileAgent mobileAgent;
 
-
-    GraphNode(int x, int y) {
-        display = new Circle(10);
-        cords = new Coordinate(x,y);
-        setStatus(NodeStatus.GREEN);
-    }
 
     GraphNode(Coordinate coordinate) {
         display = new Circle(10);
@@ -76,11 +73,6 @@ public class GraphNode implements Runnable {
         return cords;
     }
 
-//    public void setDisplay(Circle display) {
-//
-//        this.display = display;
-//
-//    }
 
     public synchronized Circle getDisplay() {
         synchronized(status) {
@@ -88,13 +80,8 @@ public class GraphNode implements Runnable {
             display.setCenterY(getCoordinate().getY() * GraphDisplay.scale);
             return display;
         }
-//        Circle c ;
-
-
-//        return c;
-
-
     }
+
 
     @Override
     public void run() {
@@ -109,6 +96,7 @@ public class GraphNode implements Runnable {
                 //check adjecent nodes for fires
                 for (GraphNode node : adjacentNodes) {
 
+                    //if it detects a fire then set to YELLOW
                     if (node.getStatus() == NodeStatus.RED) {
                         System.out.println(toString() + " found out that it's neighbor " + node.toString() + " is on fire!");
                         setStatus(NodeStatus.YELLOW);

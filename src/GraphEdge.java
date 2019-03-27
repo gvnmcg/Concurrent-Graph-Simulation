@@ -2,7 +2,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Pair;
 
-
+/**
+ * Graph edge tp connect two GraphNodes
+ */
 public class GraphEdge {
 
     private Pair<GraphNode, GraphNode> nodePair;

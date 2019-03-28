@@ -1,3 +1,4 @@
+import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -18,7 +19,8 @@ public class GraphNode implements Runnable {
     GraphNode(Coordinate coordinate) {
         display = new Circle(10);
         cords = coordinate;
-        if (status == null) setStatus(NodeStatus.GREEN);
+        this.status = NodeStatus.GREEN;
+        setStatus(NodeStatus.GREEN);
     }
 
     public void addEdge(GraphNode node) {
@@ -51,20 +53,26 @@ public class GraphNode implements Runnable {
     }
 
     public synchronized void setStatus(NodeStatus status) {
-        synchronized (status) {
-            switch (status){
-                case GREEN:
-                    display.setFill(Color.BLUE);
-                    break;
-                case YELLOW:
-                    display.setFill(Color.YELLOW);
-                    break;
-                case RED:
-                    display.setFill(Color.RED);
-                    break;
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (display) {
+                    switch (status) {
+                        case GREEN:
+                            display.setFill(Color.BLUE);
+                            break;
+                        case YELLOW:
+                            display.setFill(Color.YELLOW);
+                            break;
+                        case RED:
+                            display.setFill(Color.RED);
+                            break;
+                    }
+                }
             }
+        });
+        synchronized (this.status) {
             this.status = status;
-
         }
     }
 
@@ -114,18 +122,19 @@ public class GraphNode implements Runnable {
             System.out.println("Node: " + toString() + "; Status: " + status + " 2");
 
             //wait to catch on fire
-//            try {
-//                Thread.yield();
-//                Thread.sleep(15);
-//            } catch (InterruptedException e) {
-//                System.out.println("Tried sleeping!");
-//                e.printStackTrace();
-//            }
+            try {
+                Thread.yield();
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                System.out.println("Tried sleeping!");
+                e.printStackTrace();
+            }
         }
 
 
         //on fire
         setStatus(NodeStatus.RED);
+
         for (GraphNode node : adjacentNodes) {
             synchronized (node) {
                 if (node.getStatus() == NodeStatus.GREEN) {

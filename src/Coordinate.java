@@ -31,8 +31,9 @@ public class Coordinate {
 
     @Override
     public String toString() {
-        return "("+x+","+y+")";
+        return x+" "+y ;
     }
+    //    return "("+x+","+y+")";
 
     @Override
     public boolean equals(Object obj) {

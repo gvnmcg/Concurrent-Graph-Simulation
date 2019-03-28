@@ -20,6 +20,7 @@ public class MobileAgent implements Runnable {
     }
 
     MobileAgent(GraphNode node, boolean init) {
+        System.out.println("MA Initialized @ " + node);
         initDisplay();
 
         this.node = node;
@@ -75,21 +76,22 @@ public class MobileAgent implements Runnable {
     }
 
     private void updateDisplay(Coordinate coordinate) {
-        synchronized (display) {
-            display.setCenterX(coordinate.getX() * GraphDisplay.scale);
-            display.setCenterY(coordinate.getY() * GraphDisplay.scale);
-            switch (node.getStatus()) {
-                case GREEN:
-                    display.setFill(Color.WHITE);
-                    break;
-                case YELLOW:
-                    display.setFill(Color.ORANGE);
-                    break;
-                case RED:
-                    display.setFill(Color.BLACK);
-                    break;
-
-
+        if (display != null) {
+            synchronized (display) {
+                System.out.println("Updating display of " + node);
+                display.setCenterX(coordinate.getX() * GraphDisplay.scale);
+                display.setCenterY(coordinate.getY() * GraphDisplay.scale);
+                switch (node.getStatus()) {
+                    case GREEN:
+                        display.setFill(Color.WHITE);
+                        break;
+                    case YELLOW:
+                        display.setFill(Color.ORANGE);
+                        break;
+                    case RED:
+                        display.setFill(Color.BLACK);
+                        break;
+                }
             }
         }
     }
@@ -100,9 +102,12 @@ public class MobileAgent implements Runnable {
      */
     private void propagate() {
         System.out.println("Propagating nodes @ " + node + " of size " + node.getAdjacentNodes().size());
+
         for (GraphNode n : this.node.getAdjacentNodes()) {
             System.out.println("Propagating to " + n + " with status " + n.getStatus());
-            if (n.getStatus() != NodeStatus.RED && n.getMobileAgent() == null) new MobileAgent(n, false);
+            synchronized (n) {
+                if (n.getStatus() != NodeStatus.RED && n.getMobileAgent() == null) new MobileAgent(n, false);
+            }
         }
     }
 

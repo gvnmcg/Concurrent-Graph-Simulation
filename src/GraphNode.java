@@ -114,13 +114,13 @@ public class GraphNode implements Runnable {
             System.out.println("Node: " + toString() + "; Status: " + status + " 2");
 
             //wait to catch on fire
-            try {
-                Thread.yield();
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                System.out.println("Tried sleeping!");
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.yield();
+//                Thread.sleep(15);
+//            } catch (InterruptedException e) {
+//                System.out.println("Tried sleeping!");
+//                e.printStackTrace();
+//            }
         }
 
 

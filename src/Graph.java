@@ -68,6 +68,7 @@ public class Graph {
                         Coordinate c2 = new Coordinate(x,y);
 
                         //if the node hasnt been read in for whatever reason
+                        // TODO Not sure if we can assume that the edges are as it mentions, w/o having corresponding node in file
                         if (!nodes.containsKey(c2)){
                             node = new GraphNode(c2);
                             nodes.put(c2, node);
@@ -85,8 +86,6 @@ public class Graph {
 
                         if (nodes.get(c1) != null && nodes.get(c2) != null) {
                             nodes.get(c1).addEdge(nodes.get(c2));
-                            nodes.get(c2).addEdge(nodes.get(c1));
-
                         }
 
                         break;
@@ -111,7 +110,9 @@ public class Graph {
                             System.out.println(nodes.get(c));
                             nodes.get(c).setStatus(NodeStatus.RED);
                             System.out.println(nodes.get(c).toString() + "Status: RED");
+                            System.out.println("STATUS OF FIRE NODE: " + nodes.get(c).getStatus());
                         }
+
                         break;
                 }
             }

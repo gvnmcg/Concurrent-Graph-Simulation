@@ -62,12 +62,10 @@ public class GraphDisplay {
 
 
     public void addToCenter(Node thing){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
+        Platform.runLater(() -> {
+            synchronized (thing) {
                 centerGroup.getChildren().add(thing);
             }
-
         });
     }
 

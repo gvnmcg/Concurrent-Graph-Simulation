@@ -11,7 +11,6 @@ public class GraphNode implements Runnable {
     private ArrayList<GraphNode> adjacentNodes = new ArrayList<>();
     private Coordinate cords;
     private NodeStatus status;
-
     private Circle display;
     private MobileAgent mobileAgent;
 
@@ -19,7 +18,7 @@ public class GraphNode implements Runnable {
     GraphNode(Coordinate coordinate) {
         display = new Circle(10);
         cords = coordinate;
-        setStatus(NodeStatus.GREEN);
+        if (status == null) setStatus(NodeStatus.GREEN);
     }
 
     public void addEdge(GraphNode node) {
@@ -53,7 +52,6 @@ public class GraphNode implements Runnable {
 
     public synchronized void setStatus(NodeStatus status) {
         synchronized (status) {
-
             switch (status){
                 case GREEN:
                     display.setFill(Color.BLUE);
@@ -75,7 +73,7 @@ public class GraphNode implements Runnable {
     }
 
 
-    public synchronized Circle getDisplay() {
+    public Circle getDisplay() {
         synchronized(status) {
             display.setCenterX(getCoordinate().getX() * GraphDisplay.scale);
             display.setCenterY(getCoordinate().getY() * GraphDisplay.scale);
@@ -92,13 +90,19 @@ public class GraphNode implements Runnable {
         System.out.println("Node: " + toString() + "; Status: " + status + " 1");
         while (getStatus() == NodeStatus.GREEN) {
             try {
-                synchronized (this) {wait();}
+                synchronized (this) {
+                    wait();
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             Thread.yield();
         }
-        setStatus(NodeStatus.YELLOW);
+
+        if (getStatus() == NodeStatus.GREEN) {
+            setStatus(NodeStatus.YELLOW);
+        }
+
         if (mobileAgent != null) {
             synchronized (mobileAgent) {
                 mobileAgent.notify();
@@ -124,13 +128,13 @@ public class GraphNode implements Runnable {
         setStatus(NodeStatus.RED);
         for (GraphNode node : adjacentNodes) {
             synchronized (node) {
-                if (node.getStatus() != NodeStatus.RED) {
+                if (node.getStatus() == NodeStatus.GREEN) {
                     node.setStatus(NodeStatus.YELLOW);
                     node.notify();
                 }
             }
         }
-        setStatus(NodeStatus.RED);
+
         if (mobileAgent != null) {
             synchronized (mobileAgent) {
                 mobileAgent.notify();

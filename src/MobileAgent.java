@@ -3,11 +3,11 @@ import javafx.scene.shape.Circle;
 
 public class MobileAgent implements Runnable {
 
+    // TODO Get better way to display the mobile agent
     private static GraphDisplay gd = null;
     private GraphNode node;
     private Thread thread;
     private Circle display;
-
 
     MobileAgent(GraphNode node, GraphDisplay gd, boolean init) {
         this(node, init);
@@ -18,7 +18,6 @@ public class MobileAgent implements Runnable {
     private void singletonGD(GraphDisplay gd) {
         if (this.gd == null) this.gd = gd;
     }
-
 
     MobileAgent(GraphNode node, boolean init) {
         initDisplay();
@@ -76,10 +75,23 @@ public class MobileAgent implements Runnable {
     }
 
     private void updateDisplay(Coordinate coordinate) {
+        synchronized (display) {
+            display.setCenterX(coordinate.getX() * GraphDisplay.scale);
+            display.setCenterY(coordinate.getY() * GraphDisplay.scale);
+            switch (node.getStatus()) {
+                case GREEN:
+                    display.setFill(Color.WHITE);
+                    break;
+                case YELLOW:
+                    display.setFill(Color.ORANGE);
+                    break;
+                case RED:
+                    display.setFill(Color.BLACK);
+                    break;
 
-        display.setCenterX(coordinate.getX() * GraphDisplay.scale);
-        display.setCenterY(coordinate.getY() * GraphDisplay.scale);
 
+            }
+        }
     }
 
     /**
@@ -87,9 +99,11 @@ public class MobileAgent implements Runnable {
      *
      */
     private void propagate() {
-        System.out.println("Propagating nodes @ " + node);
-        for (GraphNode node : this.node.getAdjacentNodes())
-            if (node.getStatus() == NodeStatus.GREEN) new MobileAgent(node,false);
+        System.out.println("Propagating nodes @ " + node + " of size " + node.getAdjacentNodes().size());
+        for (GraphNode n : this.node.getAdjacentNodes()) {
+            System.out.println("Propagating to " + n + " with status " + n.getStatus());
+            if (n.getStatus() != NodeStatus.RED && n.getMobileAgent() == null) new MobileAgent(n, false);
+        }
     }
 
     public void notify(NodeStatus status) {
@@ -151,7 +165,7 @@ public class MobileAgent implements Runnable {
                 e.printStackTrace();
             }
         }
-
+        System.out.println(node + " " + display.getFill() + " " + node.getStatus());
         updateDisplay(node.getCoordinate());
         System.out.println("MA: " + node + " | Status: " + node.getStatus());
     }
@@ -162,19 +176,19 @@ public class MobileAgent implements Runnable {
     }
 
     public void initDisplay() {
-        if (gd !=null) {
-            Circle c = new Circle(5);
-            if (node != null) {
-                c.setCenterX(node.getCoordinate().getX());
-                c.setCenterY(node.getCoordinate().getY());
+            if (gd != null) {
+                Circle c = new Circle(5);
+                if (node != null) {
+                    c.setCenterX(node.getCoordinate().getX());
+                    c.setCenterY(node.getCoordinate().getY());
+                }
+                c.setFill(Color.GREEN);
+
+                this.display = c;
+                gd.addToCenter(display);
+
+                System.out.println("Added to display");
             }
-            c.setFill(Color.GREEN);
-
-            this.display = c;
-            gd.addToCenter(display);
-
-            System.out.println("Added to display");
-        }
 
     }
 }

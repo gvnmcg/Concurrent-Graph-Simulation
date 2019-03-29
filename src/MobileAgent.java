@@ -55,8 +55,8 @@ public class MobileAgent implements Runnable {
             int random = (int)(Math.random() * node.getAdjacentNodes().size());
             return walkToFire(node.getAdjacentNodes().get(random));
         }
-
     }
+
 
     private void randomWalk() {
 

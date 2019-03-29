@@ -26,20 +26,24 @@ public class GraphGen {
             System.out.println("node " + coord);
         }
 
+        ArrayList<Coordinate> coords = new ArrayList<>();
+
         for (Coordinate coord : list) {
-            int distance = 50;
+            int distance = Integer.MAX_VALUE;
             Coordinate check = null;
 
             for (Coordinate coordToCheck : list) {
 //                System.out.println(calcDistance(coord, coordToCheck));
 //                if (coord == coordToCheck) continue;
                 int distCheck = calcDistance(coord, coordToCheck);
-                if (distCheck != 0 && distance > distCheck) {
+
+                if (coords.contains(check) && distCheck != 0 && distance > distCheck) {
                     distance = distCheck;
                     check = coordToCheck;
                 }
 
             }
+            coords.add(check);
             System.out.println("edge " + coord + " " + check);
         }
 

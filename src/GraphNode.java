@@ -3,6 +3,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Graph Node for Graph data structure
@@ -14,6 +15,8 @@ public class GraphNode implements Runnable {
     private NodeStatus status;
     private Circle display;
     private MobileAgent mobileAgent;
+    boolean base = false;
+    LinkedBlockingQueue<Packet> toSend = new LinkedBlockingQueue<>();
 
 
     GraphNode(Coordinate coordinate) {
@@ -53,21 +56,18 @@ public class GraphNode implements Runnable {
     }
 
     public synchronized void setStatus(NodeStatus status) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (display) {
-                    switch (status) {
-                        case GREEN:
-                            display.setFill(Color.BLUE);
-                            break;
-                        case YELLOW:
-                            display.setFill(Color.YELLOW);
-                            break;
-                        case RED:
-                            display.setFill(Color.RED);
-                            break;
-                    }
+        Platform.runLater(() -> {
+            synchronized (display) {
+                switch (status) {
+                    case GREEN:
+                        display.setFill(Color.BLUE);
+                        break;
+                    case YELLOW:
+                        display.setFill(Color.YELLOW);
+                        break;
+                    case RED:
+                        display.setFill(Color.RED);
+                        break;
                 }
             }
         });
@@ -89,7 +89,28 @@ public class GraphNode implements Runnable {
         }
     }
 
+    public boolean sendMessage(Packet p) {
+        if (toSend.size() > 0) {
+            if (base == true) {
+                System.out.println(p.getMessage());
+                return true;
+            }
 
+            p.addToBQ(this);
+            for (GraphNode node : adjacentNodes) {
+                if (node.getStatus() != NodeStatus.RED) {
+                    node.addPacket(p);
+                }
+
+            }
+        }
+
+        return true;
+    }
+
+    public void addPacket(Packet p) {
+        toSend.add(p);
+    }
 
     @Override
     public void run() {
@@ -101,6 +122,7 @@ public class GraphNode implements Runnable {
                 synchronized (this) {
                     wait();
                 }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

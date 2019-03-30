@@ -1,6 +1,7 @@
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
@@ -34,6 +35,12 @@ public class GraphDisplay {
 
     }
 
+    GraphDisplay(Graph g, boolean b ){
+        Canvas canvas = new Canvas();
+
+
+    }
+
     /**
      * make graphical components
      * give each node display reference
@@ -54,8 +61,6 @@ public class GraphDisplay {
             centerGroup.getChildren().add(n.getDisplay());
 
         }
-
-//        updateDispl
 
     }
 

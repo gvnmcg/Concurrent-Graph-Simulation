@@ -17,13 +17,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        //initial gragh data structure
+        //initialize gragh data structure
         Graph graph = new Graph("resources/TestForLock");
 
         //display graph
         GraphDisplay graphDisplay = new GraphDisplay(graph);
-        System.out.println("huh");
-
 
         MobileAgent test = new MobileAgent(graph.getStation(), graphDisplay,  true);
         //start simulation

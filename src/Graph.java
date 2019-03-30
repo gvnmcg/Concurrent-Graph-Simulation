@@ -30,7 +30,9 @@ public class Graph {
 
         readIn(filename);
 
+    }
 
+    Graph(String filename, GraphDisplay gd){
 
     }
 
@@ -129,15 +131,6 @@ public class Graph {
             e.printStackTrace();
         }
 
-//        System.out.println(nodes);
-//        System.out.println(edges);
-
-//        for (GraphNode node : nodes.values()) {
-//            System.out.println(node);
-//            System.out.println(node.getAdjacentNodes().size());
-//            node.printNeighbors();
-//        }
-
 //        testGraph();
 
         for (GraphNode node : nodes.values()) {
@@ -152,16 +145,7 @@ public class Graph {
     public void startThreads(GraphDisplay graphDisplay){
 
         for (Thread thr : nodeThreads) thr.start();
-
-//        MobileAgent mobileAgent  = station.initAgent(baseStation);
-//        mobileAgent.initDisplay();
-//        graphDisplay.addToCenter(mobileAgent.getDisplay());
-
-//        Thread maThread = new Thread(mobileAgent);
-//        maThread.start();
     }
-
-
 
     public Map<Coordinate, GraphNode> getNodes() {
         return nodes;

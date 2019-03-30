@@ -28,6 +28,13 @@ public class Graph {
      */
     Graph(String filename){
 
+        readIn(filename);
+
+
+
+    }
+
+    private void readIn(String filename){
         BufferedReader in = null;
         String line;
 

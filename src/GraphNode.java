@@ -16,7 +16,7 @@ public class GraphNode implements Runnable {
     private Circle display;
     private MobileAgent mobileAgent;
     boolean base = false;
-    LinkedBlockingQueue<Packet> toSend = new LinkedBlockingQueue<>();
+    LinkedBlockingQueue<Packet> mailbox = new LinkedBlockingQueue<>();
 
 
     GraphNode(Coordinate coordinate) {
@@ -90,26 +90,50 @@ public class GraphNode implements Runnable {
     }
 
     public boolean sendMessage(Packet p) {
-        if (toSend.size() > 0) {
-            if (base == true) {
-                System.out.println(p.getMessage());
-                return true;
+        if (base == true) {
+            System.out.println(p.getMessage());
+            return true;
+        }
+
+        p.addToBQ(this);
+        for (GraphNode node : adjacentNodes) {
+            if (node.getStatus() != NodeStatus.RED) {
+                node.addPacket(p);
+                node.notify();
+                getReceipt(p.getID());
             }
+        }
+    }
 
-            p.addToBQ(this);
-            for (GraphNode node : adjacentNodes) {
-                if (node.getStatus() != NodeStatus.RED) {
-                    node.addPacket(p);
-                }
+    private void processMessages() {
+        for (Packet p : mailbox) {
+            sendMessage(p);
+            mailbox.remove(p);
+        }
+    }
 
+    private boolean getReceipt(int num) {
+        Packet receipt;
+        while ((receipt = checkForReceipt(num)) == null) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
 
-        return true;
+        return receipt.getStatus();
+
+    }
+
+    private Packet checkForReceipt(int num) {
+        for (Packet p : mailbox)
+            if (p.getSender() == this && p.getID() == num) return p;
+        return null;
     }
 
     public void addPacket(Packet p) {
-        toSend.add(p);
+        mailbox.add(p);
     }
 
     @Override

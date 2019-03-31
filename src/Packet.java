@@ -7,12 +7,15 @@ public class Packet {
     boolean success;
     boolean inProgress;
     LinkedBlockingQueue<GraphNode> bq;
+    int ID;
 
-    Packet (String message, boolean update, LinkedBlockingQueue<GraphNode> bq) {
+    Packet (String message, boolean update, GraphNode gn, int ID) {
         success = false;
         this.message = message;
         this.update = update;
-        this.bq = bq;
+        bq.add(gn);
+        this.ID = ID;
+
     }
 
     public void addToBQ(GraphNode node) {
@@ -23,9 +26,19 @@ public class Packet {
         bq.remove(node);
     }
 
-
     public String getMessage() {
         return message;
     }
 
+    public boolean getStatus() {
+        return success;
+    }
+
+    public GraphNode getSender() {
+        return bq.peek();
+    }
+
+    public int getID() {
+        return ID;
+    }
 }

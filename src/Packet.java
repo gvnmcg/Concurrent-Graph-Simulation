@@ -1,4 +1,4 @@
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class Packet {
 
@@ -6,11 +6,12 @@ public class Packet {
     boolean update;
     boolean success;
     boolean inProgress;
-    LinkedBlockingQueue<GraphNode> bq;
+    LinkedBlockingDeque<GraphNode> bq = new LinkedBlockingDeque<>();
     int ID;
 
     Packet (String message, boolean update, GraphNode gn, int ID) {
         success = false;
+        inProgress = true;
         this.message = message;
         this.update = update;
         bq.add(gn);
@@ -40,5 +41,24 @@ public class Packet {
 
     public int getID() {
         return ID;
+    }
+
+    public void setFinished() {
+        inProgress = false;
+        success = true;
+    }
+
+
+    public GraphNode getLast() {
+        return bq.removeLast();
+}
+
+    @Override
+    public String toString() {
+        return message;
+    }
+
+    public boolean contains(GraphNode graphNode) {
+        return bq.contains(graphNode);
     }
 }

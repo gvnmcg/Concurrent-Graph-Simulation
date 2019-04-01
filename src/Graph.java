@@ -109,6 +109,7 @@ public class Graph {
                         //BaseStation has ref to the node
 //                        station = new BaseStation(nodes.get(b));
                         baseStation = nodes.get(b);
+                        nodes.get(b).setBase();
 
                         break;
                     case "fire":

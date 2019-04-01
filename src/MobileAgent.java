@@ -150,6 +150,7 @@ public class MobileAgent implements Runnable {
 
         updateDisplay(node.getCoordinate());
         System.out.println("MA: " + node + " | Status: " + node.getStatus());
+        node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
         while (node.getStatus() == NodeStatus.GREEN) {
             try {
                 synchronized (this) {  wait(); }
@@ -162,6 +163,7 @@ public class MobileAgent implements Runnable {
         updateDisplay(node.getCoordinate());
         //while there is an adjacent fire
         System.out.println("MA: " + node + " | Status: " + node.getStatus());
+        node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
         propagate();
         while (node.getStatus() == NodeStatus.YELLOW) {
             try {
@@ -173,6 +175,7 @@ public class MobileAgent implements Runnable {
         System.out.println(node + " " + display.getFill() + " " + node.getStatus());
         updateDisplay(node.getCoordinate());
         System.out.println("MA: " + node + " | Status: " + node.getStatus());
+        node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
     }
 
 

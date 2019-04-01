@@ -18,7 +18,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         //initialize gragh data structure
-        Graph graph = new Graph("resources/TestForLock");
+        Graph graph = new Graph("resources/sample");
 
         //display graph
         GraphDisplay graphDisplay = new GraphDisplay(graph);

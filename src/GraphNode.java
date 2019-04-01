@@ -89,18 +89,30 @@ public class GraphNode implements Runnable {
         }
     }
 
-    public boolean sendMessage(Packet p) {
+    public void sendMessage(Packet p) {
         if (base == true) {
             System.out.println(p.getMessage());
-            return true;
+            p.setFinished();
         }
-
-        p.addToBQ(this);
-        for (GraphNode node : adjacentNodes) {
-            if (node.getStatus() != NodeStatus.RED) {
-                node.addPacket(p);
-                node.notify();
-                getReceipt(p.getID());
+        if (p.inProgress) {
+            p.addToBQ(this);
+            for (GraphNode node : adjacentNodes) {
+                if (node != this && node.getStatus() != NodeStatus.RED) {
+                    node.addPacket(p);
+                    node.notify();
+                    if (getReceipt(p.getID())) {
+                        break;
+                    }
+                }
+            }
+        }
+        else {
+            GraphNode test = p.getLast();
+            if (adjacentNodes.contains(test)) {
+                test.addPacket(p);
+                test.notify();
+            } else {
+                p.addToBQ(test);
             }
         }
     }

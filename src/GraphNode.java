@@ -10,15 +10,23 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class GraphNode implements Runnable {
 
+    // Private variables
     private ArrayList<GraphNode> adjacentNodes = new ArrayList<>();
     private Coordinate cords;
     private NodeStatus status;
     private Circle display;
     private MobileAgent mobileAgent;
     boolean base = false;
+
+    // Mailbox for message sending
     LinkedBlockingQueue<Packet> mailbox = new LinkedBlockingQueue<>();
 
 
+    /**
+     * Creates a GraphNode and initializes the starting values
+     *
+     * @param coordinate Location of the GraphNode
+     */
     GraphNode(Coordinate coordinate) {
         display = new Circle(10);
         cords = coordinate;
@@ -26,17 +34,40 @@ public class GraphNode implements Runnable {
         setStatus(NodeStatus.GREEN);
     }
 
+    /**
+     * Adds an edge between this and the node specified in the parameters.
+     *
+     * @param node Node to create edges between
+     */
     public void addEdge(GraphNode node) {
+        // Adds the node to the ArrayList
         adjacentNodes.add(node);
+
+
+        // TODO Check usage of getAdjacentNodes
+
+        // Adds this to the nodes arraylist
         node.getAdjacentNodes().add(this);
     }
 
+    /**
+     * Gets and returns the AdjacentNodes of the graphNode
+     *
+     * @return AdjacentNodes found in ArrayList<GraphNode>
+     */
     public ArrayList<GraphNode> getAdjacentNodes() {
         return adjacentNodes;
     }
 
+    /**
+     * Prints the neighbors of the nodes that are adjacent
+     */
     public void printNeighbors() {
+
+        // Synchronizes on adjacent nodes
         synchronized (adjacentNodes) {
+
+            // Prints nodes string representation
             for (GraphNode node : adjacentNodes) {
                 System.out.print(node.toString() + " ");
             }
@@ -44,20 +75,43 @@ public class GraphNode implements Runnable {
         }
     }
 
+    /**
+     * Returns the toString implementation of the Coordinates
+     *
+     * @return String of unique Node location
+     */
     @Override
     public String toString() {
         return cords.toString();
     }
 
+    // TODO Verify the needed effects of synchronized in the function block
+    /**
+     * Gets the status of the node
+     *
+     * @return NodeStatus of Node
+     */
     public synchronized NodeStatus getStatus() {
+        // Synchronize on the status in case setStatus is used.
         synchronized (status) {
             return status;
         }
     }
 
+    /**
+     * Sets the staus and therefore changing the GUI components
+     *
+     * @param status
+     */
     public synchronized void setStatus(NodeStatus status) {
+        // Platform Run Later allows GUI to synchronously execute the display changes
         Platform.runLater(() -> {
+
+            // TODO Verify the synch is needed
+            // Synchronize on the display
             synchronized (display) {
+
+                // Change the color based on the status
                 switch (status) {
                     case GREEN:
                         display.setFill(Color.BLUE);
@@ -71,18 +125,33 @@ public class GraphNode implements Runnable {
                 }
             }
         });
+
+        // Synchronize and change the status
         synchronized (this.status) {
+            // Change the status
             this.status = status;
         }
     }
 
+    /**
+     * Gets the coordinate of the GraphNode
+     *
+     * @return Coordinate location of node
+     */
     public Coordinate getCoordinate() {
         return cords;
     }
 
 
+    /**
+     * Gets the Circle representation of the GraphNode
+     *
+     * @return Circle representing Display
+     */
     public Circle getDisplay() {
+        // TODO Why synch
         synchronized(status) {
+            // Set the center and return the Circle component
             display.setCenterX(getCoordinate().getX() * GraphDisplay.scale);
             display.setCenterY(getCoordinate().getY() * GraphDisplay.scale);
             return display;
@@ -175,11 +244,11 @@ public class GraphNode implements Runnable {
             }
         }
 
-        //if node is notified of a fire
+        // If node is notified of a fire
         if (getStatus() == NodeStatus.YELLOW) {
             System.out.println("Node: " + toString() + "; Status: " + status + " 2");
 
-            //wait to catch on fire
+            // Wait to catch on fire
             try {
                 Thread.yield();
                 Thread.sleep(2000);
@@ -190,7 +259,7 @@ public class GraphNode implements Runnable {
         }
 
 
-        //on fire
+        // On fire
         setStatus(NodeStatus.RED);
 
         for (GraphNode node : adjacentNodes) {
@@ -218,33 +287,9 @@ public class GraphNode implements Runnable {
 
     public void setMobileAgent(MobileAgent mobileAgent) {
         this.mobileAgent = mobileAgent;
-
     }
 
     public MobileAgent getMobileAgent() {
         return mobileAgent;
     }
 }
-//            // Check status of other nodes
-//            synchronized (adjacentNodes) {
-//
-//                //check adjecent nodes for fires
-//                for (GraphNode node : adjacentNodes) {
-//
-//                    //if it detects a fire then set to YELLOW
-//                    if (node.getStatus() == NodeStatus.RED) {
-//                        System.out.println(toString() + " found out that it's neighbor " + node.toString() + " is on fire!");
-//                        setStatus(NodeStatus.YELLOW);
-//
-//                        //if there is a agent, notify the agent
-//                        if (mobileAgent != null) {
-//                            synchronized (mobileAgent) {
-//                                System.out.println("Notifying MA");
-////                                mobileAgent.notify(getStatus());
-//                                mobileAgent.notify();
-//                            }
-//                        }
-//                        break;
-//                    }
-//                }
-//            }

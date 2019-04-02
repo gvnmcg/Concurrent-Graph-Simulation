@@ -41,4 +41,11 @@ public class Packet {
     public int getID() {
         return ID;
     }
+
+    public void setFinished() {
+    }
+
+    public GraphNode getLast() {
+        return null;
+    }
 }

@@ -2,6 +2,7 @@ import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
@@ -20,6 +21,8 @@ public class GraphDisplay {
 
     private Graph graph;
 
+    GraphicsContext gc;
+
     GraphDisplay(Graph g){
         this.graph = g;
 
@@ -37,25 +40,33 @@ public class GraphDisplay {
 
     GraphDisplay(Graph g, boolean b ){
         Canvas canvas = new Canvas();
+        root.setCenter(canvas);
+
+        initDisplay(gc);
 
 
     }
 
+    private void initDisplay(GraphicsContext gc) {
+
+    }
+
     /**
-     * make graphical components
-     * give each node display reference
+     *  Make graphical components
+     *  Give each node display reference
      * @param graph
      */
     private void initDisplay(Graph graph) {
 
         //TODO cannot display any edge
-        //display each edge
+
+        // Display each edge
         for (GraphEdge e : graph.getEdges()){
 
             centerGroup.getChildren().add(e.getLine());
         }
 
-        //display each node
+        // Display each node
         for (GraphNode n : graph.getNodes().values()){
 
             centerGroup.getChildren().add(n.getDisplay());

@@ -175,7 +175,7 @@ public class GraphNode implements Runnable {
             }
         }
 
-        //if node is notified of a fire
+        // If node is notified of a fire
         if (getStatus() == NodeStatus.YELLOW) {
             System.out.println("Node: " + toString() + "; Status: " + status + " 2");
 
@@ -190,7 +190,7 @@ public class GraphNode implements Runnable {
         }
 
 
-        //on fire
+        // On fire
         setStatus(NodeStatus.RED);
 
         for (GraphNode node : adjacentNodes) {

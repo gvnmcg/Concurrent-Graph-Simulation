@@ -43,14 +43,14 @@ public class MobileAgent implements Runnable {
      */
     private GraphNode walkToFire(GraphNode node) {
 
-        //if current node is on fire then isolate and propagate
+        // If current node is on fire then isolate and propagate
         System.out.println("Walking node: " + node );
         if (node.getStatus() == NodeStatus.YELLOW) {
             System.out.println("Yellow at " + node);
             this.node = node;
             return node;
         }
-        //else randomly walk to an adjacent node
+        // Else randomly walk to an adjacent node
         else {
             int random = (int)(Math.random() * node.getAdjacentNodes().size());
             return walkToFire(node.getAdjacentNodes().get(random));
@@ -139,14 +139,6 @@ public class MobileAgent implements Runnable {
 //            updateDisplay(node.getCoordinate());
 //        }
 
-        /*TODO
-        alright sorry If I moved to many  things around
-        trying to understand how this works
-
-        i got the dot to move around
-        it does not stop  the fire but ill continue to work on it
-        until I go to sleep
-         */
 
         updateDisplay(node.getCoordinate());
         System.out.println("MA: " + node + " | Status: " + node.getStatus());
@@ -160,7 +152,7 @@ public class MobileAgent implements Runnable {
         }
 
         updateDisplay(node.getCoordinate());
-        //while there is an adjacent fire
+        // While there is an adjacent fire
         System.out.println("MA: " + node + " | Status: " + node.getStatus());
         propagate();
         while (node.getStatus() == NodeStatus.YELLOW) {

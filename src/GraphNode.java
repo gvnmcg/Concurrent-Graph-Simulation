@@ -218,29 +218,36 @@ public class GraphNode implements Runnable {
         mailbox.add(p);
     }
 
+    /**
+     * Runs the thread and assumes its respective roles
+     */
     @Override
     public void run() {
-        // TODO Change to a notify wait program.
-
         System.out.println("Node: " + toString() + "; Status: " + status + " 1");
+
+        // While the node is green, wait until notfied that neighbor is red
         while (getStatus() == NodeStatus.GREEN) {
             try {
-                synchronized (this) {
-                    wait();
-                }
-
+                synchronized (this) { wait(); }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            // Yields thread to others
             Thread.yield();
         }
 
+        // TODO Think this might be pointless
+
+        // Gets the status and changes the node to yellow
         if (getStatus() == NodeStatus.GREEN) {
             setStatus(NodeStatus.YELLOW);
         }
 
+
+        // If there is a mobile agent, notify of state change.
         if (mobileAgent != null) {
             synchronized (mobileAgent) {
+                // Notify on the mobileAgent
                 mobileAgent.notify();
             }
         }
@@ -251,18 +258,20 @@ public class GraphNode implements Runnable {
 
             // Wait to catch on fire
             try {
+
                 Thread.yield();
-                Thread.sleep(2000);
+                Thread.sleep(1000);
+
             } catch (InterruptedException e) {
-                System.out.println("Tried sleeping!");
                 e.printStackTrace();
             }
         }
 
 
-        // On fire
+        // Sets status onto fire
         setStatus(NodeStatus.RED);
 
+        // Sets the adjacent nodes to yellow
         for (GraphNode node : adjacentNodes) {
             synchronized (node) {
                 if (node.getStatus() == NodeStatus.GREEN) {
@@ -272,24 +281,42 @@ public class GraphNode implements Runnable {
             }
         }
 
+        // Notify the mobile agent
         if (mobileAgent != null) {
             synchronized (mobileAgent) {
                 mobileAgent.notify();
             }
         }
+
+        // Print final state
         System.out.println("Node: " + toString() + "; Status: " + status + " 3");
-        // Is red, need to notify others o
     }
 
+    /**
+     * Overwrites the hashing algorithm to allow for equality to be checked
+     * in maps.
+     *
+     * @return Int of hashcode
+     */
     @Override
     public int hashCode() {
         return toString().hashCode();
     }
 
+    /**
+     * Set Mobile Agent
+     *
+     * @param mobileAgent MA
+     */
     public void setMobileAgent(MobileAgent mobileAgent) {
         this.mobileAgent = mobileAgent;
     }
 
+    /**
+     * Get the Mobile Agent
+     *
+     * @return Mobile Agent 
+     */
     public MobileAgent getMobileAgent() {
         return mobileAgent;
     }

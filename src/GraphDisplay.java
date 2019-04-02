@@ -5,6 +5,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.util.HashMap;
 
@@ -23,6 +24,9 @@ public class GraphDisplay {
 
     GraphicsContext gc;
 
+    /**
+     * Initializes javafx shapes etc GUI components
+     */
     GraphDisplay(Graph g){
         this.graph = g;
 
@@ -38,17 +42,48 @@ public class GraphDisplay {
 
     }
 
+    /**
+     * intialized GUI with graphics context
+     * @param g
+     * @param b
+     */
     GraphDisplay(Graph g, boolean b ){
         Canvas canvas = new Canvas();
         root.setCenter(canvas);
 
-        initDisplay(gc);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setFill(Color.BLACK);
+        gc.strokeOval(10, 10, 10, 10);
+
+        initDisplay(g, gc);
 
 
     }
 
-    private void initDisplay(GraphicsContext gc) {
+    private void initDisplay(Graph g, GraphicsContext gc) {
 
+
+        for (GraphEdge e : g.getEdges()){
+            e.updateGraphics(gc);
+        }
+
+        for (GraphNode n : g.getNodes().values()){
+            n.updateGrahics(gc);
+        }
+
+        Thread displayThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+
+                    for (GraphNode n : g.getNodes().values()){
+                        n.updateGrahics(gc);
+                    }
+                }
+
+            }
+        });
+        displayThread.start();
     }
 
     /**
@@ -88,6 +123,15 @@ public class GraphDisplay {
 
     public Pane getRoot() {
         return root;
+    }
+
+    public static void main(String[] args) {
+        // Initialize gragh data structure
+        Graph graph = new Graph("resources/TestForLock");
+
+        // Display graph
+//        GraphDisplay graphDisplay = new GraphDisplay(graph);
+        GraphDisplay graphDisplay = new GraphDisplay(graph, true);
     }
 }
 

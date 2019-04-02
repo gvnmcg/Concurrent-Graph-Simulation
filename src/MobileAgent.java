@@ -9,16 +9,34 @@ public class MobileAgent implements Runnable {
     private Thread thread;
     private Circle display;
 
+    /**
+     * sets the Graph Display and calls other constructor
+     * @param node
+     * @param gd
+     * @param init
+     */
     MobileAgent(GraphNode node, GraphDisplay gd, boolean init) {
         this(node, init);
         singletonGD(gd);
         initDisplay();
     }
 
+    /**
+     * Set singleton GD for Mobile Agent
+     * @param gd
+     */
     private void singletonGD(GraphDisplay gd) {
         if (this.gd == null) this.gd = gd;
     }
 
+    /**
+     * Sets assigned node
+     * Sets this agents to node
+     *
+     * If this is the base Station, start walk to fire
+     * @param node
+     * @param init
+     */
     MobileAgent(GraphNode node, boolean init) {
         System.out.println("MA Initialized @ " + node);
         initDisplay();

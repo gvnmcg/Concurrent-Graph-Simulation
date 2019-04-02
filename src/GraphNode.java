@@ -1,4 +1,5 @@
 import javafx.application.Platform;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -291,5 +292,31 @@ public class GraphNode implements Runnable {
 
     public MobileAgent getMobileAgent() {
         return mobileAgent;
+    }
+
+    public void updateGrahics(GraphicsContext gc) {
+
+        // Change the color based on the status
+        switch (status) {
+            case GREEN:
+                gc.setFill(Color.BLUE);
+                break;
+            case YELLOW:
+                gc.setFill(Color.YELLOW);
+                break;
+            case RED:
+                gc.setFill(Color.RED);
+                break;
+                default:
+                    gc.setFill(Color.BLUE);
+        }
+
+        gc.fillOval(cords.getX(), cords.getY(), 10, 10);
+
+        if (mobileAgent != null){
+            gc.setFill(Color.GREEN);
+            gc.strokeOval(cords.getX(), cords.getY(), 15, 15);
+        }
+
     }
 }

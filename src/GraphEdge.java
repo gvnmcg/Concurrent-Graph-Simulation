@@ -1,3 +1,4 @@
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Pair;
@@ -16,6 +17,11 @@ public class GraphEdge {
         getOther(n1);
     }
 
+    /**
+     * returns the other node, given a node
+     * @param n
+     * @return
+     */
     private GraphNode getOther(GraphNode n) {
 
         if (n.equals(nodePair.getKey())){
@@ -46,5 +52,14 @@ public class GraphEdge {
     @Override
     public String toString() {
         return nodePair.getKey().toString() + " " + nodePair.getValue();
+    }
+
+    public void updateGraphics(GraphicsContext gc) {
+        gc.setFill(Color.BLACK);
+
+        gc.strokeLine(nodePair.getKey().getCoordinate().getX(),
+                nodePair.getKey().getCoordinate().getY(),
+                nodePair.getValue().getCoordinate().getX(),
+                nodePair.getValue().getCoordinate().getY());
     }
 }

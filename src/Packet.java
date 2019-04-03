@@ -67,4 +67,9 @@ public class Packet {
             System.out.print(node + " | ");
         System.out.println();
     }
+
+    public void setFail() {
+        success = false;
+        inProgress = false;
+    }
 }

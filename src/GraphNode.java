@@ -158,6 +158,10 @@ public class GraphNode implements Runnable {
         }
     }
 
+    /**
+     *
+     * @param p
+     */
     public void sendMessage(Packet p) {
         if (base == true) {
             System.out.println("BASE STATION (" + this + ") REPORT: " + p.getMessage());
@@ -167,16 +171,22 @@ public class GraphNode implements Runnable {
         if (p.inProgress) {
             p.addToBQ(this);
             System.out.println("Adding");
+            boolean navigable = true;
             for (GraphNode node : adjacentNodes) {
                 if (!p.contains(node) && node.getStatus() != NodeStatus.RED && !p.getStatus()) {
                     node.addPacket(p);
                     synchronized (node) { node.notify(); }
-                    if (getReceipt(p.getID())) {
+                    if (navigable = getReceipt(p.getID())) {
                         System.out.println("Broke @ " + this);
                         break;
                     }
                     System.out.println("IT KEPT GOING FOR PACKET #" + p.getID());
+                } else {
+                    navigable = false;
                 }
+            }
+            if (!navigable) {
+                p.setFail();
             }
         }
         else {

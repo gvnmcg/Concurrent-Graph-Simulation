@@ -55,10 +55,16 @@ public class Packet {
 
     @Override
     public String toString() {
-        return message;
+        return message + " " + getID() + " " + getStatus();
     }
 
     public boolean contains(GraphNode graphNode) {
         return bq.contains(graphNode);
+    }
+
+    public void printBQ() {
+        for (GraphNode node : bq)
+            System.out.print(node + " | ");
+        System.out.println();
     }
 }

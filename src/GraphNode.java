@@ -162,7 +162,7 @@ public class GraphNode implements Runnable {
         if (base == true) {
             System.out.println("BASE STATION (" + this + ") REPORT: " + p.getMessage());
             p.setFinished();
-            p.addToBQ(this);
+//            p.addToBQ(this);
         }
         if (p.inProgress) {
             p.addToBQ(this);
@@ -172,18 +172,24 @@ public class GraphNode implements Runnable {
                     node.addPacket(p);
                     synchronized (node) { node.notify(); }
                     if (getReceipt(p.getID())) {
-                    break;
+                        System.out.println("Broke @ " + this);
+                        break;
                     }
+                    System.out.println("IT KEPT GOING");
                 }
             }
         }
         else {
+            p.printBQ();
             GraphNode test = p.getLast();
+
             if (adjacentNodes.contains(test)) {
                 System.out.println("RETURNING RECEIPT @ (" + this + ") to (" + test + "): " + p);
                 test.addPacket(p);
+                System.out.println("Packet was added to " + test);
 //                synchronized (test) { test.notify(); }
-            } else {
+            } else if (p.getSender() != this) {
+
                 System.out.println("WHAT THE FUCK @ (" + this + ") to (" + test + "): " + p);
                 p.addToBQ(test);
             }
@@ -203,6 +209,7 @@ public class GraphNode implements Runnable {
         Packet receipt;
         while ((receipt = checkForReceipt(num)) == null) {
             try {
+                System.out.println("WAITING @ " + this + " with " + receipt);
                 synchronized (this) {
                     wait();
                 }
@@ -211,13 +218,15 @@ public class GraphNode implements Runnable {
             }
         }
 
+
         return receipt.getStatus();
 
     }
 
     private Packet checkForReceipt(int num) {
-        for (Packet p : mailbox)
-            if (p.getSender() == this && p.getID() == num) return p;
+        for (Packet p : mailbox) {
+            if (p.getID() == num) return p;
+        }
         return null;
     }
 
@@ -225,6 +234,7 @@ public class GraphNode implements Runnable {
         mailbox.add(p);
         synchronized (this) {
             this.notify();
+            System.out.println("Notified " + this);
         }
     }
 

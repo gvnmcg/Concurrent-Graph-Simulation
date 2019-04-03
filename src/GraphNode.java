@@ -239,11 +239,11 @@ public class GraphNode implements Runnable {
         while (getStatus() == NodeStatus.GREEN) {
             try {
 
+                processMessages();
                 synchronized (this) {
-                    processMessages();
                     wait();
-                    processMessages();
                 }
+                processMessages();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

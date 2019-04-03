@@ -1,3 +1,6 @@
+/**
+ * Produces first mobile agent, has log of agents and fires
+ */
 public class BaseStation extends GraphNode {
 
 

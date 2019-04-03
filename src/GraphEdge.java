@@ -3,7 +3,7 @@ import javafx.scene.shape.Line;
 import javafx.util.Pair;
 
 /**
- * Graph edge tp connect two GraphNodes
+ * connects two GraphNodes
  */
 public class GraphEdge {
 

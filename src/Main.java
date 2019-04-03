@@ -3,7 +3,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * The Main Method of Mobile Agents
+ * The Main Class of Mobile Agents
  */
 public class Main extends Application {
 

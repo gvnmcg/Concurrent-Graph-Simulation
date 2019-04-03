@@ -1,6 +1,7 @@
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+/
 public class MobileAgent implements Runnable {
 
     // TODO Get better way to display the mobile agent
@@ -43,7 +44,7 @@ public class MobileAgent implements Runnable {
      */
     private GraphNode walkToFire(GraphNode node) {
 
-        //if current node is on fire then isolate and propagate
+        //if current node is warned, then isolate and propagate
         System.out.println("Walking node: " + node );
         if (node.getStatus() == NodeStatus.YELLOW) {
             System.out.println("Yellow at " + node);
@@ -75,6 +76,7 @@ public class MobileAgent implements Runnable {
 
     }
 
+    //update
     private void updateDisplay(Coordinate coordinate) {
         if (display != null) {
             synchronized (display) {

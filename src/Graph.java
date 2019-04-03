@@ -48,11 +48,11 @@ public class Graph {
             while ((line = in.readLine()) != null) {
                 String[] strArray = line.split(" ");
 
-
                 switch (strArray[0]) {
+
+                    //new node
                     case "node":
 
-                        //new node
                         x = Integer.parseInt(strArray[1]);
                         y = Integer.parseInt(strArray[2]);
 
@@ -65,6 +65,8 @@ public class Graph {
                         nodeThreads.add(new Thread(node));
 
                         break;
+
+                    //new edge
                     case "edge":
 
                         //break input into coordinates
@@ -134,8 +136,14 @@ public class Graph {
 
 //        testGraph();
 
+        //initialize statuses
+        //for each node
         for (GraphNode node : nodes.values()) {
+
+            //if node is on fire
             if (node.getStatus() == NodeStatus.RED) {
+
+                //warn its adjacent nodes
                 for (GraphNode yellowNodes : node.getAdjacentNodes()) {
                     yellowNodes.setStatus(NodeStatus.YELLOW);
                 }

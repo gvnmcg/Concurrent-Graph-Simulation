@@ -2,18 +2,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- * The Main Class of Mobile Agents
- */
-public class Main extends Application {
+public class GraphDisplayTest extends Application {
 
-    /**
-     * Start the basic components
-     * - The graph data stucture
-     * - The display for the graph
-     * @param primaryStage
-     * @throws Exception
-     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -21,10 +11,8 @@ public class Main extends Application {
         Graph graph = new Graph("resources/TestForLock");
 
         // Display graph
-        GraphDisplay graphDisplay = new GraphDisplay(graph);
-
-        MobileAgent test = new MobileAgent(graph.getStation(), graphDisplay,  true);
-        // Start simulation
+//        GraphDisplay graphDisplay = new GraphDisplay(graph);
+        GraphDisplay graphDisplay = new GraphDisplay(graph, true);
         graph.startThreads(graphDisplay);
 
 

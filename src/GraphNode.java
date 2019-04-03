@@ -168,14 +168,14 @@ public class GraphNode implements Runnable {
             p.addToBQ(this);
             System.out.println("Adding");
             for (GraphNode node : adjacentNodes) {
-                if (!p.contains(node) && node.getStatus() != NodeStatus.RED) {
+                if (!p.contains(node) && node.getStatus() != NodeStatus.RED && !p.getStatus()) {
                     node.addPacket(p);
                     synchronized (node) { node.notify(); }
                     if (getReceipt(p.getID())) {
                         System.out.println("Broke @ " + this);
                         break;
                     }
-                    System.out.println("IT KEPT GOING");
+                    System.out.println("IT KEPT GOING FOR PACKET #" + p.getID());
                 }
             }
         }
@@ -183,17 +183,22 @@ public class GraphNode implements Runnable {
             p.printBQ();
             GraphNode test = p.getLast();
 
-            if (adjacentNodes.contains(test)) {
+            if (this == test) {
+
+
+            }
+            else if (adjacentNodes.contains(test)) {
                 System.out.println("RETURNING RECEIPT @ (" + this + ") to (" + test + "): " + p);
                 test.addPacket(p);
                 System.out.println("Packet was added to " + test);
 //                synchronized (test) { test.notify(); }
-            } else if (p.getSender() != this) {
+            } else {
 
                 System.out.println("WHAT THE FUCK @ (" + this + ") to (" + test + "): " + p);
                 p.addToBQ(test);
             }
         }
+        System.out.println("Finished sendi");
     }
 
     private void processMessages() {
@@ -225,7 +230,7 @@ public class GraphNode implements Runnable {
 
     private Packet checkForReceipt(int num) {
         for (Packet p : mailbox) {
-            if (p.getID() == num) return p;
+            if (p.getID() == num && p.getStatus()) return p;
         }
         return null;
     }

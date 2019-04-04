@@ -7,10 +7,9 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    public static boolean debugMessaging = false;
+    public static boolean debugMessaging = true;
     public static boolean debugMobileAgents = false;
     public static boolean debugGraphNode = false;
-
 
     /**
      * Start the basic components
@@ -23,7 +22,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         // Initialize gragh data structure
-        Graph graph = new Graph("resources/sample");
+        Graph graph = new Graph("resources/simple");
 
         // Display graph
         GraphDisplay graphDisplay = new GraphDisplay(graph);

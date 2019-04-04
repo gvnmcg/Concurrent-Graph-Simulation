@@ -189,11 +189,13 @@ public class GraphNode implements Runnable {
                     }
                     if (Main.debugMessaging) System.out.println("IT KEPT GOING FOR PACKET #" + p.getID());
                 } else {
+                    System.out.println("Innavigable @ " + node);
                     numNavigable++;
                 }
             }
 
-            if (numNavigable == adjacentNodes.size()) {
+            if (numNavigable == adjacentNodes.size()-1) {
+                if (Main.debugMessaging) System.out.println("CANT TRAVERSE @ " + this + " for the packet: " + p);
                 p.setFail();
                 // Means that there is no node under "this", that is connected to the base station.
             }

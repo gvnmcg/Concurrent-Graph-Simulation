@@ -167,7 +167,7 @@ public class GraphNode implements Runnable {
         // Checks if the node is the base station
         if (base) {
             // Processes the message of the packet
-            System.out.println("BASE STATION (" + this + ") REPORT: " + p.getMessage());
+            if (Main.debugMessaging) System.out.println("BASE STATION (" + this + ") REPORT: " + p.getMessage());
             // Sets it to be finished
             p.setFinished();
         }
@@ -182,10 +182,10 @@ public class GraphNode implements Runnable {
                     node.addPacket(p);
                     synchronized (node) { node.notify(); }
                     if (getReceipt(p.getID())) {
-                        System.out.println("Broke @ " + this);
+                        if (Main.debugMessaging) System.out.println("Broke @ " + this);
                         break;
                     }
-                    System.out.println("IT KEPT GOING FOR PACKET #" + p.getID());
+                    if (Main.debugMessaging) System.out.println("IT KEPT GOING FOR PACKET #" + p.getID());
                 } else {
                     numNavigable++;
                 }
@@ -201,20 +201,20 @@ public class GraphNode implements Runnable {
             GraphNode test = p.getLast();
 
             if (this == test) {
-                System.out.println("Receipt Received!");
+                if (Main.debugMessaging) System.out.println("Receipt Received!");
             }
             else if (adjacentNodes.contains(test)) {
-                System.out.println("RETURNING RECEIPT @ (" + this + ") to (" + test + "): " + p);
+                if (Main.debugMessaging) System.out.println("RETURNING RECEIPT @ (" + this + ") to (" + test + "): " + p);
                 test.addPacket(p);
-                System.out.println("Packet was added to " + test);
+                if (Main.debugMessaging) System.out.println("Packet was added to " + test);
 //                synchronized (test) { test.notify(); }
             } else {
 
-                System.out.println("WHAT THE FUCK @ (" + this + ") to (" + test + "): " + p);
+                if (Main.debugMessaging) System.out.println("FUCK @ (" + this + ") to (" + test + "): " + p);
                 p.addToBQ(test);
             }
         }
-        System.out.println("Finished sendi");
+        if (Main.debugMessaging) System.out.println("Finished sending!");
     }
 
     /**
@@ -222,7 +222,7 @@ public class GraphNode implements Runnable {
      */
     private void processMessages() {
         for (Packet p : mailbox) {
-            System.out.println("Processing Message @ " + this + " | " + p);
+            if (Main.debugMessaging) System.out.println("Processing Message @ " + this + " | " + p);
 
             // Act on message
             sendMessage(p);
@@ -244,7 +244,7 @@ public class GraphNode implements Runnable {
         // Check if there is a receipt matching the ID Number
         while ((receipt = checkForReceipt(num)) == null) {
             try {
-                System.out.println("WAITING @ " + this + " with " + receipt);
+                if (Main.debugMessaging) System.out.println("WAITING @ " + this + " with " + receipt);
                 // Wait, and get notified when mailbox gets put in
                 synchronized (this) {
                     wait();
@@ -283,7 +283,7 @@ public class GraphNode implements Runnable {
         // Synchronize and notify
         synchronized (this) {
             this.notify();
-            System.out.println("Notified " + this);
+            if (Main.debugMessaging) System.out.println("Notified " + this);
         }
     }
 
@@ -292,7 +292,7 @@ public class GraphNode implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println("Node: " + toString() + "; Status: " + status + " 1");
+        if (Main.debugGraphNode) System.out.println("Node: " + toString() + "; Status: " + status + " 1");
 
         // While the node is green, wait until notfied that neighbor is red
         while (getStatus() == NodeStatus.GREEN) {
@@ -323,7 +323,7 @@ public class GraphNode implements Runnable {
 
         // If node is notified of a fire
         if (getStatus() == NodeStatus.YELLOW) {
-            System.out.println("Node: " + toString() + "; Status: " + status + " 2");
+            if (Main.debugGraphNode) System.out.println("Node: " + toString() + "; Status: " + status + " 2");
 
             // Wait to catch on fire
             try {
@@ -359,7 +359,7 @@ public class GraphNode implements Runnable {
         }
 
         // Print final state
-        System.out.println("Node: " + toString() + "; Status: " + status + " 3");
+        if (Main.debugGraphNode) System.out.println("Node: " + toString() + "; Status: " + status + " 3");
     }
 
     /**

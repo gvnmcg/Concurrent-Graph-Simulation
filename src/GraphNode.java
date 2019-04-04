@@ -159,34 +159,41 @@ public class GraphNode implements Runnable {
     }
 
     /**
+     * Processes a message given within the packet
      *
      * @param p
      */
     public void sendMessage(Packet p) {
-        if (base == true) {
+        // Checks if the node is the base station
+        if (base) {
+            // Processes the message of the packet
             System.out.println("BASE STATION (" + this + ") REPORT: " + p.getMessage());
+            // Sets it to be finished
             p.setFinished();
-//            p.addToBQ(this);
         }
+
+        // Checks to see if it needs to be sent to the base station
         if (p.inProgress) {
             p.addToBQ(this);
-            System.out.println("Adding");
-            boolean navigable = true;
+
+            int numNavigable = 0;
             for (GraphNode node : adjacentNodes) {
                 if (!p.contains(node) && node.getStatus() != NodeStatus.RED && !p.getStatus()) {
                     node.addPacket(p);
                     synchronized (node) { node.notify(); }
-                    if (navigable = getReceipt(p.getID())) {
+                    if (getReceipt(p.getID())) {
                         System.out.println("Broke @ " + this);
                         break;
                     }
                     System.out.println("IT KEPT GOING FOR PACKET #" + p.getID());
                 } else {
-                    navigable = false;
+                    numNavigable++;
                 }
             }
-            if (!navigable) {
+
+            if (numNavigable == adjacentNodes.size()) {
                 p.setFail();
+                // Means that there is no node under "this", that is connected to the base station.
             }
         }
         else {
@@ -194,8 +201,7 @@ public class GraphNode implements Runnable {
             GraphNode test = p.getLast();
 
             if (this == test) {
-
-
+                System.out.println("Receipt Received!");
             }
             else if (adjacentNodes.contains(test)) {
                 System.out.println("RETURNING RECEIPT @ (" + this + ") to (" + test + "): " + p);
@@ -211,20 +217,35 @@ public class GraphNode implements Runnable {
         System.out.println("Finished sendi");
     }
 
+    /**
+     * For each message in the mailbox, attempt to process!
+     */
     private void processMessages() {
         for (Packet p : mailbox) {
             System.out.println("Processing Message @ " + this + " | " + p);
+
+            // Act on message
             sendMessage(p);
 
+            // Remove message
             mailbox.remove(p);
         }
     }
 
+    /**
+     * Wait until a receipt is received with same ID Number
+     *
+     * @param num ID of receipt that is going to be retrieved.
+     * @return Returns true if base station got the message, false if not
+     */
     private boolean getReceipt(int num) {
         Packet receipt;
+
+        // Check if there is a receipt matching the ID Number
         while ((receipt = checkForReceipt(num)) == null) {
             try {
                 System.out.println("WAITING @ " + this + " with " + receipt);
+                // Wait, and get notified when mailbox gets put in
                 synchronized (this) {
                     wait();
                 }
@@ -233,20 +254,33 @@ public class GraphNode implements Runnable {
             }
         }
 
-
+        // Returns status
         return receipt.getStatus();
-
     }
 
+
+    /**
+     * Loops through each packet and checks for the receipt
+     *
+     * @param num
+     * @return
+     */
     private Packet checkForReceipt(int num) {
+        // TODO, This should not need the p.getStatus() as there are times a receipt can be false and have the same ID
         for (Packet p : mailbox) {
             if (p.getID() == num && p.getStatus()) return p;
         }
         return null;
     }
 
+    /**
+     * Adds the packets to the mailbox
+     *
+     * @param p Packet
+     */
     public void addPacket(Packet p) {
         mailbox.add(p);
+        // Synchronize and notify
         synchronized (this) {
             this.notify();
             System.out.println("Notified " + this);

@@ -70,6 +70,6 @@ public class Packet {
 
     public void setFail() {
         success = false;
-        inProgress = false;
+//        inProgress = true;
     }
 }

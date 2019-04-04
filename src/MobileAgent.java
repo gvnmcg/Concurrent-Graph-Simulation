@@ -38,7 +38,7 @@ public class MobileAgent implements Runnable {
      * @param init
      */
     MobileAgent(GraphNode node, boolean init) {
-        System.out.println("MA Initialized @ " + node);
+        if (Main.debugMobileAgents) System.out.println("MA Initialized @ " + node);
         initDisplay();
 
         this.node = node;
@@ -62,9 +62,9 @@ public class MobileAgent implements Runnable {
     private GraphNode walkToFire(GraphNode node) {
 
         // If current node is on fire then isolate and propagate
-        System.out.println("Walking node: " + node );
+        if (Main.debugMobileAgents) System.out.println("Walking node: " + node );
         if (node.getStatus() == NodeStatus.YELLOW) {
-            System.out.println("Yellow at " + node);
+            if (Main.debugMobileAgents) System.out.println("Yellow at " + node);
             this.node = node;
             return node;
         }
@@ -96,7 +96,7 @@ public class MobileAgent implements Runnable {
     private void updateDisplay(Coordinate coordinate) {
         if (display != null) {
             synchronized (display) {
-                System.out.println("Updating display of " + node);
+                if (Main.debugMobileAgents) System.out.println("Updating display of " + node);
                 display.setCenterX(coordinate.getX() * GraphDisplay.scale);
                 display.setCenterY(coordinate.getY() * GraphDisplay.scale);
                 switch (node.getStatus()) {
@@ -119,10 +119,10 @@ public class MobileAgent implements Runnable {
      *
      */
     private void propagate() {
-        System.out.println("Propagating nodes @ " + node + " of size " + node.getAdjacentNodes().size());
+        if (Main.debugMobileAgents) System.out.println("Propagating nodes @ " + node + " of size " + node.getAdjacentNodes().size());
 
         for (GraphNode n : this.node.getAdjacentNodes()) {
-            System.out.println("Propagating to " + n + " with status " + n.getStatus());
+            if (Main.debugMobileAgents) System.out.println("Propagating to " + n + " with status " + n.getStatus());
             synchronized (n) {
                 if (n.getStatus() != NodeStatus.RED && n.getMobileAgent() == null) new MobileAgent(n, false);
             }
@@ -159,20 +159,20 @@ public class MobileAgent implements Runnable {
 
 
         updateDisplay(node.getCoordinate());
-        System.out.println("MA: " + node + " | Status: " + node.getStatus());
+        if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
         node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
         while (node.getStatus() == NodeStatus.GREEN) {
             try {
                 synchronized (this) {  wait(); }
             } catch (InterruptedException e) {
-                System.out.println("It broke");
+                if (Main.debugMobileAgents) System.out.println("It broke");
                 e.printStackTrace();
             }
         }
 
         updateDisplay(node.getCoordinate());
         // While there is an adjacent fire
-        System.out.println("MA: " + node + " | Status: " + node.getStatus());
+        if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
         node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
         propagate();
         while (node.getStatus() == NodeStatus.YELLOW) {
@@ -182,9 +182,9 @@ public class MobileAgent implements Runnable {
                 e.printStackTrace();
             }
         }
-        System.out.println(node + " " + display.getFill() + " " + node.getStatus());
+        if (Main.debugMobileAgents) System.out.println(node + " " + display.getFill() + " " + node.getStatus());
         updateDisplay(node.getCoordinate());
-        System.out.println("MA: " + node + " | Status: " + node.getStatus());
+        if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
         node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
     }
 
@@ -205,7 +205,7 @@ public class MobileAgent implements Runnable {
                 this.display = c;
                 gd.addToCenter(display);
 
-                System.out.println("Added to display");
+                if (Main.debugMobileAgents) System.out.println("Added to display");
             }
 
     }

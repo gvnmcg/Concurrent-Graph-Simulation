@@ -109,7 +109,7 @@ public class GraphNode implements Runnable {
 
             // TODO Verify the synch is needed
             // Synchronize on the display
-            synchronized (display) {
+            synchronized (display){
 
                 // Change the color based on the status
                 switch (status) {
@@ -123,6 +123,8 @@ public class GraphNode implements Runnable {
                         display.setFill(Color.RED);
                         break;
                 }
+
+                if (base) display.setFill(Color.LIGHTGREEN);
             }
         });
 

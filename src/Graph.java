@@ -121,8 +121,7 @@ public class Graph {
                         if (nodes != null && nodes.get(c) != null) {
                             System.out.println(nodes.get(c));
                             nodes.get(c).setStatus(NodeStatus.RED);
-                            System.out.println(nodes.get(c).toString() + "Status: RED");
-                            System.out.println("STATUS OF FIRE NODE: " + nodes.get(c).getStatus());
+
                         }
 
                         break;

@@ -63,9 +63,11 @@ public class Packet {
     }
 
     public void printBQ() {
-        for (GraphNode node : bq)
-            System.out.print(node + " | ");
-        System.out.println();
+        if (Main.debugMessaging) {
+            for (GraphNode node : bq)
+                System.out.print(node + " | ");
+            System.out.println();
+        }
     }
 
     public void setFail() {

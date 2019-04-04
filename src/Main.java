@@ -7,6 +7,11 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
+    public static boolean debugMessaging = false;
+    public static boolean debugMobileAgents = false;
+    public static boolean debugGraphNode = false;
+
+
     /**
      * Start the basic components
      * - The graph data stucture

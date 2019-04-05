@@ -205,7 +205,7 @@ public class GraphNode implements Runnable {
             GraphNode test = p.getLast();
 
             if (this == test) {
-                if (Main.debugMessaging) System.out.println("Receipt Received!");
+                if (Main.debugMessaging) System.out.println("RECEIPT #" + p.getID() + " SUCCESSFULLY RECEIVED!");
             }
             else if (adjacentNodes.contains(test)) {
                 if (Main.debugMessaging) System.out.println("RETURNING RECEIPT @ (" + this + ") to (" + test + "): " + p);
@@ -301,7 +301,6 @@ public class GraphNode implements Runnable {
         // While the node is green, wait until notfied that neighbor is red
         while (getStatus() == NodeStatus.GREEN) {
             try {
-
                 processMessages();
                 synchronized (this) {
                     wait();

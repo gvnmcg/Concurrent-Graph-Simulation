@@ -173,52 +173,64 @@ public class GraphNode implements Runnable {
             // Sets it to be finished
             p.setFinished();
         }
-
+        System.out.println("Packet about to be processed " + p);
         // Checks to see if it needs to be sent to the base station
-        if (p.inProgress) {
+        if (p.isMessage()) {
             p.addToBQ(this);
 
             int numNavigable = 0;
             for (GraphNode node : adjacentNodes) {
                 if (!p.contains(node) && node.getStatus() != NodeStatus.RED && !p.getStatus()) {
                     node.addPacket(p);
+                    System.out.println("ADDING PACKET");
                     synchronized (node) { node.notify(); }
                     if (getReceipt(p.getID())) {
+//                        getReceipt(p);
+                        if (p.getSender() == this && p.getStatus()) System.out.println("Maybe it worked");
+                        synchronized (node) {node.notify();}
                         if (Main.debugMessaging) System.out.println("Broke @ " + this);
                         break;
                     }
                     if (Main.debugMessaging) System.out.println("IT KEPT GOING FOR PACKET #" + p.getID());
                 } else {
-                    System.out.println("Innavigable @ " + node);
+                    System.out.println("Innavigable @ " + node + " " + node.getStatus() + " " + node.getMobileAgent());
                     numNavigable++;
                 }
             }
+            System.out.println("SIZE CHECK OF (" + this + "): " +numNavigable + " " + adjacentNodes.size());
+            if (numNavigable == adjacentNodes.size()) {
+                if (Main.debugMessaging) {
+                    System.out.println("CANT TRAVERSE @ " + this + " for the packet: " + p);
+                    p.printBQ();
+                }
 
-            if (numNavigable == adjacentNodes.size()-1) {
-                if (Main.debugMessaging) System.out.println("CANT TRAVERSE @ " + this + " for the packet: " + p);
                 p.setFail();
                 // Means that there is no node under "this", that is connected to the base station.
             }
         }
         else {
-            p.printBQ();
-            GraphNode test = p.getLast();
-
-            if (this == test) {
-                if (Main.debugMessaging) System.out.println("RECEIPT #" + p.getID() + " SUCCESSFULLY RECEIVED!");
-            }
-            else if (adjacentNodes.contains(test)) {
-                if (Main.debugMessaging) System.out.println("RETURNING RECEIPT @ (" + this + ") to (" + test + "): " + p);
-                test.addPacket(p);
-                if (Main.debugMessaging) System.out.println("Packet was added to " + test);
-//                synchronized (test) { test.notify(); }
-            } else {
-
-                if (Main.debugMessaging) System.out.println("FUCK @ (" + this + ") to (" + test + "): " + p);
-                p.addToBQ(test);
-            }
+            getReceipt(p);
         }
-        if (Main.debugMessaging) System.out.println("Finished sending!");
+//        if (Main.debugMessaging) System.out.println("Finished sending!");
+    }
+
+    private void getReceipt(Packet p) {
+        p.printBQ();
+        GraphNode test = p.getLast();
+        System.out.println("Packet is traversing on " + this + " heading towards " + test);
+        if (this == test) {
+            if (Main.debugMessaging) System.out.println("RECEIPT #" + p.getID() + " SUCCESSFULLY RECEIVED!");
+        }
+        else if (adjacentNodes.contains(test)) {
+            if (Main.debugMessaging) System.out.println("RETURNING RECEIPT @ (" + this + ") to (" + test + "): " + p);
+            test.addPacket(p);
+            if (Main.debugMessaging) System.out.println("Packet was added to " + test);
+//                synchronized (test) { test.notify(); }
+        } else {
+
+            if (Main.debugMessaging) System.out.println("FUCK @ (" + this + ") to (" + test + "): " + p);
+            p.addToBQ(test);
+        }
     }
 
     /**
@@ -226,8 +238,18 @@ public class GraphNode implements Runnable {
      */
     private void processMessages() {
         for (Packet p : mailbox) {
-            if (Main.debugMessaging) System.out.println("Processing Message @ " + this + " | " + p);
+            if (p.getStatus()) {
+                if (Main.debugMessaging) System.out.println("Processing Receipt @ " + this + " | " + p);
+                // Act on message
+                sendMessage(p);
 
+                // Remove message
+                mailbox.remove(p);
+            }
+
+        }
+        for (Packet p : mailbox) {
+            if (Main.debugMessaging) System.out.println("Processing Message @ " + this + " | " + p);
             // Act on message
             sendMessage(p);
 
@@ -272,7 +294,10 @@ public class GraphNode implements Runnable {
     private Packet checkForReceipt(int num) {
         // TODO, This should not need the p.getStatus() as there are times a receipt can be false and have the same ID
         for (Packet p : mailbox) {
-            if (p.getID() == num && p.getStatus()) return p;
+            if (p.getID() == num && !p.isMessage()) {
+                System.out.println("CHECK FOR RECEIPT (NUM:" + num + "): " + p);
+                return p;
+            }
         }
         return null;
     }
@@ -299,9 +324,10 @@ public class GraphNode implements Runnable {
         if (Main.debugGraphNode) System.out.println("Node: " + toString() + "; Status: " + status + " 1");
 
         // While the node is green, wait until notfied that neighbor is red
+        processMessages();
         while (getStatus() == NodeStatus.GREEN) {
             try {
-                processMessages();
+//                processMessages();
                 synchronized (this) {
                     wait();
                 }

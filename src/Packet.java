@@ -3,17 +3,17 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class Packet {
 
     String message;
-    boolean update;
+//    boolean update;
     boolean success;
-    boolean inProgress;
+    boolean msg;
     LinkedBlockingDeque<GraphNode> bq = new LinkedBlockingDeque<>();
     int ID;
 
     Packet (String message, boolean update, GraphNode gn, int ID) {
         success = false;
-        inProgress = true;
+        msg = true;
         this.message = message;
-        this.update = update;
+//        this.update = update;
         bq.add(gn);
         this.ID = ID;
 
@@ -44,7 +44,7 @@ public class Packet {
     }
 
     public void setFinished() {
-        inProgress = false;
+        msg = false;
         success = true;
     }
 
@@ -72,6 +72,10 @@ public class Packet {
 
     public void setFail() {
         success = false;
-//        inProgress = true;
+//        msg = true;
+    }
+
+    public boolean isMessage() {
+        return msg;
     }
 }

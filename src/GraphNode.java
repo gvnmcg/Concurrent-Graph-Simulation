@@ -323,6 +323,39 @@ public class GraphNode implements Runnable {
     public void run() {
         if (Main.debugGraphNode) System.out.println("Node: " + toString() + "; Status: " + status + " 1");
 
+        whileBlue();
+
+        whileYellow();
+
+
+
+        // Sets the adjacent nodes to yellow
+        for (GraphNode node : adjacentNodes) {
+            synchronized (node) {
+                if (node.getStatus() == NodeStatus.GREEN) {
+                    node.setStatus(NodeStatus.YELLOW);
+                    node.notify();
+                }
+            }
+        }
+
+        // Notify the mobile agent
+        if (mobileAgent != null) {
+            synchronized (mobileAgent) {
+                mobileAgent.notify();
+            }
+        }
+
+        // Print final state
+        if (Main.debugGraphNode) System.out.println("Node: " + toString() + "; Status: " + status + " 3");
+    }
+
+
+    /**
+     * While the node is not in danger
+     */
+    private void whileBlue() {
+
         // While the node is green, wait until notfied that neighbor is red
         processMessages();
         while (getStatus() == NodeStatus.GREEN) {
@@ -342,6 +375,13 @@ public class GraphNode implements Runnable {
         if (getStatus() == NodeStatus.GREEN) {
             setStatus(NodeStatus.YELLOW);
         }
+    }
+
+    /**
+     * While node is in danger and about to turn red
+     */
+    private void whileYellow() {
+
         if (mobileAgent != null) {
             synchronized (mobileAgent) {
                 // Notify on the mobileAgent
@@ -367,28 +407,10 @@ public class GraphNode implements Runnable {
         }
         processMessages();
 
+
         // Sets status onto fire
         setStatus(NodeStatus.RED);
 
-        // Sets the adjacent nodes to yellow
-        for (GraphNode node : adjacentNodes) {
-            synchronized (node) {
-                if (node.getStatus() == NodeStatus.GREEN) {
-                    node.setStatus(NodeStatus.YELLOW);
-                    node.notify();
-                }
-            }
-        }
-
-        // Notify the mobile agent
-        if (mobileAgent != null) {
-            synchronized (mobileAgent) {
-                mobileAgent.notify();
-            }
-        }
-
-        // Print final state
-        if (Main.debugGraphNode) System.out.println("Node: " + toString() + "; Status: " + status + " 3");
     }
 
     /**

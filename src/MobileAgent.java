@@ -99,17 +99,17 @@ public class MobileAgent implements Runnable {
                 if (Main.debugMobileAgents) System.out.println("Updating display of " + node);
                 display.setCenterX(coordinate.getX() * GraphDisplay.scale);
                 display.setCenterY(coordinate.getY() * GraphDisplay.scale);
-                switch (node.getStatus()) {
-                    case GREEN:
-                        display.setFill(Color.WHITE);
-                        break;
-                    case YELLOW:
-                        display.setFill(Color.ORANGE);
-                        break;
-                    case RED:
-                        display.setFill(Color.BLACK);
-                        break;
-                }
+//                switch (node.getStatus()) {
+//                    case GREEN:
+//                        display.setFill(Color.WHITE);
+//                        break;
+//                    case YELLOW:
+//                        display.setFill(Color.ORANGE);
+//                        break;
+//                    case RED:
+//                        display.setFill(Color.BLACK);
+//                        break;
+//                }
             }
         }
     }
@@ -133,11 +133,26 @@ public class MobileAgent implements Runnable {
 
     }
 
+
+
     @Override
     public void run() {
 
+        onBlueNode();
+
+        onYellowNode();
+
+        if (Main.debugMobileAgents) System.out.println(node + " " + display.getFill() + " " + node.getStatus());
         updateDisplay(node.getCoordinate());
         if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
+        node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
+    }
+
+    private void onBlueNode() {
+
+        updateDisplay(node.getCoordinate());
+        if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
+
         node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
         while (node.getStatus() == NodeStatus.GREEN) {
             try {
@@ -147,8 +162,12 @@ public class MobileAgent implements Runnable {
                 e.printStackTrace();
             }
         }
-
         updateDisplay(node.getCoordinate());
+
+    }
+
+    private void onYellowNode() {
+
         // While there is an adjacent fire
         if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
         node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
@@ -160,12 +179,7 @@ public class MobileAgent implements Runnable {
                 e.printStackTrace();
             }
         }
-        if (Main.debugMobileAgents) System.out.println(node + " " + display.getFill() + " " + node.getStatus());
-        updateDisplay(node.getCoordinate());
-        if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
-        node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
     }
-
 
     public Circle getDisplay() {
         return display;
@@ -173,12 +187,13 @@ public class MobileAgent implements Runnable {
 
     public void initDisplay() {
             if (gd != null) {
-                Circle c = new Circle(5);
+                Circle c = new Circle(15);
                 if (node != null) {
                     c.setCenterX(node.getCoordinate().getX());
                     c.setCenterY(node.getCoordinate().getY());
                 }
-                c.setFill(Color.GREEN);
+                c.setStroke(Color.GREEN);
+                c.setFill(Color.TRANSPARENT);
 
                 this.display = c;
                 gd.addToCenter(display);

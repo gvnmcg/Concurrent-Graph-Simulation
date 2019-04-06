@@ -437,7 +437,11 @@ public class GraphNode implements Runnable {
                     gc.setFill(Color.BLUE);
         }
 
-        gc.fillOval(cords.getX(), cords.getY(), 10, 10);
+        gc.fillOval(cords.getX()* GraphDisplay.scale,
+                cords.getY()* GraphDisplay.scale,
+                10* GraphDisplay.scale,
+                10* GraphDisplay.scale
+        );
 
         if (mobileAgent != null){
             gc.setFill(Color.GREEN);

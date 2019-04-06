@@ -136,28 +136,6 @@ public class MobileAgent implements Runnable {
     @Override
     public void run() {
 
-
-//        //random walk until node catches fire
-//        while(node.getStatus() == NodeStatus.GREEN){
-//            while(node.getStatus() == NodeStatus.GREEN){
-//
-//                node = node.getAdjacentNodes().get(
-//                        (int)(Math.random()*node.getAdjacentNodes().size()));
-//
-//                updateDisplay(node.getCoordinate());
-//
-//                try {
-//                    Thread.sleep( 2000);
-//                } catch (InterruptedException e){
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//
-//            updateDisplay(node.getCoordinate());
-//        }
-
-
         updateDisplay(node.getCoordinate());
         if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
         node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));

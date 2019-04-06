@@ -57,9 +57,9 @@ public class GraphEdge {
     public void updateGraphics(GraphicsContext gc) {
         gc.setFill(Color.BLACK);
 
-        gc.strokeLine(nodePair.getKey().getCoordinate().getX(),
-                nodePair.getKey().getCoordinate().getY(),
-                nodePair.getValue().getCoordinate().getX(),
-                nodePair.getValue().getCoordinate().getY());
+        gc.strokeLine(nodePair.getKey().getCoordinate().getX()* GraphDisplay.scale,
+                nodePair.getKey().getCoordinate().getY()* GraphDisplay.scale,
+                nodePair.getValue().getCoordinate().getX()* GraphDisplay.scale,
+                nodePair.getValue().getCoordinate().getY()* GraphDisplay.scale);
     }
 }

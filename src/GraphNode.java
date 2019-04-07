@@ -187,7 +187,7 @@ public class GraphNode implements Runnable {
                     System.out.println("ABOUT TO ADD PACKET TO "+node + " from " + this);
                     node.addPacket(p);
                     System.out.println("ADDING PACKET TO " +node + " from " + this);
-                    synchronized (node) { node.notify(); }
+//                    synchronized (node) { node.notify(); }
                     if (getReceipt(p.getID())) {
 
                         if (p.getSender() == this && p.getStatus()) {
@@ -244,7 +244,7 @@ public class GraphNode implements Runnable {
             if (Main.debugMessaging) System.out.println("RETURNING RECEIPT @ (" + this + ") to (" + test + "): " + p);
             test.addPacket(p);
             if (Main.debugMessaging) System.out.println("Packet was added to " + test);
-//                synchronized (test) { test.notify(); }
+//            synchronized (test) { test.notify(); }
         } else {
 
             if (Main.debugMessaging) System.out.println("FUCK @ (" + this + ") to (" + test + "): " + p);
@@ -283,17 +283,18 @@ public class GraphNode implements Runnable {
      * @param num ID of receipt that is going to be retrieved.
      * @return Returns true if base station got the message, false if not
      */
-    private boolean getReceipt(int num) {
+    private synchronized boolean getReceipt(int num) {
         Packet receipt;
+
 
         // Check if there is a receipt matching the ID Number
         while ((receipt = checkForReceipt(num)) == null) {
             try {
                 if (Main.debugMessaging) System.out.println("WAITING @ " + this + " with " + receipt + " for num" + num);
                 // Wait, and get notified when mailbox gets put in
-                synchronized (this) {
+//                synchronized (this) {
                     wait();
-                }
+//                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -311,7 +312,7 @@ public class GraphNode implements Runnable {
      * @param num
      * @return
      */
-    private Packet checkForReceipt(int num) {
+    private synchronized Packet checkForReceipt(int num) {
         // TODO, This should not need the p.getStatus() as there are times a receipt can be false and have the same ID
         for (Packet p : mailbox) {
             System.out.println("CHECK FOR RECEIPT @ (" + this + ") (NUM:" + num + "): " + p);

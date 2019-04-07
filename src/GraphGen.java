@@ -2,9 +2,9 @@ import java.util.ArrayList;
 
 public class GraphGen {
 
-    private static final int NUM_TO_GEN = 40;
-    private static final int WIDTH = 20;
-    private static final int HEIGHT = 20;
+    private static final int NUM_TO_GEN = 30;
+    private static final int WIDTH = 12;
+    private static final int HEIGHT = 10;
 
 
     private static ArrayList<Coordinate> list = new ArrayList<>();

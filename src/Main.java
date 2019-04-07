@@ -22,7 +22,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         // Initialize gragh data structure
-        Graph graph = new Graph("resources/fireNextToBaseStation");
+        Graph graph = new Graph("resources/graphgen");
 
         // Display graph
         GraphDisplay graphDisplay = new GraphDisplay(graph);

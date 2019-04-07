@@ -5,6 +5,7 @@ public class MobileAgent implements Runnable {
 
     // TODO Get better way to display the mobile agent
     private static GraphDisplay gd = null;
+
     private GraphNode node;
     private Thread thread;
     private Circle display;

@@ -1,0 +1,85 @@
+node 3 5
+node 5 10
+node 3 8
+node 1 11
+node 1 0
+node 10 2
+node 7 0
+node 1 10
+node 4 3
+node 9 9
+node 7 9
+node 10 8
+node 11 6
+node 9 7
+node 10 3
+node 1 9
+node 6 5
+node 9 11
+node 7 8
+node 5 5
+node 7 5
+node 0 1
+node 3 1
+node 4 10
+node 2 10
+node 11 8
+node 11 7
+node 2 8
+edge 5 10 3 5
+edge 3 8 5 10
+edge 1 11 3 8
+edge 1 0 4 3
+edge 10 2 7 0
+edge 7 0 10 2
+edge 1 10 1 11
+edge 4 3 3 5
+edge 9 9 7 9
+edge 7 9 7 8
+edge 10 8 9 9
+edge 11 6 10 8
+edge 9 7 10 8
+edge 10 3 10 2
+edge 1 9 1 10
+edge 6 5 5 5
+edge 9 11 9 9
+edge 7 8 7 9
+edge 5 5 6 5
+edge 7 5 9 7
+edge 0 1 1 0
+edge 3 1 1 0
+edge 4 10 5 10
+edge 2 10 1 11
+edge 11 8 10 8
+edge 11 7 10 8
+edge 2 8 3 8
+edge 3 5 3 5
+edge 5 10 3 5
+edge 3 8 11 6
+edge 1 11 9 7
+edge 1 0 4 10
+edge 10 2 3 1
+edge 7 0 7 0
+edge 1 10 5 5
+edge 4 3 11 6
+edge 9 9 4 10
+edge 7 9 4 10
+edge 10 8 3 1
+edge 11 6 1 10
+edge 9 7 7 9
+edge 10 3 10 2
+edge 1 9 4 10
+edge 6 5 3 1
+edge 9 11 10 8
+edge 7 8 4 3
+edge 5 5 6 5
+edge 7 5 1 0
+edge 0 1 1 10
+edge 3 1 9 7
+edge 4 10 6 5
+edge 2 10 5 10
+edge 11 8 7 9
+edge 11 7 7 9
+edge 2 8 10 8
+fire 1 0
+station 10 8

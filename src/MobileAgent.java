@@ -1,5 +1,8 @@
+import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+
+import java.util.ArrayList;
 
 public class MobileAgent implements Runnable {
 
@@ -44,7 +47,7 @@ public class MobileAgent implements Runnable {
 
         this.node = node;
         if (init) {
-            walkToFire(node);
+            walkToFire(node, new ArrayList<GraphNode>(), new ArrayList<GraphNode>());
         } else {
             // Propogated
             this.node = node;
@@ -60,8 +63,8 @@ public class MobileAgent implements Runnable {
      * @param node
      * @return
      */
-    private GraphNode walkToFire(GraphNode node) {
-
+    private GraphNode walkToFire(GraphNode node, ArrayList<GraphNode> visited, ArrayList<GraphNode> needToVisit) {
+//        visited.add(node);
         // If current node is on fire then isolate and propagate
         if (Main.debugMobileAgents) System.out.println("Walking node: " + node );
         if (node.getStatus() == NodeStatus.YELLOW) {
@@ -72,7 +75,14 @@ public class MobileAgent implements Runnable {
         // Else randomly walk to an adjacent node
         else {
             int random = (int)(Math.random() * node.getAdjacentNodes().size());
-            return walkToFire(node.getAdjacentNodes().get(random));
+//            if (visited.contains(node.getAdjacentNodes().get(random)) && needToVisit.size() == 0) {
+//
+//            }
+//            else if (visited.contains(node.getAdjacentNodes().get(random))) {
+//
+//            } else {
+                return walkToFire(node.getAdjacentNodes().get(random),visited, needToVisit);
+//            }
         }
     }
 
@@ -100,17 +110,19 @@ public class MobileAgent implements Runnable {
                 if (Main.debugMobileAgents) System.out.println("Updating display of " + node);
                 display.setCenterX(coordinate.getX() * GraphDisplay.scale);
                 display.setCenterY(coordinate.getY() * GraphDisplay.scale);
-//                switch (node.getStatus()) {
-//                    case GREEN:
-//                        display.setFill(Color.WHITE);
-//                        break;
-//                    case YELLOW:
-//                        display.setFill(Color.ORANGE);
-//                        break;
-//                    case RED:
-//                        display.setFill(Color.BLACK);
-//                        break;
-//                }
+                Platform.runLater(() -> {
+                    switch (node.getStatus()) {
+                        case GREEN:
+                            display.setStroke(Color.AZURE);
+                            break;
+                        case YELLOW:
+                            display.setStroke(Color.DARKORANGE);
+                            break;
+                        case RED:
+                            display.setStroke(Color.CRIMSON);
+                            break;
+                    }
+                });
             }
         }
     }
@@ -193,13 +205,14 @@ public class MobileAgent implements Runnable {
 
     public void initDisplay() {
             if (gd != null) {
-                Circle c = new Circle(15);
+                Circle c = new Circle(20);
                 if (node != null) {
                     c.setCenterX(node.getCoordinate().getX());
                     c.setCenterY(node.getCoordinate().getY());
                 }
                 c.setStroke(Color.GREEN);
                 c.setFill(Color.TRANSPARENT);
+                c.setStrokeWidth(2);
 
                 this.display = c;
                 gd.addToCenter(display);

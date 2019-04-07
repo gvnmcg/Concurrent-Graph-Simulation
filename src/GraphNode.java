@@ -32,6 +32,7 @@ public class GraphNode implements Runnable {
      */
     GraphNode(Coordinate coordinate) {
         display = new Circle(10);
+        display.setStrokeWidth(3);
         cords = coordinate;
         this.status = NodeStatus.GREEN;
         setStatus(NodeStatus.GREEN);
@@ -39,6 +40,8 @@ public class GraphNode implements Runnable {
 
     public void setBase() {
         base = true;
+        display.setStrokeWidth(5);
+        display.setStroke(Color.GRAY);
     }
 
     /**
@@ -93,13 +96,12 @@ public class GraphNode implements Runnable {
         return cords.toString();
     }
 
-    // TODO Verify the needed effects of synchronized in the function block
     /**
      * Gets the status of the node
      *
      * @return NodeStatus of Node
      */
-    public synchronized NodeStatus getStatus() {
+    public NodeStatus getStatus() {
         // Synchronize on the status in case setStatus is used.
         synchronized (status) {
             return status;
@@ -111,37 +113,35 @@ public class GraphNode implements Runnable {
      *
      * @param status
      */
-    public synchronized void setStatus(NodeStatus status) {
-        // TODO SWAP PLACES OF GUI / GLOBAL ASSIGNING
+    public void setStatus(NodeStatus status) {
+        // Synchronize and change the status
+        // Change the status
+        synchronized (this.status) {
+            this.status = status;
+        }
+
         // Platform Run Later allows GUI to synchronously execute the display changes
         Platform.runLater(() -> {
 
-            // TODO Verify the synch is needed
-            // Synchronize on the display
-            synchronized (display){
-
-                // Change the color based on the status
-                switch (status) {
-                    case GREEN:
-                        display.setFill(Color.BLUE);
-                        break;
-                    case YELLOW:
-                        display.setFill(Color.YELLOW);
-                        break;
-                    case RED:
-                        display.setFill(Color.RED);
-                        break;
-                }
-
-                if (base) display.setFill(Color.LIGHTGREEN);
+            // Change the color based on the status
+            switch (status) {
+                case GREEN:
+                    display.setFill(Color.BLUE);
+                    if (!base) display.setStroke(Color.DARKBLUE);
+                    break;
+                case YELLOW:
+                    display.setFill(Color.YELLOW);
+                    if (!base) display.setStroke(Color.ORANGE);
+                    break;
+                case RED:
+                    display.setFill(Color.RED);
+                    if (!base) display.setStroke(Color.DARKRED);
+                    break;
             }
+
         });
 
-        // Synchronize and change the status
-        synchronized (this.status) {
-            // Change the status
-            this.status = status;
-        }
+
     }
 
     /**
@@ -160,13 +160,10 @@ public class GraphNode implements Runnable {
      * @return Circle representing Display
      */
     public Circle getDisplay() {
-        // TODO Why synch
-        synchronized(status) {
-            // Set the center and return the Circle component
-            display.setCenterX(getCoordinate().getX() * GraphDisplay.scale);
-            display.setCenterY(getCoordinate().getY() * GraphDisplay.scale);
-            return display;
-        }
+        // Set the center and return the Circle component
+        display.setCenterX(getCoordinate().getX() * GraphDisplay.scale);
+        display.setCenterY(getCoordinate().getY() * GraphDisplay.scale);
+        return display;
     }
 
 
@@ -214,8 +211,6 @@ public class GraphNode implements Runnable {
                 } else {
                     if (Main.debugMessaging) System.out.println("TO THE RANCH!!!");
                     p.setFail();
-                    // TODO Not sure if this is useful
-                    p.removeFromBQ(this);
                     getReceipt(p);
                 }
             }
@@ -331,7 +326,7 @@ public class GraphNode implements Runnable {
                 processMessages();
 
                 Thread.yield();
-                Thread.sleep(2000);
+                Thread.sleep(1500);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

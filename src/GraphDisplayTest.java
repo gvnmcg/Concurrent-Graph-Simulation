@@ -11,6 +11,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.ArrayList;
+
 public class GraphDisplayTest extends Application {
 
     public static boolean debugMessaging = false;
@@ -99,8 +103,19 @@ public class GraphDisplayTest extends Application {
 
 
         ListView<String> list = new ListView<String>();
-        ObservableList<String> items = FXCollections.observableArrayList (
-                "Single", "Double", "Suite", "Family App");
+
+        ArrayList<String> filenamesList = new ArrayList<>();
+
+        File folder = new File("resources");
+        for (String file : folder.list()){
+            filenamesList.add(file.substring(0,file.length() - 4));
+        }
+
+        ObservableList<String> items = FXCollections.observableArrayList (filenamesList);
+
+
+
+
         list.setItems(items);
 
         scrollPane.setContent(list);
@@ -149,6 +164,7 @@ public class GraphDisplayTest extends Application {
     }
 
     public static void main(String[] args) {
+
         launch(args);
     }
 }

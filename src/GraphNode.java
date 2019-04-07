@@ -3,6 +3,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -18,6 +19,7 @@ public class GraphNode implements Runnable {
     private Circle display;
     private MobileAgent mobileAgent;
     boolean base = false;
+    GraphNode waitingOn = null;
 
     // Mailbox for message sending
     LinkedBlockingQueue<Packet> mailbox = new LinkedBlockingQueue<>();
@@ -73,6 +75,11 @@ public class GraphNode implements Runnable {
             }
             System.out.println();
         }
+    }
+
+
+    public synchronized GraphNode getWaitingOn() {
+        return waitingOn;
     }
 
     /**
@@ -170,7 +177,7 @@ public class GraphNode implements Runnable {
         // Checks if the node is the base station
         if (base) {
             // Processes the message of the packet
-            if (Main.debugMessaging) System.out.println("BASE STATION (" + this + ") REPORT: " + p.getMessage());
+            System.out.println("BASE STATION (" + this + ") REPORT: " + p.getMessage());
             // Sets it to be finished
             p.setFinished();
             getReceipt(p);
@@ -179,17 +186,18 @@ public class GraphNode implements Runnable {
         // Checks to see if it needs to be sent to the base station
         if (p.isMessage()) {
             System.out.println("MESSAGE CONFIRMED @ " + this + " and has " + getAdjacentNodes().size());
-            p.addToBQ(this);
 
             int numNavigable = 0;
             for (GraphNode node : getAdjacentNodes()) {
                 if (!p.contains(node) && node.getStatus() != NodeStatus.RED && !p.getStatus()) {
+                    p.addToBQ(this);
                     System.out.println("ABOUT TO ADD PACKET TO "+node + " from " + this);
                     node.addPacket(p);
                     System.out.println("ADDING PACKET TO " +node + " from " + this);
 //                    synchronized (node) { node.notify(); }
+                    waitingOn = node;
                     if (getReceipt(p.getID())) {
-
+                        waitingOn = null;
                         if (p.getSender() == this && p.getStatus()) {
                             System.out.println("Maybe it worked");
                             mailbox.remove(p);
@@ -201,10 +209,12 @@ public class GraphNode implements Runnable {
                         if (Main.debugMessaging) System.out.println("Broke @ " + this);
                         break;
                     } else {
+                        waitingOn = null;
                         p.setAsMessage();
                         System.out.println("Innavigable @ " + this + " for node " + node + " " + node.getStatus() + " " + node.getMobileAgent());
                         numNavigable++;
                     }
+
                     if (Main.debugMessaging) System.out.println("IT KEPT GOING FOR PACKET #" + p.getID());
                 } else {
                     System.out.println("Innavigable @ " + this + " for node " + node + " " + node.getStatus() + " " + node.getMobileAgent());
@@ -220,6 +230,7 @@ public class GraphNode implements Runnable {
                 if (this == p.getSender()) {
                     System.out.println("Failed at sending message " + this + " | " + p);
                 } else {
+                    System.out.println("IT IS REMOVING THE LAST THING");
                     p.setFail();
                     p.removeFromBQ(this);
                     getReceipt(p);
@@ -290,10 +301,25 @@ public class GraphNode implements Runnable {
         // Check if there is a receipt matching the ID Number
         while ((receipt = checkForReceipt(num)) == null) {
             try {
-                if (Main.debugMessaging) System.out.println("WAITING @ " + this + " with " + receipt + " for num" + num);
-                // Wait, and get notified when mailbox gets put in
+                if (Main.debugMessaging) {
+                    System.out.println("WAITING @ " + this + " with " + receipt + " for num" + num);
+                    // Wait, and get notified when mailbox gets put in
 //                synchronized (this) {
+                    System.out.println("THIS NODE @ " + this + " IS WAITING ON: " + waitingOn + " AND THAT NODE IS WAITING ON " + ((waitingOn != null) ? waitingOn.getWaitingOn() : ""));
+                    System.out.println();
+                }
+
+                if (waitingOn != null) {
+                    synchronized (waitingOn) {
+                        if (waitingOn != null && waitingOn.getWaitingOn() != null && this == waitingOn.getWaitingOn()) {
+                            processMessages();
+                        }
+                    }
+                }
+                else {
                     wait();
+                }
+
 //                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -313,6 +339,7 @@ public class GraphNode implements Runnable {
      * @return
      */
     private synchronized Packet checkForReceipt(int num) {
+        System.out.println("CHECKING FOR THE NUMBER #" + num + " @ (" + this + ")");
         // TODO, This should not need the p.getStatus() as there are times a receipt can be false and have the same ID
         for (Packet p : mailbox) {
             System.out.println("CHECK FOR RECEIPT @ (" + this + ") (NUM:" + num + "): " + p);
@@ -320,6 +347,7 @@ public class GraphNode implements Runnable {
                 return p;
             }
         }
+
         return null;
     }
 

@@ -22,7 +22,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         // Initialize gragh data structure
-        Graph graph = new Graph("resources/sample");
+        Graph graph = new Graph("resources/TestForLock");
 
         // Display graph
         GraphDisplay graphDisplay = new GraphDisplay(graph);

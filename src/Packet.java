@@ -72,10 +72,14 @@ public class Packet {
 
     public void setFail() {
         success = false;
-//        msg = true;
+        msg = false;
     }
 
     public boolean isMessage() {
         return msg;
+    }
+
+    public void setAsMessage() {
+        msg = true;
     }
 }

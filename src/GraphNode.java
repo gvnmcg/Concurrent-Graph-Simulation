@@ -305,20 +305,20 @@ public class GraphNode implements Runnable {
                     System.out.println("WAITING @ " + this + " with " + receipt + " for num" + num);
                     // Wait, and get notified when mailbox gets put in
 //                synchronized (this) {
-                    System.out.println("THIS NODE @ " + this + " IS WAITING ON: " + waitingOn + " AND THAT NODE IS WAITING ON " + ((waitingOn != null) ? waitingOn.getWaitingOn() : ""));
-                    System.out.println();
+//                    System.out.println("THIS NODE @ " + this + " IS WAITING ON: " + waitingOn + " AND THAT NODE IS WAITING ON " + ((waitingOn != null) ? waitingOn.getWaitingOn() : ""));
+//                    System.out.println();
                 }
-
-                if (waitingOn != null) {
-                    synchronized (waitingOn) {
-                        if (waitingOn != null && waitingOn.getWaitingOn() != null && this == waitingOn.getWaitingOn()) {
-                            processMessages();
-                        }
-                    }
-                }
-                else {
+//
+//                if (waitingOn != null) {
+//                    synchronized (waitingOn) {
+//                        if (waitingOn != null && waitingOn.getWaitingOn() != null && this == waitingOn.getWaitingOn()) {
+//                            processMessages();
+//                        }
+//                    }
+//                }
+//                else {
                     wait();
-                }
+//                }
 
 //                }
             } catch (InterruptedException e) {

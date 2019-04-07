@@ -31,7 +31,7 @@ public class GraphDisplay {
         this.graph = g;
 
         root.setCenter(centerGroup);
-        initDisplay(g);
+        initGraphics(g);
 
 //        AnimationTimer aTimer = new AnimationTimer() {
 //            @Override
@@ -48,19 +48,20 @@ public class GraphDisplay {
      * @param b
      */
     GraphDisplay(Graph g, boolean b ){
-        Canvas canvas = new Canvas();
+        Canvas canvas = new Canvas(700, 500);
         root.setCenter(canvas);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.BLACK);
         gc.strokeOval(10, 10, 10, 10);
 
-        initDisplay(g, gc);
+        initGraphics(g, gc);
 
+        System.out.println("huh?");
 
     }
 
-    private void initDisplay(Graph g, GraphicsContext gc) {
+    private void initGraphics(Graph g, GraphicsContext gc) {
 
 
         for (GraphEdge e : g.getEdges()){
@@ -91,7 +92,7 @@ public class GraphDisplay {
      *  Give each node display reference
      * @param graph
      */
-    private void initDisplay(Graph graph) {
+    private void initGraphics(Graph graph) {
 
         //TODO cannot display any edge
 

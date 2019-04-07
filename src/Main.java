@@ -7,7 +7,7 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    public static boolean debugMessaging = true;
+    public static boolean debugMessaging = false;
     public static boolean debugMobileAgents = false;
     public static boolean debugGraphNode = false;
 
@@ -22,7 +22,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         // Initialize gragh data structure
-        Graph graph = new Graph("resources/TestForLock");
+        Graph graph = new Graph("resources/fireNextToBaseStation");
 
         // Display graph
         GraphDisplay graphDisplay = new GraphDisplay(graph);
@@ -41,6 +41,7 @@ public class Main extends Application {
 
         primaryStage.setScene(new Scene(graphDisplay.getRoot(), 700, 500));
         primaryStage.show();
+
     }
 
     public static void main(String[] args) {

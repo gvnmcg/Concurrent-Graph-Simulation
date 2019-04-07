@@ -146,6 +146,8 @@ public class MobileAgent implements Runnable {
         updateDisplay(node.getCoordinate());
         if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
         node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
+        synchronized (node) { node.notify(); }
+
     }
 
     private void onBlueNode() {
@@ -153,7 +155,10 @@ public class MobileAgent implements Runnable {
         updateDisplay(node.getCoordinate());
         if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
 
-        node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
+
+        if (node.getStatus() == NodeStatus.GREEN) {
+            node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
+        }
         while (node.getStatus() == NodeStatus.GREEN) {
             try {
                 synchronized (this) {  wait(); }

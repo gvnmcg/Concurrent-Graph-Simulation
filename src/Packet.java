@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class Packet {
@@ -7,6 +8,7 @@ public class Packet {
     boolean success;
     boolean msg;
     LinkedBlockingDeque<GraphNode> bq = new LinkedBlockingDeque<>();
+    LinkedBlockingDeque<GraphNode> tried = new LinkedBlockingDeque<>();
     int ID;
 
     Packet (String message, boolean update, GraphNode gn, int ID) {
@@ -17,6 +19,14 @@ public class Packet {
         bq.add(gn);
         this.ID = ID;
 
+    }
+
+    public void addToTried(GraphNode node) {
+        tried.add(node);
+    }
+
+    public boolean containsTried(GraphNode node) {
+        return tried.contains(node);
     }
 
     public void addToBQ(GraphNode node) {

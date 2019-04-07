@@ -112,7 +112,10 @@ public class GraphDisplayTest extends Application {
 
             String fileSelection = listView.getSelectionModel().getSelectedItem();
 
-            initGraph(fileSelection);
+            if (fileSelection != null){
+                initGraph(fileSelection);
+
+            }
 
             window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
         });

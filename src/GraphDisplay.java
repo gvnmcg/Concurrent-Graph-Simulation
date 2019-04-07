@@ -5,7 +5,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.util.HashMap;
 
@@ -26,13 +28,10 @@ public class GraphDisplay {
 
     GraphDisplay(){
 
+        System.out.println("woah");
+        root.setLeft(getLegend());
     }
 
-    public void initDisplay(Graph graph){
-        this.graph = graph;
-        root.setCenter(centerGroup);
-        initGraphics(graph);
-    }
 
     /**
      * Initializes javafx shapes etc GUI components
@@ -41,6 +40,7 @@ public class GraphDisplay {
         this.graph = g;
 
         root.setCenter(centerGroup);
+        root.setLeft(getLegend());
         initGraphics(g);
 
 //        AnimationTimer aTimer = new AnimationTimer() {
@@ -70,6 +70,26 @@ public class GraphDisplay {
         System.out.println("huh?");
 
     }
+
+    private VBox getLegend() {
+
+        VBox vBox = new VBox();
+
+
+        vBox.getChildren().add(new Text("Blue = OK"));
+        vBox.getChildren().add(new Text("Yellow = In Danger"));
+        vBox.getChildren().add(new Text("Red = On Fire/Destroyed"));
+
+        return vBox;
+
+    }
+
+    public void initDisplay(Graph graph){
+        this.graph = graph;
+        root.setCenter(centerGroup);
+        initGraphics(graph);
+    }
+
 
     private void initGraphics(Graph g, GraphicsContext gc) {
 

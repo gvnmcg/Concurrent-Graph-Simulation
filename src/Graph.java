@@ -19,7 +19,7 @@ public class Graph {
     //??
     private GraphNode baseStation;
 
-    private BaseStation station;
+//    private BaseStation station;
 
 
     /**
@@ -115,8 +115,10 @@ public class Graph {
 
                         break;
                     case "fire":
-//                        String c = strArray[1] + " " + strArray[2];
+
                         Coordinate c = new Coordinate(strArray[1] + " " + strArray[2]);
+
+                        //immediately set node to red
 
                         if (nodes != null && nodes.get(c) != null) {
                             System.out.println(nodes.get(c));

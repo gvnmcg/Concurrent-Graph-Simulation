@@ -24,6 +24,16 @@ public class GraphDisplay {
 
     GraphicsContext gc;
 
+    GraphDisplay(){
+
+    }
+
+    public void initDisplay(Graph graph){
+        this.graph = graph;
+        root.setCenter(centerGroup);
+        initGraphics(graph);
+    }
+
     /**
      * Initializes javafx shapes etc GUI components
      */

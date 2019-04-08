@@ -2,6 +2,9 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -10,6 +13,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class GraphDisplayTest extends Application {
 
@@ -22,18 +29,15 @@ public class GraphDisplayTest extends Application {
     public static final int WIDTH = 700;
     public static final int HEIGHT = 500;
 
+    GraphDisplay graphDisplay;
+
+    Stage window;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        // Initialize gragh data structure
-        Graph graph = new Graph("resources/TestForLock");
-
-        // Display graph
-        GraphDisplay graphDisplay = new GraphDisplay(graph);
-//        GraphDisplay graphDisplay = new GraphDisplay(graph, true);
-        graph.startThreads(graphDisplay);
-
+        window = primaryStage;
 
         // Does not work???
         primaryStage.setOnCloseRequest(e -> {
@@ -48,16 +52,18 @@ public class GraphDisplayTest extends Application {
     }
 
 
-    private void initGraph(String filename, Stage primaryStage){
+    private Graph initGraph(String filename){
         // Initialize gragh data structure
-        Graph graph = new Graph("resources/fireNextToBaseStation");
+        Graph graph = new Graph("resources/" + filename);
 
         // Display graph
-        GraphDisplay graphDisplay = new GraphDisplay(graph);
+        graphDisplay = new GraphDisplay(graph);
 
-        MobileAgent test = new MobileAgent(graph.getStation(), graphDisplay,  true);
+//        MobileAgent test = new MobileAgent(graph.getStation(), graphDisplay,  true);
         // Start simulation
         graph.startThreads(graphDisplay);
+
+        return graph;
     }
 
     private Scene introScene(){
@@ -67,13 +73,16 @@ public class GraphDisplayTest extends Application {
 
         Text title = new Text("MobileAgents");
 
-        ScrollPane graphselectionPane = graphSelectionScrollPane();
-
         Button startButton = new Button("Start");
-        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleConfirmation());
+//        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleConfirmation());
+
+        ScrollPane graphselectionPane = graphSelectionScrollPane(startButton);
 
         Button infoBoxButton = new Button("what's this?");
         infoBoxButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleInfoBox());
+
+        introRoot.setAlignment(Pos.CENTER);
+        introRoot.setPadding(new Insets(50, 10, 10, 10));
 
         introRoot.add(title, 1,1);
         introRoot.add(graphselectionPane, 1, 2);
@@ -93,17 +102,36 @@ public class GraphDisplayTest extends Application {
         };
     }
 
-    private ScrollPane graphSelectionScrollPane() {
+    private ScrollPane graphSelectionScrollPane(Button confirmButton) {
 
         ScrollPane scrollPane = new ScrollPane();
 
+        ListView<String> listView = new ListView<String>();
 
-        ListView<String> list = new ListView<String>();
-        ObservableList<String> items = FXCollections.observableArrayList (
-                "Single", "Double", "Suite", "Family App");
-        list.setItems(items);
+        confirmButton.setOnAction(e->{
 
-        scrollPane.setContent(list);
+            String fileSelection = listView.getSelectionModel().getSelectedItem();
+
+            if (fileSelection != null){
+                initGraph(fileSelection);
+
+            }
+
+            window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
+        });
+
+        ArrayList<String> filenamesList = new ArrayList<>();
+
+        File folder = new File("resources");
+        for (String file : folder.list()){
+            filenamesList.add(file.substring(0,file.length() - 4));
+        }
+
+        ObservableList<String> items = FXCollections.observableArrayList (filenamesList);
+
+        listView.setItems(items);
+
+        scrollPane.setContent(listView);
         scrollPane.setMaxWidth(100);
         scrollPane.setMaxWidth(100);
 
@@ -149,6 +177,7 @@ public class GraphDisplayTest extends Application {
     }
 
     public static void main(String[] args) {
+
         launch(args);
     }
 }

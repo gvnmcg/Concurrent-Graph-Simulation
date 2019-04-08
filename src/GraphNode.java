@@ -21,6 +21,9 @@ public class GraphNode implements Runnable {
     private MobileAgent mobileAgent;
     boolean base = false;
 
+    public static long baseDelay = 200;
+    public static long randVariance = 2000;
+
     // Mailbox for message sending
     LinkedBlockingQueue<Packet> mailbox = new LinkedBlockingQueue<>();
 
@@ -324,7 +327,10 @@ public class GraphNode implements Runnable {
                 processMessages();
 
                 Thread.yield();
-                Thread.sleep(1000);
+
+                int random = (int)(Math.random() * randVariance)+1;
+
+                Thread.sleep(baseDelay+random);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

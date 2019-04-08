@@ -72,16 +72,12 @@ public class GraphDisplayTest extends Application {
     private Scene introScene(){
 
 //        BorderPane introRoot = new BorderPane();
-        StackPane introRoot = new StackPane();
-        HBox box = new HBox();
-        box.setSpacing(10);
-        introRoot.getChildren().add(box);
+        GridPane introRoot = new GridPane();
 
         Text title = new Text("MobileAgents");
 
         Button startButton = new Button("Start");
 //        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleConfirmation());
-
 
         ScrollPane graphselectionPane = graphSelectionScrollPane(startButton);
 
@@ -89,12 +85,13 @@ public class GraphDisplayTest extends Application {
         infoBoxButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleInfoBox());
 
         introRoot.setAlignment(Pos.CENTER);
-        introRoot.setPadding(new Insets(50, 10, 10, 10));
+//        introRoot.setPadding(new Insets(50, 10, 10, 10));
+        introRoot.setHgap(25);
 
-        box.getChildren().add(title);
-        box.getChildren().add(graphselectionPane);
-        box.getChildren().add(startButton);
-        box.getChildren().add(infoBoxButton);
+        introRoot.add(title, 1,1);
+        introRoot.add(graphselectionPane, 1, 2);
+        introRoot.add(startButton, 2,2);
+        introRoot.add(infoBoxButton, 3,2);
 
         return new Scene(introRoot, WIDTH, HEIGHT);
     }
@@ -139,9 +136,9 @@ public class GraphDisplayTest extends Application {
         listView.setItems(items);
 
         scrollPane.setContent(listView);
-        scrollPane.setMaxWidth(100);
-        scrollPane.setMaxWidth(100);
-
+//        scrollPane.setMinWidth(300);
+        scrollPane.setMaxHeight(300);
+        scrollPane.setFitToWidth(true);
         return scrollPane;
     }
 

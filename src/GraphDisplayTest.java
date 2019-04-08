@@ -77,11 +77,23 @@ public class GraphDisplayTest extends Application {
         Text title = new Text("MobileAgents");
 
         Button startButton = new Button("Start");
+        startButton.setStyle("\n" +
+                "    -fx-text-fill: #006464;\n" +
+                "    -fx-background-color: #DFB951;\n" +
+                "    -fx-border-radius: 20;\n" +
+                "    -fx-background-radius: 20;\n" +
+                "    -fx-padding: 5;");
 //        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleConfirmation());
 
         ScrollPane graphselectionPane = graphSelectionScrollPane(startButton);
 
         Button infoBoxButton = new Button("what's this?");
+        infoBoxButton.setStyle("\n" +
+                "    -fx-text-fill: #006464;\n" +
+                "    -fx-background-color: #DFB951;\n" +
+                "    -fx-border-radius: 20;\n" +
+                "    -fx-background-radius: 20;\n" +
+                "    -fx-padding: 5;");
         infoBoxButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleInfoBox());
 
         introRoot.setAlignment(Pos.CENTER);

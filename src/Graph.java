@@ -25,9 +25,7 @@ public class Graph {
      * @param filename
      */
     Graph(String filename){
-
         readIn(filename);
-
     }
 
     Graph(String filename, GraphDisplay gd){

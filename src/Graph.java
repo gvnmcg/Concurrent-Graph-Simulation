@@ -2,9 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Graph Data structure for Mobile Agents
@@ -38,14 +36,29 @@ public class Graph {
 
     private void readIn(String filename){
         BufferedReader in = null;
-        String line;
 
+        ArrayList<String> lines = new ArrayList<>();
         int x, y;
         try {
             in = new BufferedReader(new FileReader(filename + ".txt"));
 
+            String l;
+
+            while ((l = in.readLine()) != null) {
+                lines.add(l);
+            }
+
+            lines.sort((o1, o2) -> {
+                char c1 = o1.charAt(0);
+                char c2 = o2.charAt(0);
+
+                if (c1 == 'n' || c2 == 'f' || c2 == 's') return -1;
+                else if (c2 == 'n' || c1 == 'f' || c1 == 's') return 1;
+                else return 0;
+            });
+
             //read in the graph nodes, edges, base station, fire
-            while ((line = in.readLine()) != null) {
+            for (String line : lines) {
                 String[] strArray = line.split(" ");
 
                 switch (strArray[0]) {

@@ -9,7 +9,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.GridPaneBuilder;
+//import javafx.scene.layout.GridPaneBuilder;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -21,11 +21,8 @@ public class Main extends Application {
     public static boolean debugMessaging = false;
     public static boolean debugMobileAgents = false;
     public static boolean debugGraphNode = false;
-
     String fileSelction = "sample";
 
-    public static final int WIDTH = 700;
-    public static final int HEIGHT = 500;
 
     /**
      * Start the basic components
@@ -38,7 +35,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         // Initialize gragh data structure
-        Graph graph = new Graph("resources/graphgen");
+        Graph graph = new Graph("resources/Star");
 
         // Display graph
         GraphDisplay graphDisplay = new GraphDisplay(graph);

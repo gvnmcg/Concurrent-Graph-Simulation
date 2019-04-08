@@ -22,7 +22,10 @@ public class MobileAgent implements Runnable {
     MobileAgent(GraphNode node, GraphDisplay gd, boolean init) {
         this(node, init);
         singletonGD(gd);
-        initDisplay();
+
+//        initDisplay();
+
+
     }
 
     /**
@@ -53,6 +56,7 @@ public class MobileAgent implements Runnable {
             this.node = node;
         }
 
+        // MA
         this.node.setMobileAgent(this);
         thread = new Thread(this);
         thread.start();
@@ -81,7 +85,7 @@ public class MobileAgent implements Runnable {
 //            else if (visited.contains(node.getAdjacentNodes().get(random))) {
 //
 //            } else {
-                return walkToFire(node.getAdjacentNodes().get(random),visited, needToVisit);
+            return walkToFire(node.getAdjacentNodes().get(random),visited, needToVisit);
 //            }
         }
     }
@@ -106,24 +110,22 @@ public class MobileAgent implements Runnable {
 
     private void updateDisplay(Coordinate coordinate) {
         if (display != null) {
-            synchronized (display) {
-                if (Main.debugMobileAgents) System.out.println("Updating display of " + node);
-                display.setCenterX(coordinate.getX() * GraphDisplay.scale);
-                display.setCenterY(coordinate.getY() * GraphDisplay.scale);
-                Platform.runLater(() -> {
-                    switch (node.getStatus()) {
-                        case GREEN:
-                            display.setStroke(Color.AZURE);
-                            break;
-                        case YELLOW:
-                            display.setStroke(Color.DARKORANGE);
-                            break;
-                        case RED:
-                            display.setStroke(Color.CRIMSON);
-                            break;
-                    }
-                });
-            }
+            if (Main.debugMobileAgents) System.out.println("Updating display of " + node);
+            display.setCenterX(coordinate.getX() * GraphDisplay.scale);
+            display.setCenterY(coordinate.getY() * GraphDisplay.scale);
+            Platform.runLater(() -> {
+                switch (node.getStatus()) {
+                    case GREEN:
+                        display.setStroke(Color.AZURE);
+                        break;
+                    case YELLOW:
+                        display.setStroke(Color.DARKORANGE);
+                        break;
+                    case RED:
+                        display.setStroke(Color.CRIMSON);
+                        break;
+                }
+            });
         }
     }
 
@@ -145,8 +147,6 @@ public class MobileAgent implements Runnable {
     public void notify(NodeStatus status) {
 
     }
-
-
 
     @Override
     public void run() {
@@ -204,21 +204,22 @@ public class MobileAgent implements Runnable {
     }
 
     public void initDisplay() {
-            if (gd != null) {
-                Circle c = new Circle(20);
-                if (node != null) {
-                    c.setCenterX(node.getCoordinate().getX());
-                    c.setCenterY(node.getCoordinate().getY());
-                }
-                c.setStroke(Color.GREEN);
-                c.setFill(Color.TRANSPARENT);
-                c.setStrokeWidth(2);
+        if (gd != null) {
+            Circle c = new Circle(20);
+            c.setStroke(Color.AZURE);
+            c.setFill(Color.TRANSPARENT);
+            c.setStrokeWidth(3);
 
-                this.display = c;
-                gd.addToCenter(display);
-
-                if (Main.debugMobileAgents) System.out.println("Added to display");
+            if (node != null) {
+                c.setCenterX(node.getCoordinate().getX());
+                c.setCenterY(node.getCoordinate().getY());
+                updateDisplay(node.getCoordinate());
             }
 
+            this.display = c;
+            Platform.runLater(() -> gd.addToCenter(display));
+
+            if (Main.debugMobileAgents) System.out.println("Added to display");
+        }
     }
 }

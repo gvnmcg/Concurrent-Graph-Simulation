@@ -166,8 +166,6 @@ public class GraphNode implements Runnable {
         return display;
     }
 
-
-    //    p.setAsMessage();
     /**
      * Processes a message given within the packet
      *

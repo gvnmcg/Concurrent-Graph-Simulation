@@ -11,6 +11,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -69,12 +72,16 @@ public class GraphDisplayTest extends Application {
     private Scene introScene(){
 
 //        BorderPane introRoot = new BorderPane();
-        GridPane introRoot = new GridPane();
+        StackPane introRoot = new StackPane();
+        HBox box = new HBox();
+        box.setSpacing(10);
+        introRoot.getChildren().add(box);
 
         Text title = new Text("MobileAgents");
 
         Button startButton = new Button("Start");
 //        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleConfirmation());
+
 
         ScrollPane graphselectionPane = graphSelectionScrollPane(startButton);
 
@@ -84,10 +91,10 @@ public class GraphDisplayTest extends Application {
         introRoot.setAlignment(Pos.CENTER);
         introRoot.setPadding(new Insets(50, 10, 10, 10));
 
-        introRoot.add(title, 1,1);
-        introRoot.add(graphselectionPane, 1, 2);
-        introRoot.add(startButton, 1,2);
-        introRoot.add(infoBoxButton, 2,2);
+        box.getChildren().add(title);
+        box.getChildren().add(graphselectionPane);
+        box.getChildren().add(startButton);
+        box.getChildren().add(infoBoxButton);
 
         return new Scene(introRoot, WIDTH, HEIGHT);
     }

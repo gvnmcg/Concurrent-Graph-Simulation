@@ -49,14 +49,12 @@ public class GraphDisplayTest extends Application {
 
         window = primaryStage;
 
-        // Does not work???
+        //ends all threads and closes window
         primaryStage.setOnCloseRequest(e -> {
             System.exit(0);
             primaryStage.close();
         });
 
-
-//        primaryStage.setScene(new Scene(graphDisplay.getRoot(), 700, 500));
         primaryStage.setScene(introScene());
         primaryStage.show();
     }
@@ -83,19 +81,24 @@ public class GraphDisplayTest extends Application {
 
         Text title = new Text("MobileAgents");
 
+        //Button that confirms the selection and starts the simulation
         Button startButton = new Button("Start");
         startButton.setStyle(buttonStyle);
-//        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleConfirmation());
 
+        //pane containing all the graph options
         ScrollPane graphselectionPane = graphSelectionScrollPane(startButton);
 
+        //opens a dialog giving infor mationa about the project
         Button infoBoxButton = new Button("what's this?");
         infoBoxButton.setStyle(buttonStyle);
         infoBoxButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleInfoBox());
 
+        //tells what file is selected byt he selector
         Text selectedFileText = new Text(fileSelction);
 
+        //button that opens a file selector
         Button getFileButton = new Button("get File");
+        getFileButton.setStyle(buttonStyle);
         getFileButton.setOnAction(event -> {
 
             FileChooser fileChooser = new FileChooser();
@@ -104,8 +107,9 @@ public class GraphDisplayTest extends Application {
             selectedFileText.setText(fileSelction);
         });
 
+        //add everything to the scene root
+
         introRoot.setAlignment(Pos.CENTER);
-//        introRoot.setPadding(new Insets(50, 10, 10, 10));
         introRoot.setHgap(25);
 
         introRoot.add(title, 1,1);

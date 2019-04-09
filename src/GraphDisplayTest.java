@@ -80,10 +80,9 @@ public class GraphDisplayTest extends Application {
 
         Button startButton = new Button("Start");
         startButton.setStyle("\n" +
-                "    -fx-text-fill: #006464;\n" +
-                "    -fx-background-color: #DFB951;\n" +
-                "    -fx-border-radius: 20;\n" +
-                "    -fx-background-radius: 20;\n" +
+                "    -fx-text-fill: #111111;\n" +
+                "    -fx-background-color: #FFFFFF;\n" +
+                "    -fx-border-color: #111111;\n" +
                 "    -fx-padding: 5;");
 //        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleConfirmation());
 
@@ -92,10 +91,9 @@ public class GraphDisplayTest extends Application {
 
         Button infoBoxButton = new Button("what's this?");
         infoBoxButton.setStyle("\n" +
-                "    -fx-text-fill: #006464;\n" +
-                "    -fx-background-color: #DFB951;\n" +
-                "    -fx-border-radius: 20;\n" +
-                "    -fx-background-radius: 20;\n" +
+                "    -fx-text-fill: #111111;\n" +
+                "    -fx-background-color: #FFFFFF;\n" +
+                "    -fx-border-color: #111111;\n" +
                 "    -fx-padding: 5;");
         infoBoxButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleInfoBox());
 

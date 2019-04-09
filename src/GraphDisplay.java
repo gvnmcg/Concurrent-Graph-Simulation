@@ -25,6 +25,7 @@ public class GraphDisplay {
     private Graph graph;
 
     GraphicsContext gc;
+    private static BaseStationLog baseLog = new BaseStationLog();
 
     GraphDisplay(){
 
@@ -40,7 +41,9 @@ public class GraphDisplay {
         this.graph = g;
 
         root.setCenter(centerGroup);
-        root.setLeft(getLegend());
+        root.setRight(getLegend());
+        root.setLeft(baseLog);
+
         initGraphics(g);
 
 //        AnimationTimer aTimer = new AnimationTimer() {
@@ -49,6 +52,20 @@ public class GraphDisplay {
 //                refreshGraphView();
 //            }
 //        }
+
+    }
+
+    private Node baseStationLog() {
+
+        baseLog = new BaseStationLog();
+
+        return baseLog;
+
+    }
+
+    public static void addToLog(String message){
+
+        baseLog.addMessge(message);
 
     }
 

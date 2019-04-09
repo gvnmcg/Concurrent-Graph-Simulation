@@ -87,6 +87,7 @@ public class GraphDisplayTest extends Application {
 
         ScrollPane graphselectionPane = graphSelectionScrollPane(startButton);
 
+
         Button infoBoxButton = new Button("what's this?");
         infoBoxButton.setStyle("\n" +
                 "    -fx-text-fill: #006464;\n" +

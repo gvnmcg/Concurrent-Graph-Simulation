@@ -183,6 +183,9 @@ public class GraphNode implements Runnable {
             // Sets it to be finished
             p.setFinished();
             getReceipt(p);
+
+
+            GraphDisplay.addToLog(p.message);
         }
         if (Main.debugMessaging) System.out.println("Packet about to be processed " + p);
         // Checks to see if it needs to be sent to the base station

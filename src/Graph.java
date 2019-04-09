@@ -1,7 +1,5 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,15 +10,11 @@ import java.util.Map;
  */
 public class Graph {
 
-    // TODO Need to update this to something like a map, where it maps the coordinates to the node
+    // Private variables where the abstract data structures are held
     private HashMap<Coordinate, GraphNode> nodes = new HashMap<>();
     private LinkedList<Thread> nodeThreads = new LinkedList<>();
     private LinkedList<GraphEdge> edges = new LinkedList<>();
-
-    //??
     private GraphNode baseStation;
-
-//    private BaseStation station;
 
 
     /**
@@ -31,10 +25,14 @@ public class Graph {
         readIn(filename);
     }
 
+    /**
+     * Read in the file name with the given .txt component
+     * @param filename
+     */
     private void readIn(String filename){
-        BufferedReader in = null;
-
+        BufferedReader in;
         ArrayList<String> lines = new ArrayList<>();
+
         int x, y;
         try {
 
@@ -42,26 +40,30 @@ public class Graph {
             in = new BufferedReader(new FileReader(filename + ".txt"));
 
 
-            // Lines adding
+            // Adds the users
             String l;
             while ((l = in.readLine()) != null) lines.add(l);
 
+            // Sorts the lines based on the first character
             lines.sort((o1, o2) -> {
                 char c1 = o1.charAt(0);
                 char c2 = o2.charAt(0);
 
+                // Run various if statements to reorder the lines
                 if (c1 == 'n' || c2 == 'f' || c2 == 's') return -1;
                 else if (c2 == 'n' || c1 == 'f' || c1 == 's') return 1;
                 else return 0;
             });
 
-            //read in the graph nodes, edges, base station, fire
+            // Read in the graph nodes, edges, base station, fire
             for (String line : lines) {
+
+                // Split based on the spaces
                 String[] strArray = line.split(" ");
 
                 switch (strArray[0]) {
 
-                    //new node
+                    // Create a new Node
                     case "node":
 
                         x = Integer.parseInt(strArray[1]);
@@ -70,14 +72,13 @@ public class Graph {
                         Coordinate coord = new Coordinate(x,y);
                         GraphNode node = new GraphNode(coord);
 
-                        //save in data struct
+                        // Create and save in the data structure
                         nodes.put(coord, node);
-
                         nodeThreads.add(new Thread(node));
 
                         break;
 
-                    //new edge
+                    // New edge
                     case "edge":
 
                         //break input into coordinates
@@ -89,8 +90,7 @@ public class Graph {
                         y = Integer.parseInt(strArray[4]);
                         Coordinate c2 = new Coordinate(x,y);
 
-                        //if the node hasnt been read in for whatever reason
-                        // TODO Not sure if we can assume that the edges are as it mentions, w/o having corresponding node in file
+                        // If the node hasnt been read in for whatever reason
                         if (!nodes.containsKey(c2)){
                             node = new GraphNode(c2);
                             nodes.put(c2, node);
@@ -111,51 +111,44 @@ public class Graph {
                         }
 
                         break;
+                    // Set the station
                     case "station":
 
+                        // Set the base station!
                         x = Integer.parseInt(strArray[1]);
                         y = Integer.parseInt(strArray[2]);
                         Coordinate b = new Coordinate(x,y);
 
-//                        baseStation = nodes.get(c3);
-
-                        //BaseStation has ref to the node
-//                        station = new BaseStation(nodes.get(b));
                         baseStation = nodes.get(b);
                         nodes.get(b).setBase();
 
                         break;
+                    // Set the node that was on fire
                     case "fire":
 
                         Coordinate c = new Coordinate(strArray[1] + " " + strArray[2]);
 
-                        //immediately set node to red
-
+                        // Immediately set node to red
                         if (nodes != null && nodes.get(c) != null) {
-                            System.out.println(nodes.get(c));
                             nodes.get(c).setStatus(NodeStatus.RED);
-
                         }
 
                         break;
                 }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-//        testGraph();
 
-        //initialize statuses
-        //for each node
+
+        // Initializes status for the corresponding nodes
         for (GraphNode node : nodes.values()) {
 
-            //if node is on fire
+            // Set the fire node's neighbors to be yellow
             if (node.getStatus() == NodeStatus.RED) {
 
-                //warn its adjacent nodes
+                // Set the adjacent node's statuses
                 for (GraphNode yellowNodes : node.getAdjacentNodes()) {
                     yellowNodes.setStatus(NodeStatus.YELLOW);
                 }
@@ -163,19 +156,36 @@ public class Graph {
         }
     }
 
-    public void startThreads(GraphDisplay graphDisplay){
-
+    /**
+     * Start the threads
+     */
+    public void startThreads(){
         for (Thread thr : nodeThreads) thr.start();
     }
 
+    /**
+     * Get the mapped nodes
+     *
+     * @return Map of Coordinates to the Nodes
+     */
     public Map<Coordinate, GraphNode> getNodes() {
         return nodes;
     }
 
+    /**
+     * Get the edges of the Graph for GUI drawing purposes
+     *
+     * @return List of Edges
+     */
     public LinkedList<GraphEdge> getEdges() {
         return edges;
     }
 
+    /**
+     * Get the station of the GraphNode
+     *
+     * @return GraphNode of station
+     */
     public GraphNode getStation() {
         return baseStation;
     }

@@ -61,7 +61,7 @@ public class GraphDisplayTest extends Application {
 
         MobileAgent test = new MobileAgent(graph.getStation(), graphDisplay,  true);
         // Start simulation
-        graph.startThreads(graphDisplay);
+        graph.startThreads();
 
         return graph;
     }

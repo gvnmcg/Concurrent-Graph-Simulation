@@ -34,7 +34,7 @@ public class GraphDisplayTest extends Application {
             "    -fx-border-radius: 20;\n" +
             "    -fx-background-radius: 20;\n" +
             "    -fx-padding: 5;";
-
+    Text selectedFileText;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -88,7 +88,7 @@ public class GraphDisplayTest extends Application {
         });
 
         //tells what file is selected byt he selector
-        Text selectedFileText = new Text(fileSelection);
+        selectedFileText = new Text(fileSelection);
 
         //button that opens a file selector
         Button getFileButton = new Button("get File");
@@ -123,6 +123,13 @@ public class GraphDisplayTest extends Application {
 
         //selectable list of options
         ListView<String> listView = new ListView<String>();
+
+        listView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                selectedFileText.setText(listView.getSelectionModel().getSelectedItem());
+            }
+        });
 
         //button to start simulation takes what ever is selected
         confirmButton.setOnAction(e->{

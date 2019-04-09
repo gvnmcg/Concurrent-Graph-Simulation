@@ -27,13 +27,6 @@ public class GraphDisplay {
     GraphicsContext gc;
     private static BaseStationLog baseLog = new BaseStationLog();
 
-    GraphDisplay(){
-
-        System.out.println("woah");
-        root.setLeft(getLegend());
-    }
-
-
     /**
      * Initializes javafx shapes etc GUI components
      */
@@ -45,14 +38,6 @@ public class GraphDisplay {
         root.setLeft(baseLog);
 
         initGraphics(g);
-
-//        AnimationTimer aTimer = new AnimationTimer() {
-//            @Override
-//            public void handle(long now) {
-//                refreshGraphView();
-//            }
-//        }
-
     }
 
     private Node baseStationLog() {
@@ -69,24 +54,6 @@ public class GraphDisplay {
 
     }
 
-    /**
-     * intialized GUI with graphics context
-     * @param g
-     * @param b
-     */
-    GraphDisplay(Graph g, boolean b ){
-        Canvas canvas = new Canvas(700, 500);
-        root.setCenter(canvas);
-
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.BLACK);
-        gc.strokeOval(10, 10, 10, 10);
-
-        initGraphics(g, gc);
-
-        System.out.println("huh?");
-
-    }
 
     private VBox getLegend() {
 
@@ -107,32 +74,6 @@ public class GraphDisplay {
         initGraphics(graph);
     }
 
-
-    private void initGraphics(Graph g, GraphicsContext gc) {
-
-
-        for (GraphEdge e : g.getEdges()){
-            e.updateGraphics(gc);
-        }
-
-        for (GraphNode n : g.getNodes().values()){
-            n.updateGraphics(gc);
-        }
-
-        Thread displayThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-
-                    for (GraphNode n : g.getNodes().values()){
-                        n.updateGraphics(gc);
-                    }
-                }
-
-            }
-        });
-        displayThread.start();
-    }
 
     /**
      *  Make graphical components
@@ -174,13 +115,5 @@ public class GraphDisplay {
         return root;
     }
 
-    public static void main(String[] args) {
-        // Initialize gragh data structure
-        Graph graph = new Graph("resources/TestForLock");
-
-        // Display graph
-//        GraphDisplay graphDisplay = new GraphDisplay(graph);
-        GraphDisplay graphDisplay = new GraphDisplay(graph, true);
-    }
 }
 

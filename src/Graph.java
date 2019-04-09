@@ -31,10 +31,6 @@ public class Graph {
         readIn(filename);
     }
 
-    Graph(String filename, GraphDisplay gd){
-
-    }
-
     private void readIn(String filename){
         BufferedReader in = null;
 

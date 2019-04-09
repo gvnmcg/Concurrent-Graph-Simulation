@@ -27,6 +27,8 @@ public class GraphDisplayTest extends Application {
     public static boolean debugMobileAgents = false;
     public static boolean debugGraphNode = false;
 
+
+
     String fileSelction = "sample";
 
     public static final int WIDTH = 700;
@@ -62,7 +64,7 @@ public class GraphDisplayTest extends Application {
         // Display graph
         graphDisplay = new GraphDisplay(graph);
 
-//        MobileAgent test = new MobileAgent(graph.getStation(), graphDisplay,  true);
+        MobileAgent test = new MobileAgent(graph.getStation(), graphDisplay,  true);
         // Start simulation
         graph.startThreads(graphDisplay);
 

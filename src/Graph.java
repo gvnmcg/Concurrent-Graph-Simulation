@@ -38,13 +38,14 @@ public class Graph {
         ArrayList<String> lines = new ArrayList<>();
         int x, y;
         try {
+
+            // Create buffered reader
             in = new BufferedReader(new FileReader(filename + ".txt"));
 
-            String l;
 
-            while ((l = in.readLine()) != null) {
-                lines.add(l);
-            }
+            // Lines adding
+            String l;
+            while ((l = in.readLine()) != null) lines.add(l);
 
             lines.sort((o1, o2) -> {
                 char c1 = o1.charAt(0);

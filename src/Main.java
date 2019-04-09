@@ -1,17 +1,8 @@
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-//import javafx.scene.layout.GridPaneBuilder;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+//import javafx.scene.layout.GridPaneBuilder;
 
 /**
  * The Main Class of Mobile Agents
@@ -42,7 +33,7 @@ public class Main extends Application {
 
         MobileAgent test = new MobileAgent(graph.getStation(), graphDisplay,  true);
         // Start simulation
-        graph.startThreads(graphDisplay);
+        graph.startThreads();
 
 
         // Does not work???

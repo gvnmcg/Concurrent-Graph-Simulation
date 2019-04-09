@@ -116,7 +116,7 @@ public class MobileAgent implements Runnable {
             Platform.runLater(() -> {
                 switch (node.getStatus()) {
                     case GREEN:
-                        display.setStroke(Color.AZURE);
+                        display.setStroke(Color.DARKBLUE);
                         break;
                     case YELLOW:
                         display.setStroke(Color.DARKORANGE);

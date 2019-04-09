@@ -2,7 +2,10 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * Graph Data structure for Mobile Agents
@@ -179,31 +182,6 @@ public class Graph {
 
     public GraphNode getStation() {
         return baseStation;
-    }
-
-    private void testGraph() {
-        //        Some tests for GraphNodes
-        GraphNode gn1 = new GraphNode(new Coordinate(0,0));
-        GraphNode gn2 = new GraphNode(new Coordinate(2,0));
-        GraphNode gn3 = new GraphNode(new Coordinate(0,2));
-
-        gn1.addEdge(gn2);
-        gn3.addEdge(gn1);
-        gn3.addEdge(gn2);
-
-        gn1.printNeighbors();
-        gn2.printNeighbors();
-        gn3.printNeighbors();
-
-
-        gn1.setStatus(NodeStatus.YELLOW);
-
-        Thread t1 = new Thread(gn1);
-        t1.start();
-        Thread t2 = new Thread(gn2);
-        t2.start();
-        Thread t3 = new Thread(gn3);
-        t3.start();
     }
 
 

@@ -3,7 +3,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -12,20 +11,19 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class GraphNode implements Runnable {
 
-//     TODO Extend Circle ?
     // Private variables
     private ArrayList<GraphNode> adjacentNodes = new ArrayList<>();
     private Coordinate cords;
     private NodeStatus status;
     private Circle display;
     private MobileAgent mobileAgent;
-    boolean base = false;
+    private boolean base = false;
 
     public static long baseDelay = 1500;
     public static long randVariance = 0;
 
     // Mailbox for message sending
-    LinkedBlockingQueue<Packet> mailbox = new LinkedBlockingQueue<>();
+    private LinkedBlockingQueue<Packet> mailbox = new LinkedBlockingQueue<>();
 
 
     /**
@@ -34,13 +32,20 @@ public class GraphNode implements Runnable {
      * @param coordinate Location of the GraphNode
      */
     GraphNode(Coordinate coordinate) {
+
+        // Assign the initial values
         display = new Circle(10);
         display.setStrokeWidth(3);
         cords = coordinate;
+
+        // Set Status initially, then tell GUI the status
         this.status = NodeStatus.GREEN;
         setStatus(NodeStatus.GREEN);
     }
 
+    /**
+     * Sets the base and various GUI elements
+     */
     public void setBase() {
         base = true;
         display.setStrokeWidth(5);
@@ -51,7 +56,7 @@ public class GraphNode implements Runnable {
      * Add Edge from one node to another.
      *  - Does not need to be called more than once
      *
-     * @param node
+     * @param node GraphNode to be added to!
      */
     public void addEdge(GraphNode node) {
         // Adds the node to the ArrayList
@@ -71,22 +76,6 @@ public class GraphNode implements Runnable {
      */
     public ArrayList<GraphNode> getAdjacentNodes() {
         return adjacentNodes;
-    }
-
-    /**
-     * Prints the neighbors of the nodes that are adjacent
-     */
-    public void printNeighbors() {
-
-        // Synchronizes on adjacent nodes
-        synchronized (adjacentNodes) {
-
-            // Prints nodes string representation
-            for (GraphNode node : adjacentNodes) {
-                System.out.print(node.toString() + " ");
-            }
-            System.out.println();
-        }
     }
 
     /**
@@ -114,11 +103,10 @@ public class GraphNode implements Runnable {
     /**
      * Sets the staus and therefore changing the GUI components
      *
-     * @param status
+     * @param status Status of the Node
      */
     public void setStatus(NodeStatus status) {
         // Synchronize and change the status
-        // Change the status
         synchronized (this.status) {
             this.status = status;
         }
@@ -141,9 +129,7 @@ public class GraphNode implements Runnable {
                     if (!base) display.setStroke(Color.DARKRED);
                     break;
             }
-
         });
-
 
     }
 
@@ -172,70 +158,66 @@ public class GraphNode implements Runnable {
     /**
      * Processes a message given within the packet
      *
-     * @param p
+     * @param p Packet to be sent
      */
     public void sendMessage(Packet p) {
+        // Remove the item of focus
         mailbox.remove(p);
+
         // Checks if the node is the base station
         if (base) {
-            // Processes the message of the packet
+            // Processes the message of the packet and sets to finished
             System.out.println("BASE STATION (" + this + ") REPORT: " + p.getMessage());
-            // Sets it to be finished
             p.setFinished();
-            getReceipt(p);
+            return;
 
-
-            GraphDisplay.addToLog(p.message);
+            // TODO GraphDisplay stuff
+//            GraphDisplay.addToLog(p.message);
         }
-        if (Main.debugMessaging) System.out.println("Packet about to be processed " + p);
+
         // Checks to see if it needs to be sent to the base station
         if (p.isMessage()) {
-            if (Main.debugMessaging) System.out.println("MESSAGE CONFIRMED @ " + this + " and has " + getAdjacentNodes().size());
 
-            int numNavigable = 0;
+            // Count the amount that is navigable
+            int notNavigable = 0;
+
+            // Loop through the nodes for checking!
             for (GraphNode node : getAdjacentNodes()) {
-                if (!p.contains(node) && node.getStatus() != NodeStatus.RED && !p.getStatus() && !p.containsTried(node)) {
+                if (!p.contains(node) && node.getStatus() != NodeStatus.RED &&
+                    !p.getStatus() && !p.containsTried(node)) {
+
+                    // Adds to the queue and breaks
                     p.addToBQ(this);
-                    if (Main.debugMessaging) System.out.println("ABOUT TO ADD PACKET TO "+node + " from " + this);
                     node.addPacket(p);
-                    if (Main.debugMessaging) System.out.println("ADDING PACKET TO " +node + " from " + this);
-                } else {
-                    if (Main.debugMessaging) System.out.println("Innavigable @ " + this + " for node " + node + " " + node.getStatus() + " " + node.getMobileAgent());
-                    numNavigable++;
-                }
+                    break;
+                } else notNavigable++;
             }
-            if (Main.debugMessaging) System.out.println("SIZE CHECK OF (" + this + "): " +numNavigable + " " + adjacentNodes.size());
-            if (numNavigable == adjacentNodes.size()) {
-                if (Main.debugMessaging) {
-                    System.out.println("CANT TRAVERSE @ " + this + " for the packet: " + p);
-                    p.printBQ();
-                }
-                if (this == p.getSender()) {
-                    if (Main.debugMessaging) System.out.println("Failed at sending message " + this + " | " + p);
-                } else {
-                    if (Main.debugMessaging) System.out.println("TO THE RANCH!!!");
-                    p.setFail();
-                    getReceipt(p);
-                }
+
+            // Runs if all possible options have failed, backtracks up a node
+            // for further testing/examination
+            if (notNavigable == adjacentNodes.size() && this != p.getSender()) {
+                p.setFail();
+                getReceipt(p);
             }
         }
     }
 
+    /**
+     * A receipt is sent to notify the previous person of failure among nodes
+     * that it has send to.
+     *
+     * @param p Packet to be processed
+     */
     private void getReceipt(Packet p) {
-        if (Main.debugMessaging) p.printBQ();
-        GraphNode test = p.getLast();
-        if (Main.debugMessaging) System.out.println("Packet is traversing on " + this + " heading towards " + test);
-        if (this == test) {
-            if (Main.debugMessaging) System.out.println("RECEIPT #" + p.getID() + " SUCCESSFULLY RECEIVED!");
-        }
-        else if (adjacentNodes.contains(test)) {
-            if (Main.debugMessaging) System.out.println("RETURNING RECEIPT @ (" + this + ") to (" + test + "): " + p);
-            test.addPacket(p);
-            if (Main.debugMessaging) System.out.println("Packet was added to " + test);
-//            synchronized (test) { test.notify(); }
-        } else {
-            if (Main.debugMessaging) System.out.println("FUCK @ (" + this + ") to (" + test + "): " + p);
-            p.addToBQ(test);
+        GraphNode next = p.getLast();
+
+        // Typically, this involves backtracking to notify the previous of
+        // potential failure among the nodes
+        if (adjacentNodes.contains(next)) {
+            next.addPacket(p);
+        } else if (this != next) {
+            // If it is not contained, then add node back onto the BQ
+            p.addToBQ(next);
         }
     }
 
@@ -243,87 +225,82 @@ public class GraphNode implements Runnable {
      * For each message in the mailbox, attempt to process!
      */
     private void processMessages() {
-        if (mailbox.size() == 0) return;
-        for (Packet p : mailbox) {
-            if (p.getStatus()) {
-                if (Main.debugMessaging) System.out.println("Processing Receipt @ " + this + " | " + p);
-                // Act on message
-                sendMessage(p);
+        // Give receipts the highest authority
+        for (Packet p : mailbox) if (p.getStatus()) sendMessage(p);
 
-                // Remove message
-                mailbox.remove(p);
-            }
-        }
-
-        for (Packet p : mailbox) {
-            if (Main.debugMessaging) System.out.println("Processing Message @ " + this + " | " + p);
-            // Act on message
-            sendMessage(p);
-
-            // Remove message
-            mailbox.remove(p);
-        }
-//        processMessages();
+        // Process the rest of the messages (Receipts may be included)
+        for (Packet p : mailbox) sendMessage(p);
     }
 
 
     /**
-     * Adds the packets to the mailbox
+     * Adds the packets to the mailbox and notifies for processing
      *
      * @param p Packet
      */
     public void addPacket(Packet p) {
-        if (Main.debugMessaging) System.out.println("BOOLEAN OF ADDING THE PACKET: " + mailbox.add(p));
-        else mailbox.add(p);
-        // Synchronize and notify
+        // Add to this's mailbox
+        mailbox.add(p);
+
+        // Synchronize on itself and notify
         synchronized (this) {
             this.notify();
-            if (Main.debugMessaging) System.out.println("Notified " + this + " for packet number " + p.getID());
         }
     }
 
     /**
-     * Runs the thread and assumes its respective roles
+     * Runs the thread and assumes its respective role as a GraphNode
+     *
+     * Messaging and processes are further documented within the readme and
+     * associated documents
      */
     @Override
     public void run() {
-        if (Main.debugGraphNode) System.out.println("Node: " + toString() + "; Status: " + status + " 1");
+        // Process messages
+        processMessages();
 
         // While the node is green, wait until notified that neighbor is red
-        processMessages();
         while (getStatus() == NodeStatus.GREEN) {
             try {
-                if (Main.debugMessaging) System.out.println("ENTERING THE FIRST ONE " + this);
+                // Process messages within the mailbox
                 processMessages();
-                if (Main.debugMessaging) System.out.println("PROCESSED THE FIRST ONE " + this);
-                if (mailbox.size() == 0)
-                    synchronized (this) {
-                        if (Main.debugMessaging) System.out.println("IS IN A FUCKING WAIT STATE" + this);
-                        wait();
-                        if (Main.debugMessaging) System.out.println("OUT OF THE FUCKING WAIT STATE @ " + this);
 
+                // Wait if mailbox is not of proper size
+                if (mailbox.size() == 0) {
+                    synchronized (this) {
+                        wait();
                     }
+                }
+
+                // Process messages within the mailbox
                 processMessages();
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             // Yields thread to others
             Thread.yield();
         }
+
+        // Checks if the status is green and changes accordingly
         if (getStatus() == NodeStatus.GREEN) {
             setStatus(NodeStatus.YELLOW);
         }
+
+        // Notify potential mobile agent of the status change
         if (mobileAgent != null) {
             synchronized (mobileAgent) {
                 // Notify on the mobileAgent
                 mobileAgent.notify();
-                processMessages();
             }
         }
 
-        // If node is notified of a fire
+        // Process any mail traffic
+        processMessages();
+
+
+        // If the status is in danger, then wait the specified time and turn red
         if (getStatus() == NodeStatus.YELLOW) {
-            if (Main.debugGraphNode) System.out.println("Node: " + toString() + "; Status: " + status + " 2");
 
             // Wait to catch on fire
             try {
@@ -361,6 +338,10 @@ public class GraphNode implements Runnable {
             }
         }
 
+        // Waits for the mobile agents "is dead" message.
+        //
+        // Can remove this without consequence to the program, its just
+        // taking advantage of the "Speak one last time" rule
         synchronized (this) {
             try {
                 wait();
@@ -369,10 +350,11 @@ public class GraphNode implements Runnable {
             }
         }
 
+        // Process the last messages from the stuff
         processMessages();
-        // Print final state
-        if (Main.debugGraphNode) System.out.println("Node: " + toString() + "; Status: " + status + " 3");
-        }
+
+        // Thread dies here and all communication is lost after this
+    }
 
     /**
      * Overwrites the hashing algorithm to allow for equality to be checked
@@ -403,7 +385,12 @@ public class GraphNode implements Runnable {
         return mobileAgent;
     }
 
-    public void updateGrahics(GraphicsContext gc) {
+    /**
+     * Update the graphics with the given condition
+     *
+     * @param gc Updates with the GraphicsContext
+     */
+    public void updateGraphics(GraphicsContext gc) {
 
         // Change the color based on the status
         switch (status) {
@@ -420,8 +407,10 @@ public class GraphNode implements Runnable {
                     gc.setFill(Color.BLUE);
         }
 
+        // Fill in the shape
         gc.fillOval(cords.getX(), cords.getY(), 10, 10);
 
+        // Condition based on mobile agent
         if (mobileAgent != null){
             gc.setFill(Color.GREEN);
             gc.strokeOval(cords.getX(), cords.getY(), 15, 15);

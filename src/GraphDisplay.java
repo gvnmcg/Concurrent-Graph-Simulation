@@ -116,7 +116,7 @@ public class GraphDisplay {
         }
 
         for (GraphNode n : g.getNodes().values()){
-            n.updateGrahics(gc);
+            n.updateGraphics(gc);
         }
 
         Thread displayThread = new Thread(new Runnable() {
@@ -125,7 +125,7 @@ public class GraphDisplay {
                 while (true){
 
                     for (GraphNode n : g.getNodes().values()){
-                        n.updateGrahics(gc);
+                        n.updateGraphics(gc);
                     }
                 }
 

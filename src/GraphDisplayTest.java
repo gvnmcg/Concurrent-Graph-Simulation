@@ -28,7 +28,7 @@ public class GraphDisplayTest extends Application {
     public static boolean debugMobileAgents = false;
     public static boolean debugGraphNode = false;
 
-    String fileSelction = "sample";
+    String fileSelection = "sample";
 
     public static final int WIDTH = 700;
     public static final int HEIGHT = 500;
@@ -91,10 +91,12 @@ public class GraphDisplayTest extends Application {
         //opens a dialog giving infor mationa about the project
         Button infoBoxButton = new Button("what's this?");
         infoBoxButton.setStyle(buttonStyle);
-        infoBoxButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleInfoBox());
+        infoBoxButton.setOnAction(event -> {
+
+        });
 
         //tells what file is selected byt he selector
-        Text selectedFileText = new Text(fileSelction);
+        Text selectedFileText = new Text(fileSelection);
 
         //button that opens a file selector
         Button getFileButton = new Button("get File");
@@ -102,9 +104,9 @@ public class GraphDisplayTest extends Application {
         getFileButton.setOnAction(event -> {
 
             FileChooser fileChooser = new FileChooser();
-            fileSelction = fileChooser.showOpenDialog(window).getName();
+            fileSelection = fileChooser.showOpenDialog(window).getName();
 
-            selectedFileText.setText(fileSelction);
+            selectedFileText.setText(fileSelection);
         });
 
         //add everything to the scene root
@@ -123,36 +125,25 @@ public class GraphDisplayTest extends Application {
         return new Scene(introRoot, WIDTH, HEIGHT);
     }
 
-    private EventHandler<MouseEvent> handleInfoBox() {
-
-        return new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-
-            }
-        };
-    }
-
     private ScrollPane graphSelectionScrollPane(Button confirmButton) {
 
         ScrollPane scrollPane = new ScrollPane();
 
+        //selectable list of options
         ListView<String> listView = new ListView<String>();
 
+        //button to start simulation takes what ever is selected
         confirmButton.setOnAction(e->{
 
-            String fileSelection = listView.getSelectionModel().getSelectedItem();
-
+            fileSelection = listView.getSelectionModel().getSelectedItem();
             if (fileSelection != null){
                 initGraph(fileSelection);
-
+                window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
             }
-
-            window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
         });
 
+        //read in file names into list for listview
         ArrayList<String> filenamesList = new ArrayList<>();
-
         File folder = new File("resources");
         for (String file : folder.list()){
             filenamesList.add(file.substring(0,file.length() - 4));
@@ -162,50 +153,13 @@ public class GraphDisplayTest extends Application {
 
         listView.setItems(items);
 
+        //prepare scroll pane
         scrollPane.setContent(listView);
-//        scrollPane.setMinWidth(300);
         scrollPane.setMaxHeight(300);
         scrollPane.setFitToWidth(true);
         return scrollPane;
     }
 
-    EventHandler<MouseEvent> handleStart(Graph graph,GraphDisplay graphDisplay ){
-        return new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                graph.startThreads(graphDisplay);
-            }
-        };
-    }
-
-    EventHandler<MouseEvent> handleReload(){
-        return new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-
-
-            }
-        };
-    }
-
-    EventHandler<MouseEvent> handleConfirmation(){
-        return new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-
-
-            }
-        };
-    }
-
-    EventHandler<MouseEvent> handleGraphSelection(){
-        return new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-
-            }
-        };
-    }
 
     public static void main(String[] args) {
 

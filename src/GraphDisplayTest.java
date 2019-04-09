@@ -12,6 +12,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -27,6 +28,7 @@ public class GraphDisplayTest extends Application {
 
 
     String fileSelction = "sample";
+    File selectedFile;
 
     public static final int WIDTH = 700;
     public static final int HEIGHT = 500;
@@ -106,6 +108,14 @@ public class GraphDisplayTest extends Application {
         introRoot.add(startButton, 2,2);
         introRoot.add(infoBoxButton, 3,2);
 
+        infoBoxButton.setOnAction(actionEvent -> {
+
+            FileChooser fileChooser = new FileChooser();
+//            fileChooser.showOpenDialog(window);
+
+            selectedFile = fileChooser.showOpenDialog(window);
+        });
+
         return new Scene(introRoot, WIDTH, HEIGHT);
     }
 
@@ -131,10 +141,15 @@ public class GraphDisplayTest extends Application {
 
             if (fileSelection != null){
                 initGraph(fileSelection);
-
+                window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
             }
 
-            window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
+            if (selectedFile != null){
+
+                System.out.println(selectedFile);
+            }
+
+
         });
 
         ArrayList<String> filenamesList = new ArrayList<>();

@@ -10,7 +10,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -25,10 +28,7 @@ public class GraphDisplayTest extends Application {
     public static boolean debugMobileAgents = false;
     public static boolean debugGraphNode = false;
 
-
-
     String fileSelction = "sample";
-    File selectedFile;
 
     public static final int WIDTH = 700;
     public static final int HEIGHT = 500;
@@ -36,6 +36,12 @@ public class GraphDisplayTest extends Application {
     GraphDisplay graphDisplay;
 
     Stage window;
+
+    String buttonStyle =  "    -fx-text-fill: #006464;\n" +
+            "    -fx-background-color: #DFB951;\n" +
+            "    -fx-border-radius: 20;\n" +
+            "    -fx-background-radius: 20;\n" +
+            "    -fx-padding: 5;";
 
 
     @Override
@@ -63,7 +69,7 @@ public class GraphDisplayTest extends Application {
         // Display graph
         graphDisplay = new GraphDisplay(graph);
 
-        MobileAgent test = new MobileAgent(graph.getStation(), graphDisplay,  true);
+//        MobileAgent test = new MobileAgent(graph.getStation(), graphDisplay,  true);
         // Start simulation
         graph.startThreads(graphDisplay);
 
@@ -72,30 +78,31 @@ public class GraphDisplayTest extends Application {
 
     private Scene introScene(){
 
-//        BorderPane introRoot = new BorderPane();
+        //root to this scene
         GridPane introRoot = new GridPane();
-
 
         Text title = new Text("MobileAgents");
 
         Button startButton = new Button("Start");
-        startButton.setStyle("\n" +
-                "    -fx-text-fill: #111111;\n" +
-                "    -fx-background-color: #FFFFFF;\n" +
-                "    -fx-border-color: #111111;\n" +
-                "    -fx-padding: 5;");
+        startButton.setStyle(buttonStyle);
 //        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleConfirmation());
 
         ScrollPane graphselectionPane = graphSelectionScrollPane(startButton);
 
-
         Button infoBoxButton = new Button("what's this?");
-        infoBoxButton.setStyle("\n" +
-                "    -fx-text-fill: #111111;\n" +
-                "    -fx-background-color: #FFFFFF;\n" +
-                "    -fx-border-color: #111111;\n" +
-                "    -fx-padding: 5;");
+        infoBoxButton.setStyle(buttonStyle);
         infoBoxButton.addEventHandler(MouseEvent.MOUSE_CLICKED,handleInfoBox());
+
+        Text selectedFileText = new Text(fileSelction);
+
+        Button getFileButton = new Button("get File");
+        getFileButton.setOnAction(event -> {
+
+            FileChooser fileChooser = new FileChooser();
+            fileSelction = fileChooser.showOpenDialog(window).getName();
+
+            selectedFileText.setText(fileSelction);
+        });
 
         introRoot.setAlignment(Pos.CENTER);
 //        introRoot.setPadding(new Insets(50, 10, 10, 10));
@@ -103,16 +110,11 @@ public class GraphDisplayTest extends Application {
 
         introRoot.add(title, 1,1);
         introRoot.add(graphselectionPane, 1, 2);
+        introRoot.add(getFileButton, 1, 3);
+        introRoot.add(selectedFileText,1,4);
+
         introRoot.add(startButton, 2,2);
         introRoot.add(infoBoxButton, 3,2);
-
-        infoBoxButton.setOnAction(actionEvent -> {
-
-            FileChooser fileChooser = new FileChooser();
-//            fileChooser.showOpenDialog(window);
-
-            selectedFile = fileChooser.showOpenDialog(window);
-        });
 
         return new Scene(introRoot, WIDTH, HEIGHT);
     }
@@ -139,15 +141,10 @@ public class GraphDisplayTest extends Application {
 
             if (fileSelection != null){
                 initGraph(fileSelection);
-                window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
+
             }
 
-            if (selectedFile != null){
-
-                System.out.println(selectedFile);
-            }
-
-
+            window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
         });
 
         ArrayList<String> filenamesList = new ArrayList<>();

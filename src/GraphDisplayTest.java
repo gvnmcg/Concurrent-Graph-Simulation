@@ -10,10 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -75,6 +72,7 @@ public class GraphDisplayTest extends Application {
 
 //        BorderPane introRoot = new BorderPane();
         GridPane introRoot = new GridPane();
+
 
         Text title = new Text("MobileAgents");
 

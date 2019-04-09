@@ -21,8 +21,8 @@ public class GraphNode implements Runnable {
     private MobileAgent mobileAgent;
     boolean base = false;
 
-    public static long baseDelay = 200;
-    public static long randVariance = 2000;
+    public static long baseDelay = 1500;
+    public static long randVariance = 0;
 
     // Mailbox for message sending
     LinkedBlockingQueue<Packet> mailbox = new LinkedBlockingQueue<>();

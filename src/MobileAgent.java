@@ -4,14 +4,16 @@ import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class MobileAgent implements Runnable {
 
-    // TODO Get better way to display the mobile agent
     private static GraphDisplay gd = null;
-
     private GraphNode node;
     private Thread thread;
     private Circle display;
+
 
     /**
      * sets the Graph Display and calls other constructor
@@ -23,9 +25,7 @@ public class MobileAgent implements Runnable {
         this(node, init);
         singletonGD(gd);
 
-//        initDisplay();
-
-
+        if (init) initDisplay();
     }
 
     /**
@@ -134,12 +134,19 @@ public class MobileAgent implements Runnable {
      *
      */
     private void propagate() {
-        if (Main.debugMobileAgents) System.out.println("Propagating nodes @ " + node + " of size " + node.getAdjacentNodes().size());
+        System.out.println("Propagating nodes @ " + node + " of size " + node.getAdjacentNodes().size());
 
         for (GraphNode n : this.node.getAdjacentNodes()) {
-            if (Main.debugMobileAgents) System.out.println("Propagating to " + n + " with status " + n.getStatus());
+            System.out.print(n + " | ");
+        }
+        System.out.println();
+        for (GraphNode n : this.node.getAdjacentNodes()) {
+            System.out.println("Propagating to " + n + " with status " + n.getStatus());
             synchronized (n) {
-                if (n.getStatus() != NodeStatus.RED && n.getMobileAgent() == null) new MobileAgent(n, false);
+                if (n.getStatus() != NodeStatus.RED && n.getMobileAgent() == null) {
+                    System.out.println("Init the node: " + n + "from MA @ " + this);
+                    new MobileAgent(n, false);
+                }
             }
         }
     }
@@ -186,10 +193,11 @@ public class MobileAgent implements Runnable {
 
     private void onYellowNode() {
 
+        propagate();
+
         // While there is an adjacent fire
         if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
         node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
-        propagate();
         while (node.getStatus() == NodeStatus.YELLOW) {
             try {
                 synchronized (this) {  wait(); }

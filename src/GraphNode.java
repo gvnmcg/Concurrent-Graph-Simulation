@@ -167,7 +167,7 @@ public class GraphNode implements Runnable {
         // Checks if the node is the base station
         if (base) {
             // Processes the message of the packet and sets to finished
-            System.out.println("BASE STATION (" + this + ") REPORT: " + p.getMessage());
+            System.out.println("LOG: " + p.getMessage());
             p.setFinished();
             return;
 

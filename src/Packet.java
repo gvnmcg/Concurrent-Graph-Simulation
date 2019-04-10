@@ -43,7 +43,7 @@ public class Packet {
      * @return String of message
      */
     public String getMessage() {
-        return message;
+        return message + " | Unique Packet ID: " + ID;
     }
 
     /**

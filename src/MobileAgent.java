@@ -90,7 +90,6 @@ public class MobileAgent implements Runnable {
      */
     private void updateDisplay(Coordinate coordinate) {
         if (display != null) {
-            if (Main.debugMobileAgents) System.out.println("Updating display of " + node);
             display.setCenterX(coordinate.getX() * GraphDisplay.scale);
             display.setCenterY(coordinate.getY() * GraphDisplay.scale);
             Platform.runLater(() -> {
@@ -116,7 +115,7 @@ public class MobileAgent implements Runnable {
         // Loop through nodes and add mobile agents
         for (GraphNode n : this.node.getAdjacentNodes()) {
             synchronized (n) {
-                if (n.getStatus() != NodeStatus.RED && n.getMobileAgent() == null) {
+                if (n.getStatus()!=NodeStatus.RED && n.getMobileAgent()==null){
                     new MobileAgent(n, false);
                 }
             }
@@ -135,7 +134,8 @@ public class MobileAgent implements Runnable {
 
         updateDisplay(node.getCoordinate());
         // Send final node
-        node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
+        node.addPacket(new Packet("MA: " + node + " | Status: " +
+                node.getStatus(), false, node, (int)(Math.random()*20000)));
         synchronized (node) { node.notify(); }
         // Dies here with the GraphNode
     }
@@ -150,7 +150,8 @@ public class MobileAgent implements Runnable {
 
         // Send package if the node is green
         if (node.getStatus() == NodeStatus.GREEN) {
-            node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
+            node.addPacket(new Packet("MA: " + node + " | Status: " +
+                    node.getStatus(), false, node, (int)(Math.random()*20000)));
         }
 
         // Wait until it is time to change
@@ -174,7 +175,8 @@ public class MobileAgent implements Runnable {
         propagate();
 
         // While there is an adjacent fire
-        node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
+        node.addPacket(new Packet("MA: " + node + " | Status: " +
+                node.getStatus(), false, node, (int)(Math.random()*20000)));
 
         // Wait until the node status turns RED
         while (node.getStatus() == NodeStatus.YELLOW) {

@@ -22,14 +22,24 @@ Running the jar, the first window has a couple options:
 - "Open" allows you to use a file that is not included
 - "Start"  starts the simulation using the chosen file
 
+As you can see from the following screenshots, you have the option of choosing a configuration file (Like those that Professor Chenoweth distributed on learn), or specifying your own.
 
-![Game pla](https://i.imgur.com/4t1Vw8H.png)
+You can also click on "Info" for information regarding the application
 
-![Game play](https://i.imgur.com/oMezFV8.png)
+![Selection Screen](https://i.imgur.com/4t1Vw8H.png)
 
-![Game play](https://i.imgur.com/IjK2fzR.png)
+Selecting a file consists of hitting the "Open" button, and from there, you can navigate and select a file to be loaded into the Mobile Agents emulations!
 
-![Game play](https://i.imgur.com/LEMKzvA.png)
+![Selecting a file](https://i.imgur.com/oMezFV8.png)
+
+Once you hit the "Start" button, you can relax and monitor the Mobile Agents game in Action. The log appears in the botton half of the screen and is limited to 300px. You can also find the log in the console for ease of use.
+
+![Emulation 1](https://i.imgur.com/IjK2fzR.png)
+
+Once the emulation is done, you can exit out of the program by clicking the red button on the top right corner of the screen
+
+![Emulation 2](https://i.imgur.com/LEMKzvA.png)
+
 ## Header
 
 Blah Blah Blah Blah Blah Blah Blah Blah 

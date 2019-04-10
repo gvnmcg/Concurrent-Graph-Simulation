@@ -79,7 +79,7 @@ public class GraphDisplayTest extends Application {
         //Button that confirms the selection and starts the simulation
         Button startButton = new Button("Start");
         startButton.setStyle(buttonStyle);
-        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED, handleConfirm())
+        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED, handleConfirm());
 
         //pane containing all the graph options
         ScrollPane graphselectionPane = graphSelectionScrollPane();

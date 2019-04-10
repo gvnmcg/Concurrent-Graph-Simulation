@@ -44,6 +44,7 @@ public class GraphDisplay {
     }
 
     public static void addToLog(String message){
+
         baseLog.addMessge(message);
     }
 

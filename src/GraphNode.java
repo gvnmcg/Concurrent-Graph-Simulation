@@ -169,6 +169,12 @@ public class GraphNode implements Runnable {
             // Processes the message of the packet and sets to finished
             System.out.println("LOG: " + p.getMessage());
             p.setFinished();
+            synchronized (p){
+                Platform.runLater(()->{
+                    GraphDisplay.addToLog(p.getMessage());
+                });
+            }
+
             return;
 
             // TODO GraphDisplay stuff
@@ -417,4 +423,6 @@ public class GraphNode implements Runnable {
         }
 
     }
+
+
 }

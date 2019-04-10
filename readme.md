@@ -18,13 +18,13 @@ All settings are configured inside the code, as there is not much left up to the
 
 Running the jar, the first window has a couple options:
 
-- The List of different graphs included in the program
-- "Open" allows you to use a file that is not included
-- "Start"  starts the simulation using the chosen file
+- The List of different graphs included in the program.
+- "Open" allows you to use a file that is not included.
+- "Start"  starts the simulation using the chosen file.
 
 As you can see from the following screenshots, you have the option of choosing a configuration file (Like those that Professor Chenoweth distributed on learn), or specifying your own.
 
-You can also click on "Info" for information regarding the application
+You can also click on "Info" for information regarding the application.
 
 ![Selection Screen](https://i.imgur.com/4t1Vw8H.png)
 
@@ -36,36 +36,16 @@ Once you hit the "Start" button, you can relax and monitor the Mobile Agents gam
 
 ![Emulation 1](https://i.imgur.com/IjK2fzR.png)
 
-Once the emulation is done, you can exit out of the program by clicking the red button on the top right corner of the screen
+Once the emulation is done, you can exit out of the program by clicking the red button on the top right corner of the screen.
 
 ![Emulation 2](https://i.imgur.com/LEMKzvA.png)
 
-## Header
-
-Blah Blah Blah Blah Blah Blah Blah Blah 
-
-```
-Graveyard is at 4 tiles!
-Board:	[3:3] 
-Please select one to play! (index L|R)
-[4:4][2:2][4:3][3:1][1:0]
-5 R
-```
-
-Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah 
-
-```
-Graveyard is at 4 tiles!
-Board:	[2:3] [3:3] [0:1] 
-Please select one to play! (index L|R)
-[4:4][2:2][4:3][3:1]
-0
-Parsing Invalid! Try again!
-```
-
-Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah 
-
 ## GUI Simulation!
+
+In the simulation GUI the nodes are connected by lines to shoe there neighbor relation. They change color as the fire effects each running GraphNode thread.
+- Nodes Start as Blue meaning they are fine and awaiting for another node to notify them.
+- Once notified they turn Yellow, which means one of their neighbors is on fire.
+- Red Nodes have sent messages to each of their neighbors and their thread has ended.
 
 ## Assumptions
 

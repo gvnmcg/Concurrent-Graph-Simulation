@@ -1,5 +1,8 @@
 import java.util.concurrent.LinkedBlockingDeque;
 
+/**
+ * Packet class for messaging
+ */
 public class Packet {
 
     private String message;

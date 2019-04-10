@@ -37,8 +37,6 @@ public class GraphEdge {
     public Line getLine() {
         Line l = new Line();
 
-        System.out.println("make line to " + nodePair.getKey() + " to " + nodePair.getValue());
-
         l.setStartX(nodePair.getKey().getCoordinate().getX() * GraphDisplay.scale);
         l.setStartY(nodePair.getKey().getCoordinate().getY() * GraphDisplay.scale);
         l.setEndX(nodePair.getValue().getCoordinate().getX() * GraphDisplay.scale);

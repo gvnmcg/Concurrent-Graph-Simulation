@@ -23,8 +23,12 @@ Running the jar, the first window has a couple options:
 - "Start"  starts the simulation using the chosen file
 
 
+![Game pla](https://imgur.com/4t1Vw8H)
+
 ![Game play](https://imgur.com/4t1Vw8H)
+
 ![Game play](https://imgur.com/4t1Vw8H)
+
 ![Game play](https://imgur.com/4t1Vw8H)
 ## Header
 

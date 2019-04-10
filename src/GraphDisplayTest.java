@@ -49,6 +49,7 @@ public class GraphDisplayTest extends Application {
             primaryStage.close();
         });
 
+        primaryStage.setTitle("Mobile Agents");
         primaryStage.setScene(introScene());
         primaryStage.show();
     }
@@ -111,7 +112,7 @@ public class GraphDisplayTest extends Application {
         openButton.setOnAction(event -> {
 
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setInitialDirectory(new File("resources"));
+//            fileChooser.setInitialDirectory(new File("resources"));
 
             try {
                 fileSelection = fileChooser.showOpenDialog(window).getName();

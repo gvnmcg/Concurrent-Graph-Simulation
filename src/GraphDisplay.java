@@ -33,8 +33,8 @@ public class GraphDisplay {
 
         ScrollPane sp = new ScrollPane();
         sp.setContent(baseLog);
-        sp.setMaxHeight(350);
-        sp.setMinHeight(350);
+        sp.setMaxHeight(300);
+        sp.setMinHeight(300);
         sp.setPadding(new Insets(5,0,5,50));
 
         root.setCenter(centerGroup);

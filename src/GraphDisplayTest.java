@@ -34,11 +34,10 @@ public class GraphDisplayTest extends Application {
 
     Stage window;
 
-    String buttonStyle =  "    -fx-text-fill: #006464;\n" +
-            "    -fx-background-color: #DFB951;\n" +
-            "    -fx-border-radius: 20;\n" +
-            "    -fx-background-radius: 20;\n" +
-            "    -fx-padding: 5;";
+    String buttonStyle =  "    -fx-text-fill: #101024;\n" +
+            "    -fx-background-color: #EEEEEE;\n" +
+            "    -fx-border-color: #111111;" +
+            "    -fx-padding: 8;";
     Text selectedFileText;
 
     @Override
@@ -52,6 +51,7 @@ public class GraphDisplayTest extends Application {
             primaryStage.close();
         });
 
+        primaryStage.setTitle("Mobile Agents");
         primaryStage.setScene(introScene());
         primaryStage.show();
     }
@@ -76,7 +76,9 @@ public class GraphDisplayTest extends Application {
         //root to this scene
         GridPane introRoot = new GridPane();
 
-        Text title = new Text("MobileAgents");
+
+        Text title = new Text("Mobile Agents");
+        title.setStyle("-fx-font: 24 arial;");
 
         //Button that confirms the selection and starts the simulation
         Button startButton = new Button("Start");
@@ -112,7 +114,7 @@ public class GraphDisplayTest extends Application {
         openButton.setOnAction(event -> {
 
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setInitialDirectory(new File("resources"));
+//            fileChooser.setInitialDirectory(new File("resources"));
 
             try {
 //                fileSelectionStr = fileChooser.showOpenDialog(window).getName();
@@ -128,6 +130,7 @@ public class GraphDisplayTest extends Application {
 
         introRoot.setAlignment(Pos.CENTER);
         introRoot.setHgap(25);
+        introRoot.setVgap(15);
 
         introRoot.add(title, 1,1);
         introRoot.add(graphselectionPane, 1, 2);

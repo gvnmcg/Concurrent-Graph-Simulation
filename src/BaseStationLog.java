@@ -16,7 +16,7 @@ public class BaseStationLog extends VBox {
 
     /**
      * Displays message on GUI
-     * @param message
+     * @param message Message
      */
     public void addMessage(String message){
         list.add(0, new Label(message));

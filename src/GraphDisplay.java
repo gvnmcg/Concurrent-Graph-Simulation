@@ -1,12 +1,11 @@
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.util.HashMap;
@@ -29,9 +28,16 @@ public class GraphDisplay {
      */
     GraphDisplay(Graph g){
 
+
+        ScrollPane sp = new ScrollPane();
+        sp.setContent(baseLog);
+        sp.setMaxHeight(350);
+        sp.setMinHeight(350);
+        sp.setPadding(new Insets(5,0,5,50));
+
         root.setCenter(centerGroup);
         root.setRight(getLegend());
-        root.setLeft(baseLog);
+        root.setBottom(sp);
 
         initGraphics(g);
     }

@@ -67,7 +67,7 @@ public class GraphDisplay {
     /**
      *  Make graphical components
      *  Give each node display reference
-     * @param graph
+     * @param graph Graph
      */
     private void initGraphics(Graph graph) {
 

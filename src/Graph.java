@@ -28,7 +28,7 @@ public class Graph {
 
     /**
      * Read in the file name with the given .txt component
-     * @param file
+     * @param file File to be read
      */
     private void readIn(File file){
         BufferedReader in;
@@ -144,6 +144,7 @@ public class Graph {
         }
 
         // Initializes status for the corresponding nodes
+
         for (GraphNode node : nodes.values()) {
 
             // Set the fire node's neighbors to be yellow
@@ -155,6 +156,7 @@ public class Graph {
                 }
             }
         }
+
     }
 
     /**

@@ -86,7 +86,7 @@ public class MobileAgent implements Runnable {
 
     /**
      * Updates the display of
-     * @param coordinate
+     * @param coordinate Coordinate of the Node
      */
     private void updateDisplay(Coordinate coordinate) {
         if (display != null) {
@@ -192,7 +192,7 @@ public class MobileAgent implements Runnable {
     /**
      * Initializes the display of a Mobile agent
      */
-    public void initDisplay() {
+    private void initDisplay() {
         if (gd != null) {
             // Set GUI components
             Circle c = new Circle(20);

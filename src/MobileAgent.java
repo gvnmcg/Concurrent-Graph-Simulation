@@ -2,13 +2,12 @@ import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import java.util.ArrayList;
-
 /**
- *
+ * Mobile agent class
  */
 public class MobileAgent implements Runnable {
 
+    // Private variables for the class
     private static GraphDisplay gd = null;
     private GraphNode node;
     private Thread thread;
@@ -17,9 +16,9 @@ public class MobileAgent implements Runnable {
 
     /**
      * sets the Graph Display and calls other constructor
-     * @param node
-     * @param gd
-     * @param init
+     * @param node GraphNode attached to
+     * @param gd GD to update to
+     * @param init true if walk is required, false if not
      */
     MobileAgent(GraphNode node, GraphDisplay gd, boolean init) {
         this(node, init);
@@ -30,7 +29,7 @@ public class MobileAgent implements Runnable {
 
     /**
      * Set singleton GD for Mobile Agent
-     * @param gd
+     * @param gd Sets graphic display
      */
     private void singletonGD(GraphDisplay gd) {
         if (this.gd == null) this.gd = gd;
@@ -41,73 +40,54 @@ public class MobileAgent implements Runnable {
      * Sets this agents to node
      *
      * If this is the base Station, start walk to fire
-     * @param node
-     * @param init
+     * @param node GraphNode attached to
+     * @param init true if walk is required
      */
     MobileAgent(GraphNode node, boolean init) {
-        if (Main.debugMobileAgents) System.out.println("MA Initialized @ " + node);
         initDisplay();
 
+        // Sets the node and walks
         this.node = node;
         if (init) {
-            walkToFire(node, new ArrayList<GraphNode>(), new ArrayList<GraphNode>());
-        } else {
-            // Propogated
-            this.node = node;
+            walkToFire(node);
         }
 
-        // MA
+        // Sets thread data
         this.node.setMobileAgent(this);
         thread = new Thread(this);
         thread.start();
     }
 
     /**
-     * random walk
-     * @param node
-     * @return
+     * Random walk to a yellow node
+     * Will find it or bust
+     *
+     * @param node Current GraphNode of the crawl
+     * @return Graphnode of yellow node
      */
-    private GraphNode walkToFire(GraphNode node, ArrayList<GraphNode> visited, ArrayList<GraphNode> needToVisit) {
-//        visited.add(node);
+    private GraphNode walkToFire(GraphNode node) {
         // If current node is on fire then isolate and propagate
-        if (Main.debugMobileAgents) System.out.println("Walking node: " + node );
         if (node.getStatus() == NodeStatus.YELLOW) {
-            if (Main.debugMobileAgents) System.out.println("Yellow at " + node);
+            // navigate
             this.node = node;
             return node;
         }
         // Else randomly walk to an adjacent node
         else {
             int random = (int)(Math.random() * node.getAdjacentNodes().size());
-//            if (visited.contains(node.getAdjacentNodes().get(random)) && needToVisit.size() == 0) {
-//
-//            }
-//            else if (visited.contains(node.getAdjacentNodes().get(random))) {
-//
-//            } else {
-            return walkToFire(node.getAdjacentNodes().get(random),visited, needToVisit);
-//            }
+            GraphNode randNode = node.getAdjacentNodes().get(random);
+
+            // Walk to the node if it is not on fire
+            if (randNode.getStatus() != NodeStatus.RED) {
+                return walkToFire(node.getAdjacentNodes().get(random));
+            } else return walkToFire(node);
         }
     }
 
-
-    private void randomWalk() {
-
-        while(node.getStatus() == NodeStatus.GREEN){
-
-            node = node.getAdjacentNodes().get(
-                    (int)(Math.random()*node.getAdjacentNodes().size()));
-
-            updateDisplay(node.getCoordinate());
-
-//            Thread.sleep( 2000);
-
-        }
-
-        updateDisplay(node.getCoordinate());
-
-    }
-
+    /**
+     * Updates the display of
+     * @param coordinate
+     */
     private void updateDisplay(Coordinate coordinate) {
         if (display != null) {
             if (Main.debugMobileAgents) System.out.println("Updating display of " + node);
@@ -130,74 +110,73 @@ public class MobileAgent implements Runnable {
     }
 
     /**
-     *clone
-     *
+     * Clone the mobile agents to other nodes
      */
     private void propagate() {
-        System.out.println("Propagating nodes @ " + node + " of size " + node.getAdjacentNodes().size());
-
+        // Loop through nodes and add mobile agents
         for (GraphNode n : this.node.getAdjacentNodes()) {
-            System.out.print(n + " | ");
-        }
-        System.out.println();
-        for (GraphNode n : this.node.getAdjacentNodes()) {
-            System.out.println("Propagating to " + n + " with status " + n.getStatus());
             synchronized (n) {
                 if (n.getStatus() != NodeStatus.RED && n.getMobileAgent() == null) {
-                    System.out.println("Init the node: " + n + "from MA @ " + this);
                     new MobileAgent(n, false);
                 }
             }
         }
     }
 
-    public void notify(NodeStatus status) {
-
-    }
-
+    /**
+     * Run and match actions specified in the PDF
+     */
     @Override
     public void run() {
 
+        // Run functions emulating the behavior of the node
         onBlueNode();
-
         onYellowNode();
 
-        if (Main.debugMobileAgents) System.out.println(node + " " + display.getFill() + " " + node.getStatus());
         updateDisplay(node.getCoordinate());
-        if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
+        // Send final node
         node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
         synchronized (node) { node.notify(); }
-
+        // Dies here with the GraphNode
     }
 
+    /**
+     * Emulate the behavior of a blue node
+     */
     private void onBlueNode() {
 
+        // Update the display
         updateDisplay(node.getCoordinate());
-        if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
 
-
+        // Send package if the node is green
         if (node.getStatus() == NodeStatus.GREEN) {
             node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
         }
+
+        // Wait until it is time to change
         while (node.getStatus() == NodeStatus.GREEN) {
             try {
                 synchronized (this) {  wait(); }
             } catch (InterruptedException e) {
-                if (Main.debugMobileAgents) System.out.println("It broke");
                 e.printStackTrace();
             }
         }
-        updateDisplay(node.getCoordinate());
 
+        // Update the display
+        updateDisplay(node.getCoordinate());
     }
 
+    /**
+     * Emulates the behavior of a Yellow node
+     */
     private void onYellowNode() {
-
+        // Propagate/clone the yellow nodes
         propagate();
 
         // While there is an adjacent fire
-        if (Main.debugMobileAgents) System.out.println("MA: " + node + " | Status: " + node.getStatus());
         node.addPacket(new Packet("MA: " + node + " | Status: " + node.getStatus(), false, node, (int)(Math.random()*20000)));
+
+        // Wait until the node status turns RED
         while (node.getStatus() == NodeStatus.YELLOW) {
             try {
                 synchronized (this) {  wait(); }
@@ -207,27 +186,28 @@ public class MobileAgent implements Runnable {
         }
     }
 
-    public Circle getDisplay() {
-        return display;
-    }
 
+    /**
+     * Initializes the display of a Mobile agent
+     */
     public void initDisplay() {
         if (gd != null) {
+            // Set GUI components
             Circle c = new Circle(20);
             c.setStroke(Color.AZURE);
             c.setFill(Color.TRANSPARENT);
             c.setStrokeWidth(3);
 
+            // Set the center to be the same as the node's
             if (node != null) {
                 c.setCenterX(node.getCoordinate().getX());
                 c.setCenterY(node.getCoordinate().getY());
                 updateDisplay(node.getCoordinate());
             }
 
+            // Update the display and apply it to the GUI
             this.display = c;
             Platform.runLater(() -> gd.addToCenter(display));
-
-            if (Main.debugMobileAgents) System.out.println("Added to display");
         }
     }
 }

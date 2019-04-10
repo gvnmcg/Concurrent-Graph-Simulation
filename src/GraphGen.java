@@ -1,19 +1,23 @@
 import java.util.ArrayList;
 
+/**
+ * PLEASE NOTE:
+ * This has no purpose in the scheme of the application but rather a way to
+ * generate odd and unpredictable graphs.
+ *
+ */
 public class GraphGen {
 
     private static final int NUM_TO_GEN = 30;
-    private static final int WIDTH = 12;
-    private static final int HEIGHT = 10;
-
-
+    private static final int SIZE = 12;
     private static ArrayList<Coordinate> list = new ArrayList<>();
+
 
     public static void main(String[] args) {
 
         for (int i = 0; i < NUM_TO_GEN; i++) {
-            int w = (int)(Math.random() * WIDTH);
-            int h = (int)(Math.random() * WIDTH);
+            int w = (int)(Math.random() * SIZE);
+            int h = (int)(Math.random() * SIZE);
 
             Coordinate coord = new Coordinate(w,h);
 
@@ -33,8 +37,7 @@ public class GraphGen {
             Coordinate check = null;
 
             for (Coordinate coordToCheck : list) {
-//                System.out.println(calcDistance(coord, coordToCheck));
-//                if (coord == coordToCheck) continue;
+
                 int distCheck = calcDistance(coord, coordToCheck);
 
                 if (coords.contains(check) && distCheck != 0 && distance > distCheck) {

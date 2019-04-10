@@ -19,7 +19,6 @@ public class GraphDisplay {
     private static BaseStationLog baseLog = new BaseStationLog();
 
 
-
     /**
      * Initializes javafx shapes etc GUI components
      */
@@ -39,15 +38,25 @@ public class GraphDisplay {
         initGraphics(g);
     }
 
+    /**
+     * Add to the log with the specified message
+     *
+     * @param message Message of the string
+     */
     public static void addToLog(String message){
 
         baseLog.addMessage(message);
     }
 
+    /**
+     * Get the legend, which tells the user what is dead/indanger/alive
+     *
+     * @return VBox of labels
+     */
     private VBox getLegend() {
-
         VBox vBox = new VBox();
 
+        // Set the Text of the fields
         vBox.getChildren().add(new Text("Blue = OK"));
         vBox.getChildren().add(new Text("Yellow = In Danger"));
         vBox.getChildren().add(new Text("Red = On Fire/Destroyed"));
@@ -58,7 +67,7 @@ public class GraphDisplay {
     /**
      *  Make graphical components
      *  Give each node display reference
-     * @param graph
+     * @param graph Graph
      */
     private void initGraphics(Graph graph) {
 
@@ -74,18 +83,25 @@ public class GraphDisplay {
 
     }
 
-
-
+    /**
+     * Add to the center of the Node
+     *
+     * @param thing Node
+     */
     public void addToCenter(Node thing){
+        // Synchronized or else would give, Illegal State exception
         Platform.runLater(() -> {
-
             synchronized (thing) {
                 centerGroup.getChildren().add(thing);
             }
         });
     }
 
-
+    /**
+     * Gets the root of the emulation
+     *
+     * @return Returns the root
+     */
     public Pane getRoot() {
         return root;
     }

@@ -19,8 +19,9 @@ public class GraphNode implements Runnable {
     private MobileAgent mobileAgent;
     private boolean base = false;
 
-    public static long baseDelay = 1500;
-    public static long randVariance = 0;
+    // Can set for random variance or extend the delay
+    private static long baseDelay = 2500;
+    private static long randVariance = 0;
 
     // Mailbox for message sending
     private LinkedBlockingQueue<Packet> mailbox = new LinkedBlockingQueue<>();
@@ -62,10 +63,7 @@ public class GraphNode implements Runnable {
         // Adds the node to the ArrayList
         adjacentNodes.add(node);
 
-
-        // TODO Check usage of getAdjacentNodes
-
-        // Adds this to the nodes arraylist
+        // Adds this to the nodes array list
         node.getAdjacentNodes().add(this);
     }
 
@@ -419,6 +417,4 @@ public class GraphNode implements Runnable {
         }
 
     }
-
-
 }

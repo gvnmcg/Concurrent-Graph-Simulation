@@ -1,4 +1,6 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -18,7 +20,7 @@ public class Graph {
 
     /**
      * Graph constructor that creates a graph from the given text file
-     * @param filename
+     * @param file File of the configured graph
      */
     Graph(File file){
         readIn(file);
@@ -26,7 +28,7 @@ public class Graph {
 
     /**
      * Read in the file name with the given .txt component
-     * @param file
+     * @param file File to be read
      */
     private void readIn(File file){
         BufferedReader in;
@@ -101,8 +103,8 @@ public class Graph {
 
                         //if the nodes has been read in
                         if (nodes.containsKey(c1) && nodes.containsKey(c2)){
-                            edges.add(new GraphEdge(
-                                    nodes.get(c1), nodes.get(c2)));
+                            edges.add(new GraphEdge(nodes.get(c1),
+                                                    nodes.get(c2)));
                         }
 
 
@@ -126,8 +128,8 @@ public class Graph {
                     // Set the node that was on fire
                     case "fire":
 
-                        Coordinate c = new Coordinate(
-                                strArray[1] + " " + strArray[2]);
+                        Coordinate c = new Coordinate(strArray[1] + " " +
+                                                      strArray[2]);
 
                         // Immediately set node to red
                         if (nodes != null && nodes.get(c) != null) {
@@ -142,6 +144,7 @@ public class Graph {
         }
 
         // Initializes status for the corresponding nodes
+
         for (GraphNode node : nodes.values()) {
 
             // Set the fire node's neighbors to be yellow
@@ -153,6 +156,7 @@ public class Graph {
                 }
             }
         }
+
     }
 
     /**

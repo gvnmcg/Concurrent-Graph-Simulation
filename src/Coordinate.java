@@ -11,6 +11,10 @@ public class Coordinate {
         this.y = y;
     }
 
+    /**
+     * takes String to makes a Coordinate
+     * @param str
+     */
     Coordinate(String str) {
 
         String[] strArr = str.split(" ");
@@ -18,8 +22,6 @@ public class Coordinate {
         this.x = Integer.parseInt(strArr[0]);
         this.y = Integer.parseInt(strArr[1]);
     }
-
-
 
     public int getX() {
         return x;

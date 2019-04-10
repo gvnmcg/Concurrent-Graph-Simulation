@@ -68,7 +68,7 @@ public class Main extends Application {
         //root to this scene
         GridPane introRoot = new GridPane();
 
-
+        //set Title
         Text title = new Text("Mobile Agents");
         title.setFont(Font.font(70));
         title.setStyle("-fx-font: 24 arial;");
@@ -120,7 +120,6 @@ public class Main extends Application {
         });
 
         //add everything to the scene root
-
         introRoot.setAlignment(Pos.CENTER);
         introRoot.setHgap(25);
         introRoot.setVgap(15);
@@ -148,21 +147,25 @@ public class Main extends Application {
         File folder = new File("resources");
         ObservableList<String> items = FXCollections.observableArrayList (Arrays.asList(folder.list()));
 
-
         listView.setItems(items);
 
-        //prepare scroll pane
+        //Prepare scroll pane
         scrollPane.setContent(listView);
         scrollPane.setMaxHeight(300);
         scrollPane.setFitToWidth(true);
         return scrollPane;
     }
 
+    /**
+     * Handles startingt the simulation making sure a file is selected and changing the scene.
+     * @return
+     */
     private EventHandler<MouseEvent> handleConfirm() {
         return new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
 
+                //if a file is selected, load up Graph and start the simulation
                 if (fileSelection != null){
                     initGraph(fileSelection);
                     window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));

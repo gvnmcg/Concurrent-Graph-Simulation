@@ -40,7 +40,10 @@ public class GraphGen {
 
                 int distCheck = calcDistance(coord, coordToCheck);
 
-                if (coords.contains(check) && distCheck != 0 && distance > distCheck) {
+                if (coords.contains(check)
+                        && distCheck != 0
+                        && distance > distCheck) {
+
                     distance = distCheck;
                     check = coordToCheck;
                 }
@@ -50,13 +53,11 @@ public class GraphGen {
             System.out.println("edge " + coord + " " + check);
         }
 
-        for (Coordinate coord : list) {
-            System.out.println("edge " + coord + " " + list.get((int)(Math.random() * (NUM_TO_GEN-5))));
-        }
 
     }
 
     private static int calcDistance(Coordinate c1, Coordinate c2) {
-        return ((int)(Math.sqrt(Math.pow(c2.getX()-c1.getX(), 2) + Math.pow(c2.getY()-c1.getY(), 2))));
+        return ((int)(Math.sqrt(Math.pow(c2.getX()-c1.getX(), 2)
+                + Math.pow(c2.getY()-c1.getY(), 2))));
     }
 }

@@ -90,8 +90,9 @@ public class Main extends Application {
             alert.setGraphic(null);
             alert.setTitle("");
             alert.setHeaderText("What is Mobile Agents?");
-            alert.setContentText("It is a simulation of a communication network as it launches concurrent programs " +
-                    "to contain a 'forest fire' destroying the nodes on the network.");
+            alert.setContentText("It is a simulation of a communication " +
+                    "network as it launches concurrent programs to contain " +
+                    "a 'forest fire' destroying the nodes on the network.");
 
 //            alert.setOnCloseRequest(event -> alert.close());
             alert.showAndWait();
@@ -113,7 +114,8 @@ public class Main extends Application {
 
             }catch (NullPointerException e){return;}
 
-            selectedFileText.setText(fileSelectionStr.substring(0, fileSelectionStr.length() - 4));
+            selectedFileText.setText(fileSelectionStr
+                    .substring(0, fileSelectionStr.length() - 4));
 
         });
 
@@ -139,11 +141,13 @@ public class Main extends Application {
 
         //Selectable list of options
         ListView<String> listView = new ListView<String>();
-        listView.addEventHandler(MouseEvent.MOUSE_CLICKED, handleListClick(listView));
+        listView.addEventHandler(
+                MouseEvent.MOUSE_CLICKED, handleListClick(listView));
 
         //Read in file names into list for listview
         File folder = new File("resources");
-        ObservableList<String> items = FXCollections.observableArrayList (Arrays.asList(folder.list()));
+        ObservableList<String> items =
+                FXCollections.observableArrayList(Arrays.asList(folder.list()));
 
         listView.setItems(items);
 
@@ -155,7 +159,8 @@ public class Main extends Application {
     }
 
     /**
-     * Handles starting the simulation making sure a file is selected and changing the scene.
+     * Handles starting the simulation making sure a file is selected
+     * and changing the scene.
      * @return
      */
     private EventHandler<MouseEvent> handleConfirm() {
@@ -166,7 +171,8 @@ public class Main extends Application {
                 //If a file is selected, load up Graph and start the simulation
                 if (fileSelection != null){
                     initGraph(fileSelection);
-                    window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
+                    window.setScene(
+                            new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
                 } else {
                     selectedFileText.setText("Please Choose File");
                 }
@@ -179,14 +185,18 @@ public class Main extends Application {
      * @param listView
      * @return
      */
-    private EventHandler<MouseEvent> handleListClick(ListView<String> listView) {
+    private EventHandler<MouseEvent> handleListClick(ListView<String> listView){
         return new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                fileSelectionStr = listView.getSelectionModel().getSelectedItem();
+                fileSelectionStr =
+                        listView.getSelectionModel().getSelectedItem();
 
-                fileSelection = new File("resources/" + fileSelectionStr);
-                selectedFileText.setText(fileSelectionStr.substring(0, fileSelectionStr.length() - 4));
+                fileSelection = new File(
+                        "resources/" + fileSelectionStr);
+                selectedFileText.setText(
+                        fileSelectionStr
+                                .substring(0, fileSelectionStr.length() - 4));
 
             }
         };

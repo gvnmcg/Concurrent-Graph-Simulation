@@ -101,7 +101,8 @@ public class Graph {
 
                         //if the nodes has been read in
                         if (nodes.containsKey(c1) && nodes.containsKey(c2)){
-                            edges.add(new GraphEdge(nodes.get(c1), nodes.get(c2)));
+                            edges.add(new GraphEdge(
+                                    nodes.get(c1), nodes.get(c2)));
                         }
 
 
@@ -125,7 +126,8 @@ public class Graph {
                     // Set the node that was on fire
                     case "fire":
 
-                        Coordinate c = new Coordinate(strArray[1] + " " + strArray[2]);
+                        Coordinate c = new Coordinate(
+                                strArray[1] + " " + strArray[2]);
 
                         // Immediately set node to red
                         if (nodes != null && nodes.get(c) != null) {

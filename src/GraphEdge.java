@@ -8,11 +8,11 @@ import javafx.util.Pair;
  */
 public class GraphEdge {
 
-    private Pair<GraphNode, GraphNode> nodePair;
+    private Pair<GraphNode, GraphNode> pair;
 
     GraphEdge(GraphNode n1, GraphNode n2){
 
-        nodePair = new Pair<>(n1, n2);
+        pair = new Pair<>(n1, n2);
 
         getOther(n1);
     }
@@ -24,10 +24,10 @@ public class GraphEdge {
      */
     private GraphNode getOther(GraphNode n) {
 
-        if (n.equals(nodePair.getKey())){
-            return nodePair.getValue();
-        } else if (n.equals(nodePair.getValue())){
-            return nodePair.getKey();
+        if (n.equals(pair.getKey())){
+            return pair.getValue();
+        } else if (n.equals(pair.getValue())){
+            return pair.getKey();
         } else {
             return null;
         }
@@ -37,10 +37,10 @@ public class GraphEdge {
     public Line getLine() {
         Line l = new Line();
 
-        l.setStartX(nodePair.getKey().getCoordinate().getX() * GraphDisplay.scale);
-        l.setStartY(nodePair.getKey().getCoordinate().getY() * GraphDisplay.scale);
-        l.setEndX(nodePair.getValue().getCoordinate().getX() * GraphDisplay.scale);
-        l.setEndY(nodePair.getValue().getCoordinate().getY() * GraphDisplay.scale);
+        l.setStartX(pair.getKey().getCoordinate().getX()*GraphDisplay.scale);
+        l.setStartY(pair.getKey().getCoordinate().getY()*GraphDisplay.scale);
+        l.setEndX(pair.getValue().getCoordinate().getX()*GraphDisplay.scale);
+        l.setEndY(pair.getValue().getCoordinate().getY()*GraphDisplay.scale);
         l.setFill(Color.BLACK);
         l.setStroke(Color.BLACK);
         l.setStrokeWidth(4);
@@ -49,15 +49,16 @@ public class GraphEdge {
 
     @Override
     public String toString() {
-        return nodePair.getKey().toString() + " " + nodePair.getValue();
+        return pair.getKey().toString() + " " + pair.getValue();
     }
 
     public void updateGraphics(GraphicsContext gc) {
         gc.setFill(Color.BLACK);
 
-        gc.strokeLine(nodePair.getKey().getCoordinate().getX()* GraphDisplay.scale,
-                nodePair.getKey().getCoordinate().getY()* GraphDisplay.scale,
-                nodePair.getValue().getCoordinate().getX()* GraphDisplay.scale,
-                nodePair.getValue().getCoordinate().getY()* GraphDisplay.scale);
+        gc.strokeLine(
+                pair.getKey().getCoordinate().getX()*GraphDisplay.scale,
+                pair.getKey().getCoordinate().getY()*GraphDisplay.scale,
+                pair.getValue().getCoordinate().getX()*GraphDisplay.scale,
+                pair.getValue().getCoordinate().getY()*GraphDisplay.scale);
     }
 }

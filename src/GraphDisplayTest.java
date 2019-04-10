@@ -79,9 +79,10 @@ public class GraphDisplayTest extends Application {
         //Button that confirms the selection and starts the simulation
         Button startButton = new Button("Start");
         startButton.setStyle(buttonStyle);
+        startButton.addEventHandler(MouseEvent.MOUSE_CLICKED, handleConfirm())
 
         //pane containing all the graph options
-        ScrollPane graphselectionPane = graphSelectionScrollPane(startButton);
+        ScrollPane graphselectionPane = graphSelectionScrollPane();
 
         //opens a dialog giving infor mationa about the project
         Button infoBoxButton = new Button("Info");
@@ -116,7 +117,7 @@ public class GraphDisplayTest extends Application {
 
             }catch (NullPointerException e){return;}
 
-            selectedFileText.setText(fileSelection);
+            selectedFileText.setText(fileSelection.substring(0, fileSelection.length() - 4));
 
         });
 
@@ -136,29 +137,14 @@ public class GraphDisplayTest extends Application {
         return new Scene(introRoot, WIDTH, HEIGHT);
     }
 
-    private ScrollPane graphSelectionScrollPane(Button confirmButton) {
+    private ScrollPane graphSelectionScrollPane() {
 
         ScrollPane scrollPane = new ScrollPane();
 
         //selectable list of options
         ListView<String> listView = new ListView<String>();
 
-        listView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                selectedFileText.setText(listView.getSelectionModel().getSelectedItem());
-                fileSelection = listView.getSelectionModel().getSelectedItem();
-            }
-        });
-
-        //button to start simulation takes what ever is selected
-        confirmButton.setOnAction(e->{
-
-            if (fileSelection != null){
-                initGraph(fileSelection);
-                window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
-            }
-        });
+        listView.addEventHandler(MouseEvent.MOUSE_CLICKED, handleListClick(listView));
 
         //read in file names into list for listview
         ArrayList<String> filenamesList = new ArrayList<>();
@@ -176,6 +162,29 @@ public class GraphDisplayTest extends Application {
         scrollPane.setMaxHeight(300);
         scrollPane.setFitToWidth(true);
         return scrollPane;
+    }
+
+    private EventHandler<MouseEvent> handleConfirm() {
+        return new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (fileSelection != null){
+                    initGraph(fileSelection);
+                    window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
+                }
+            }
+        };
+    }
+
+    private EventHandler<MouseEvent> handleListClick(ListView<String> listView) {
+        return new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                fileSelection = listView.getSelectionModel().getSelectedItem();
+                selectedFileText.setText(fileSelection.substring(0, fileSelection.length() - 4));
+
+            }
+        };
     }
 
 

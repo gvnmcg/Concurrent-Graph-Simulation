@@ -113,10 +113,11 @@ public class GraphDisplayTest extends Application {
 
             try {
                 fileSelection = fileChooser.showOpenDialog(window).getName();
+
             }catch (NullPointerException e){return;}
 
-
             selectedFileText.setText(fileSelection);
+
         });
 
         //add everything to the scene root
@@ -146,13 +147,13 @@ public class GraphDisplayTest extends Application {
             @Override
             public void handle(MouseEvent event) {
                 selectedFileText.setText(listView.getSelectionModel().getSelectedItem());
+                fileSelection = listView.getSelectionModel().getSelectedItem();
             }
         });
 
         //button to start simulation takes what ever is selected
         confirmButton.setOnAction(e->{
 
-            fileSelection = listView.getSelectionModel().getSelectedItem();
             if (fileSelection != null){
                 initGraph(fileSelection);
                 window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
@@ -163,7 +164,7 @@ public class GraphDisplayTest extends Application {
         ArrayList<String> filenamesList = new ArrayList<>();
         File folder = new File("resources");
         for (String file : folder.list()){
-            filenamesList.add(file.substring(0,file.length() - 4));
+            filenamesList.add(file);
         }
 
         ObservableList<String> items = FXCollections.observableArrayList (filenamesList);

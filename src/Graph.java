@@ -37,7 +37,7 @@ public class Graph {
         try {
 
             // Create buffered reader
-            in = new BufferedReader(new FileReader(filename + ".txt"));
+            in = new BufferedReader(new FileReader(filename));
 
 
             // Adds the users

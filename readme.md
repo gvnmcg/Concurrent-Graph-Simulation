@@ -84,6 +84,7 @@ I hope you enjoy viewing our game and we wish you the best!
 The initial game settings are up to specifications set by professor Chenoweth and if modifications are made, the risk is inheritable upon the changer. However, here are a list of assumptions that we have made for creating this project:
 * We have assumed that there must be an initial way for the Mobile Agent in the first walk to navigate to the fire. Without an initial way, the walking would fail and cease to stop.
 * We have assumed that the user would not try to run the program without selecting a file. Disregarding this will lead to an error message notifying the user of their mistake, but will not cause any adverse effects on the program
+* A receipt can attempt to be returned, but the node that it might have returned to would have already been consumed by fire. However, this might be a feature due to the disruption that the fire causes being more properly emulated.
 
 
 ## Built With

@@ -22,6 +22,14 @@ Running the jar, the first window has a couple options:
 - "Open" allows you to use a file that is not included
 - "Start"  starts the simulation using the chosen file
 
+
+![Game pla](https://i.imgur.com/4t1Vw8H.png)
+
+![Game play](https://i.imgur.com/oMezFV8.png)
+
+![Game play](https://i.imgur.com/IjK2fzR.png)
+
+![Game play](https://i.imgur.com/LEMKzvA.png)
 ## Header
 
 Blah Blah Blah Blah Blah Blah Blah Blah 

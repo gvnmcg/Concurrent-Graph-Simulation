@@ -10,6 +10,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -75,6 +76,7 @@ public class Main extends Application {
 
 
         Text title = new Text("Mobile Agents");
+        title.setFont(Font.font(70));
         title.setStyle("-fx-font: 24 arial;");
 
         //Button that confirms the selection and starts the simulation

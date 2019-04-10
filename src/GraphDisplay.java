@@ -22,16 +22,12 @@ public class GraphDisplay {
 
     private Group centerGroup = new Group();
 
-    private Graph graph;
-
-    GraphicsContext gc;
     private static BaseStationLog baseLog = new BaseStationLog();
 
     /**
      * Initializes javafx shapes etc GUI components
      */
     GraphDisplay(Graph g){
-        this.graph = g;
 
         root.setCenter(centerGroup);
         root.setRight(getLegend());
@@ -45,35 +41,22 @@ public class GraphDisplay {
         baseLog = new BaseStationLog();
 
         return baseLog;
-
     }
 
     public static void addToLog(String message){
-
         baseLog.addMessge(message);
-
     }
-
 
     private VBox getLegend() {
 
         VBox vBox = new VBox();
-
 
         vBox.getChildren().add(new Text("Blue = OK"));
         vBox.getChildren().add(new Text("Yellow = In Danger"));
         vBox.getChildren().add(new Text("Red = On Fire/Destroyed"));
 
         return vBox;
-
     }
-
-    public void initDisplay(Graph graph){
-        this.graph = graph;
-        root.setCenter(centerGroup);
-        initGraphics(graph);
-    }
-
 
     /**
      *  Make graphical components

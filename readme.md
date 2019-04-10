@@ -1,6 +1,6 @@
 # Mobile Agents Simulation
 
-This java program is to simulate the spread of a fire across many interconneted nodes, and to test the "Mobile Agents" that monitor and attach themselves to each node. 
+This java program is to simulate the spread of a fire across many interconnected nodes, and to test the "Mobile Agents" that monitor and attach themselves to each node. 
 
 ## Getting Started
 
@@ -10,9 +10,17 @@ The game's source code is located in the corresponding archives, and the jars ar
 
 Java SDK 10 is the primary version of Java that this application was written in.
 
-### Running
+### Command Line Arguments
 
 All settings are configured inside the code, as there is not much left up to the user to decide upon.
+
+##Graphical User Interface
+
+Running the jar, the first window has a couple options:
+
+- The List of different graphs included in the program
+- "Open" allows you to use a file that is not included
+- "Start"  starts the simulation using the chosen file
 
 ## Header
 

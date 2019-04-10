@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
@@ -61,7 +62,7 @@ public class GraphDisplayTest extends Application {
         // Display graph
         graphDisplay = new GraphDisplay(graph);
 
-        MobileAgent test = new MobileAgent(graph.getStation(), graphDisplay,  true);
+        new MobileAgent(graph.getStation(), graphDisplay,  true);
         // Start simulation
         graph.startThreads();
 
@@ -83,22 +84,37 @@ public class GraphDisplayTest extends Application {
         ScrollPane graphselectionPane = graphSelectionScrollPane(startButton);
 
         //opens a dialog giving infor mationa about the project
-        Button infoBoxButton = new Button("what's this?");
+        Button infoBoxButton = new Button("Info");
         infoBoxButton.setStyle(buttonStyle);
         infoBoxButton.setOnAction(event -> {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
 
+            alert.setGraphic(null);
+            alert.setTitle("");
+            alert.setHeaderText("What is Mobile Agents?");
+            alert.setContentText("It is a simulation of a communication network as it launches concurrent programs " +
+                    "to contain a 'forest fire' destroying the nodes on the network.");
+
+//            alert.setOnCloseRequest(event -> alert.close());
+            alert.showAndWait();
+            alert.close();
         });
 
         //tells what file is selected byt he selector
         selectedFileText = new Text(fileSelection);
 
         //button that opens a file selector
-        Button getFileButton = new Button("get File");
-        getFileButton.setStyle(buttonStyle);
-        getFileButton.setOnAction(event -> {
+        Button openButton = new Button("Open");
+        openButton.setStyle(buttonStyle);
+        openButton.setOnAction(event -> {
 
             FileChooser fileChooser = new FileChooser();
-            fileSelection = fileChooser.showOpenDialog(window).getName();
+            fileChooser.setInitialDirectory(new File("resources"));
+
+            try {
+                fileSelection = fileChooser.showOpenDialog(window).getName();
+            }catch (NullPointerException e){return;}
+
 
             selectedFileText.setText(fileSelection);
         });
@@ -110,7 +126,7 @@ public class GraphDisplayTest extends Application {
 
         introRoot.add(title, 1,1);
         introRoot.add(graphselectionPane, 1, 2);
-        introRoot.add(getFileButton, 1, 3);
+        introRoot.add(openButton, 1, 3);
         introRoot.add(selectedFileText,1,4);
 
         introRoot.add(startButton, 2,2);

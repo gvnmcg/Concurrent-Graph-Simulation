@@ -16,26 +16,20 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main extends Application {
 
     private String fileSelectionStr = "sample";
     private File fileSelection;
-
     public static final int WIDTH = 700;
     public static final int HEIGHT = 500;
-
     private GraphDisplay graphDisplay;
-
     private Stage window;
-
     private String buttonStyle =  "    -fx-text-fill: #101024;\n" +
             "    -fx-background-color: #EEEEEE;\n" +
             "    -fx-border-color: #111111;" +
             "    -fx-padding: 8;";
-
     private Text selectedFileText;
 
     @Override

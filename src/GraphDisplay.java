@@ -8,8 +8,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.util.HashMap;
-
 /**
  * Displays Graph data structure and it components
  */
@@ -17,9 +15,7 @@ public class GraphDisplay {
 
     public static int scale = 50;
     private BorderPane root = new BorderPane();
-
     private Group centerGroup = new Group();
-
     private static BaseStationLog baseLog = new BaseStationLog();
 
 

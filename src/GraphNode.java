@@ -167,7 +167,6 @@ public class GraphNode implements Runnable {
         // Checks if the node is the base station
         if (base) {
             // Processes the message of the packet and sets to finished
-//            System.out.println("LOG: " + p.getMessage());
             p.setFinished();
             synchronized (p){
                 Platform.runLater(()->{
@@ -176,9 +175,6 @@ public class GraphNode implements Runnable {
             }
 
             return;
-
-            // TODO GraphDisplay stuff
-//            GraphDisplay.addToLog(p.message);
         }
 
         // Checks to see if it needs to be sent to the base station

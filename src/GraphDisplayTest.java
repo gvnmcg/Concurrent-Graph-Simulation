@@ -20,25 +20,22 @@ import java.util.Arrays;
 
 public class GraphDisplayTest extends Application {
 
-    public static boolean debugMessaging = false;
-    public static boolean debugMobileAgents = false;
-    public static boolean debugGraphNode = false;
-
     private String fileSelectionStr = "sample";
-    File fileSelection;
+    private File fileSelection;
 
     public static final int WIDTH = 700;
     public static final int HEIGHT = 500;
 
-    GraphDisplay graphDisplay;
+    private GraphDisplay graphDisplay;
 
-    Stage window;
+    private Stage window;
 
-    String buttonStyle =  "    -fx-text-fill: #101024;\n" +
+    private String buttonStyle =  "    -fx-text-fill: #101024;\n" +
             "    -fx-background-color: #EEEEEE;\n" +
             "    -fx-border-color: #111111;" +
             "    -fx-padding: 8;";
-    Text selectedFileText;
+
+    private Text selectedFileText;
 
     @Override
     public void start(Stage primaryStage) throws Exception {

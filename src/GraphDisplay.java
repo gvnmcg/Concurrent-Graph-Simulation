@@ -17,7 +17,6 @@ public class GraphDisplay {
 
     public static int scale = 50;
     private BorderPane root = new BorderPane();
-    private HashMap<GraphNode, Group> nodeGroupMap = new HashMap<>();
 
     private Group centerGroup = new Group();
 
@@ -44,13 +43,6 @@ public class GraphDisplay {
         initGraphics(g);
     }
 
-    private Node baseStationLog() {
-
-        baseLog = new BaseStationLog();
-
-        return baseLog;
-    }
-
     public static void addToLog(String message){
 
         baseLog.addMessage(message);
@@ -74,19 +66,14 @@ public class GraphDisplay {
      */
     private void initGraphics(Graph graph) {
 
-        //TODO cannot display any edge
-
         // Display each edge
         for (GraphEdge e : graph.getEdges()){
-
             centerGroup.getChildren().add(e.getLine());
         }
 
         // Display each node
         for (GraphNode n : graph.getNodes().values()){
-
             centerGroup.getChildren().add(n.getDisplay());
-
         }
 
     }

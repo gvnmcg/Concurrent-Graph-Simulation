@@ -8,13 +8,17 @@ The game's source code is located in the corresponding archives, and the jars ar
 
 ### Prerequisites
 
-Java SDK 10 is the primary version of Java that this application was written in.
+This application was built using java SDK 1.8 using JavaFx
 
 ### Command Line Arguments
 
-All settings are configured inside the code, as there is not much left up to the user to decide upon.
+All settings can be configured either in the code or the GUI version
+- If the user needs to slow down / modify the speed, it can be manipulated within the top of GraphNode
+- Spread of the "fire" currently has no random effect (For easy viewing), but can still be configured in the top of GraphNode
 
-##Graphical User Interface
+For any other information that you might need. Please feel free to consult the documentation or the annotated code.
+
+## Graphical User Interface
 
 Running the jar, the first window has a couple options:
 

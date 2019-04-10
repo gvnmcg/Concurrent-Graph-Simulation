@@ -55,7 +55,7 @@ When a node is notified, it typically does the following
 Depending on what it finds from the two previous bulletpoints, it can notify others or message others.
 
 The messaging infrastructure works like the following
-- A Mobile Agent puts the message in the mailbox of the attached GrahpNode
+- A Mobile Agent puts the message in the mailbox of the attached GraphNode
 - The GraphNode processes it and pushes it to another node.
 - The nodes repeatedly push the message until either it can't or until it finds the base station.
 - Since the packet keeps track of where it has been, loops are prevented.

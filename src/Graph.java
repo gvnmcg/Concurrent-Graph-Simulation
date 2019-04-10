@@ -20,10 +20,6 @@ public class Graph {
      * Graph constructor that creates a graph from the given text file
      * @param filename
      */
-//    Graph(String filename){
-//        readIn(filename);
-//    }
-
     Graph(File file){
         readIn(file);
     }
@@ -142,8 +138,6 @@ public class Graph {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
         // Initializes status for the corresponding nodes
         for (GraphNode node : nodes.values()) {

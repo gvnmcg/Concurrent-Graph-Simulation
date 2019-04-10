@@ -22,13 +22,13 @@ For any other information that you might need. Please feel free to consult the d
 
 Running the jar, the first window has a couple options:
 
-- The List of different graphs included in the program.
-- "Open" allows you to use a file that is not included.
-- "Start"  starts the simulation using the chosen file.
+- The List of different graphs included in the program
+- "Open" allows you to use a file that is not included
+- "Start"  starts the simulation using the chosen file
 
 As you can see from the following screenshots, you have the option of choosing a configuration file (Like those that Professor Chenoweth distributed on learn), or specifying your own.
 
-You can also click on "Info" for information regarding the application.
+You can also click on "Info" for information regarding the application
 
 ![Selection Screen](https://i.imgur.com/4t1Vw8H.png)
 
@@ -40,26 +40,54 @@ Once you hit the "Start" button, you can relax and monitor the Mobile Agents gam
 
 ![Emulation 1](https://i.imgur.com/IjK2fzR.png)
 
-Once the emulation is done, you can exit out of the program by clicking the red button on the top right corner of the screen.
+Once the emulation is done, you can exit out of the program by clicking the red button on the top right corner of the screen
 
 ![Emulation 2](https://i.imgur.com/LEMKzvA.png)
 
-## GUI Simulation!
+## Algorithm Explanation
 
-In the simulation GUI the nodes are connected by lines to shoe there neighbor relation. They change color as the fire effects each running GraphNode thread.
-- Nodes Start as Blue meaning they are fine and awaiting for another node to notify them.
-- Once notified they turn Yellow, which means one of their neighbors is on fire.
-- Red Nodes have sent messages to each of their neighbors and their thread has ended.
+We decided to use a wait/notfiy structure for a lot of the GraphNode/MobileAgent communication to allow for less CPU-intensive computations. Essentially, if action was needed on another Node, it should be notified.
 
-## Assumptions
+When a node is notified, it typically does the following
+- Check for messages to process
+- Check for a change in its status
 
-The initial game settings are up to specifications set by professor Chenoweth and if modifications are made, the risk is inheritable upon the changer.
+Depending on what it finds from the two previous bulletpoints, it can notify others or message others.
 
-* Point 1
-* Point 2
+The messaging infrastructure works like the following
+- A Mobile Agent puts the message in the mailbox of the attached GrahpNode
+- The GraphNode processes it and pushes it to another node.
+- The nodes repeatedly push the message until either it can't or until it finds the base station.
+- Since the packet keeps track of where it has been, loops are prevented.
+- When a packet can't go any further. It backtracks with a "Receipt", notifying previous nodes that the original direction was wrong.
+- If the packet backtracks all the way to the original sender, and there is no availabled path, then the packet stops sending.
+
+This can be improved with a hop algorithm, but this is one of the better decentralized approaches to message routing that we have attempted
+
+The following is sample output of what our messaging infrastructure looks like. (We only allow the Base station to print, all Nodes/MobileAgents use the base station as a proxy)
+
+```
+LOG: MA: 6 1 | Status: GREEN | Unique Packet ID: 9151
+LOG: MA: 5 0 | Status: GREEN | Unique Packet ID: 19890
+LOG: MA: 7 2 | Status: YELLOW | Unique Packet ID: 18498
+LOG: MA: 4 1 | Status: GREEN | Unique Packet ID: 13712
+LOG: MA: 7 0 | Status: YELLOW | Unique Packet ID: 10432
+LOG: MA: 3 0 | Status: GREEN | Unique Packet ID: 12790
+LOG: MA: 2 2 | Status: GREEN | Unique Packet ID: 3518
+LOG: MA: 7 0 | Status: RED | Unique Packet ID: 11835
+```
+
+I hope you enjoy viewing our game and we wish you the best!
+
+## Bugs and Assumptions
+
+The initial game settings are up to specifications set by professor Chenoweth and if modifications are made, the risk is inheritable upon the changer. However, here are a list of assumptions that we have made for creating this project:
+* We have assumed that there must be an initial way for the Mobile Agent in the first walk to navigate to the fire. Without an initial way, the walking would fail and cease to stop.
+* We have assumed that the user would not try to run the program without selecting a file. Disregarding this will lead to an error message notifying the user of their mistake, but will not cause any adverse effects on the program
+* 
 
 ## Built With
-This was made using Java SDK 10.0.2
+This was made using Java SDK 1.8
 * [JavaFX](https://openjfx.io/) - The GUI framework used
 
 ## Authors
@@ -67,7 +95,3 @@ This was made using Java SDK 10.0.2
 * **Connor Frost** - *Developing work* - [CS351 Project 4](https://csgit.cs.unm.edu/frostc/)
 * **Gavin McGuire** - *Developing work* - [CS351 Project 4](https://csgit.cs.unm.edu/mcguireg/)
 
-## TODO
-
-* **Create customizable gui** - *Start button, graph generation, graph picker, etc..* - 
-* 

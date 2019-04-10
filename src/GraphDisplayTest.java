@@ -152,13 +152,7 @@ public class GraphDisplayTest extends Application {
         listView.addEventHandler(MouseEvent.MOUSE_CLICKED, handleListClick(listView));
 
         //read in file names into list for listview
-         File folder = new File("resources");
-//        ArrayList<String> filenamesList = new ArrayList<>();
-//        for (String file : folder.list()){
-//            filenamesList.add(file);
-//        }
-
-//        ObservableList<String> items = FXCollections.observableArrayList (filenamesList);
+        File folder = new File("resources");
         ObservableList<String> items = FXCollections.observableArrayList (Arrays.asList(folder.list()));
 
 

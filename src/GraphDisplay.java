@@ -23,6 +23,8 @@ public class GraphDisplay {
 
     private static BaseStationLog baseLog = new BaseStationLog();
 
+
+
     /**
      * Initializes javafx shapes etc GUI components
      */
@@ -51,7 +53,7 @@ public class GraphDisplay {
 
     public static void addToLog(String message){
 
-        baseLog.addMessge(message);
+        baseLog.addMessage(message);
     }
 
     private VBox getLegend() {

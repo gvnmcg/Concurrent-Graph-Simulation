@@ -2,6 +2,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 //import javafx.scene.layout.GridPaneBuilder;
 
 /**
@@ -26,7 +28,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         // Initialize gragh data structure
-        Graph graph = new Graph("resources/Star");
+        Graph graph = new Graph(new File("resources/Star"));
 
         // Display graph
         GraphDisplay graphDisplay = new GraphDisplay(graph);

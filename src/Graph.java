@@ -1,5 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -21,15 +20,19 @@ public class Graph {
      * Graph constructor that creates a graph from the given text file
      * @param filename
      */
-    Graph(String filename){
-        readIn(filename);
+//    Graph(String filename){
+//        readIn(filename);
+//    }
+
+    Graph(File file){
+        readIn(file);
     }
 
     /**
      * Read in the file name with the given .txt component
-     * @param filename
+     * @param file
      */
-    private void readIn(String filename){
+    private void readIn(File file){
         BufferedReader in;
         ArrayList<String> lines = new ArrayList<>();
 
@@ -37,7 +40,7 @@ public class Graph {
         try {
 
             // Create buffered reader
-            in = new BufferedReader(new FileReader(filename));
+            in = new BufferedReader(new FileReader (file));
 
 
             // Adds the users

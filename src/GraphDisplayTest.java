@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GraphDisplayTest extends Application {
 
@@ -23,7 +24,8 @@ public class GraphDisplayTest extends Application {
     public static boolean debugMobileAgents = false;
     public static boolean debugGraphNode = false;
 
-    String fileSelection = "sample";
+    private String fileSelectionStr = "sample";
+    File fileSelection;
 
     public static final int WIDTH = 700;
     public static final int HEIGHT = 500;
@@ -55,9 +57,9 @@ public class GraphDisplayTest extends Application {
     }
 
 
-    private Graph initGraph(String filename){
+    private Graph initGraph(File file){
         // Initialize gragh data structure
-        Graph graph = new Graph("resources/" + filename);
+        Graph graph = new Graph(file);
 
         // Display graph
         graphDisplay = new GraphDisplay(graph);
@@ -102,7 +104,7 @@ public class GraphDisplayTest extends Application {
         });
 
         //tells what file is selected byt he selector
-        selectedFileText = new Text(fileSelection);
+        selectedFileText = new Text(fileSelectionStr);
 
         //button that opens a file selector
         Button openButton = new Button("Open");
@@ -113,11 +115,12 @@ public class GraphDisplayTest extends Application {
             fileChooser.setInitialDirectory(new File("resources"));
 
             try {
-                fileSelection = fileChooser.showOpenDialog(window).getName();
+//                fileSelectionStr = fileChooser.showOpenDialog(window).getName();
+                fileSelection = fileChooser.showOpenDialog(window);
 
             }catch (NullPointerException e){return;}
 
-            selectedFileText.setText(fileSelection.substring(0, fileSelection.length() - 4));
+            selectedFileText.setText(fileSelectionStr.substring(0, fileSelectionStr.length() - 4));
 
         });
 
@@ -143,17 +146,18 @@ public class GraphDisplayTest extends Application {
 
         //selectable list of options
         ListView<String> listView = new ListView<String>();
-
         listView.addEventHandler(MouseEvent.MOUSE_CLICKED, handleListClick(listView));
 
         //read in file names into list for listview
-        ArrayList<String> filenamesList = new ArrayList<>();
-        File folder = new File("resources");
-        for (String file : folder.list()){
-            filenamesList.add(file);
-        }
+         File folder = new File("resources");
+//        ArrayList<String> filenamesList = new ArrayList<>();
+//        for (String file : folder.list()){
+//            filenamesList.add(file);
+//        }
 
-        ObservableList<String> items = FXCollections.observableArrayList (filenamesList);
+//        ObservableList<String> items = FXCollections.observableArrayList (filenamesList);
+        ObservableList<String> items = FXCollections.observableArrayList (Arrays.asList(folder.list()));
+
 
         listView.setItems(items);
 
@@ -168,9 +172,12 @@ public class GraphDisplayTest extends Application {
         return new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+
                 if (fileSelection != null){
                     initGraph(fileSelection);
                     window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
+                } else {
+                    selectedFileText.setText("Please Choose File");
                 }
             }
         };
@@ -180,8 +187,10 @@ public class GraphDisplayTest extends Application {
         return new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                fileSelection = listView.getSelectionModel().getSelectedItem();
-                selectedFileText.setText(fileSelection.substring(0, fileSelection.length() - 4));
+                fileSelectionStr = listView.getSelectionModel().getSelectedItem();
+
+                fileSelection = new File("resources/" + fileSelectionStr);
+                selectedFileText.setText(fileSelectionStr.substring(0, fileSelectionStr.length() - 4));
 
             }
         };

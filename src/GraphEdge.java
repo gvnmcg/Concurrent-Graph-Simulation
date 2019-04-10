@@ -49,10 +49,14 @@ public class GraphEdge {
         Line l = new Line();
 
         // Set the GUI component
-        l.setStartX(nodePair.getKey().getCoordinate().getX() * GraphDisplay.scale);
-        l.setStartY(nodePair.getKey().getCoordinate().getY() * GraphDisplay.scale);
-        l.setEndX(nodePair.getValue().getCoordinate().getX() * GraphDisplay.scale);
-        l.setEndY(nodePair.getValue().getCoordinate().getY() * GraphDisplay.scale);
+        l.setStartX(nodePair.getKey().getCoordinate().getX() *
+                                      GraphDisplay.scale);
+        l.setStartY(nodePair.getKey().getCoordinate().getY() *
+                                      GraphDisplay.scale);
+        l.setEndX(nodePair.getValue().getCoordinate().getX() *
+                                      GraphDisplay.scale);
+        l.setEndY(nodePair.getValue().getCoordinate().getY() *
+                                      GraphDisplay.scale);
         l.setFill(Color.BLACK);
         l.setStroke(Color.BLACK);
         l.setStrokeWidth(4);

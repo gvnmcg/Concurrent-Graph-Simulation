@@ -65,10 +65,10 @@ public class Main extends Application {
 
     private Scene introScene(){
 
-        //root to this scene
+        //Root to this scene
         GridPane introRoot = new GridPane();
 
-        //set Title
+        //Set Title
         Text title = new Text("Mobile Agents");
         title.setFont(Font.font(70));
         title.setStyle("-fx-font: 24 arial;");
@@ -78,10 +78,10 @@ public class Main extends Application {
         startButton.setStyle(buttonStyle);
         startButton.addEventHandler(MouseEvent.MOUSE_CLICKED, handleConfirm());
 
-        //pane containing all the graph options
+        //Pane containing all the graph options
         ScrollPane graphselectionPane = graphSelectionScrollPane();
 
-        //opens a dialog giving infor mationa about the project
+        //Opens a dialog giving infor mationa about the project
         Button infoBoxButton = new Button("Info");
         infoBoxButton.setStyle(buttonStyle);
         infoBoxButton.setOnAction(event -> {
@@ -98,19 +98,17 @@ public class Main extends Application {
             alert.close();
         });
 
-        //tells what file is selected byt he selector
+        //Tells what file is selected byt he selector
         selectedFileText = new Text(fileSelectionStr);
 
-        //button that opens a file selector
+        //Button that opens a file selector
         Button openButton = new Button("Open");
         openButton.setStyle(buttonStyle);
         openButton.setOnAction(event -> {
 
             FileChooser fileChooser = new FileChooser();
-//            fileChooser.setInitialDirectory(new File("resources"));
 
             try {
-//                fileSelectionStr = fileChooser.showOpenDialog(window).getName();
                 fileSelection = fileChooser.showOpenDialog(window);
 
             }catch (NullPointerException e){return;}
@@ -119,7 +117,7 @@ public class Main extends Application {
 
         });
 
-        //add everything to the scene root
+        //Add everything to the scene root
         introRoot.setAlignment(Pos.CENTER);
         introRoot.setHgap(25);
         introRoot.setVgap(15);
@@ -139,11 +137,11 @@ public class Main extends Application {
 
         ScrollPane scrollPane = new ScrollPane();
 
-        //selectable list of options
+        //Selectable list of options
         ListView<String> listView = new ListView<String>();
         listView.addEventHandler(MouseEvent.MOUSE_CLICKED, handleListClick(listView));
 
-        //read in file names into list for listview
+        //Read in file names into list for listview
         File folder = new File("resources");
         ObservableList<String> items = FXCollections.observableArrayList (Arrays.asList(folder.list()));
 
@@ -157,7 +155,7 @@ public class Main extends Application {
     }
 
     /**
-     * Handles startingt the simulation making sure a file is selected and changing the scene.
+     * Handles starting the simulation making sure a file is selected and changing the scene.
      * @return
      */
     private EventHandler<MouseEvent> handleConfirm() {
@@ -165,7 +163,7 @@ public class Main extends Application {
             @Override
             public void handle(MouseEvent event) {
 
-                //if a file is selected, load up Graph and start the simulation
+                //If a file is selected, load up Graph and start the simulation
                 if (fileSelection != null){
                     initGraph(fileSelection);
                     window.setScene(new Scene(graphDisplay.getRoot(),WIDTH, HEIGHT));
@@ -176,6 +174,11 @@ public class Main extends Application {
         };
     }
 
+    /**
+     * If the list item is clicked, it prepares its associated file.
+     * @param listView
+     * @return
+     */
     private EventHandler<MouseEvent> handleListClick(ListView<String> listView) {
         return new EventHandler<MouseEvent>() {
             @Override
